@@ -1,0 +1,35 @@
+{
+  "name": "newspage",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "server": "nodemon index.js",
+    "client": "cd client && npm start",
+    "dev": "concurrently \"npm run server \" \"npm run client\""
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^3.2.0",
+    "bcrypt-nodejs": "^0.0.3",
+    "body-parser": "^1.19.0",
+    "concurrently": "^5.3.0",
+    "connect-multiparty": "^2.2.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "html-react-parser": "^1.2.4",
+    "jsonwebtoken": "^8.5.1",
+    "mongoose": "^5.11.15",
+    "multer": "^1.4.2",
+    "nodemailer": "^6.5.0",
+    "react-icons": "^4.2.0"
+  },
+  "devDependencies": {
+    "eslint": "^7.21.0",
+    "nodemon": "^2.0.7"
+  }
+}
