@@ -1,6 +1,5 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import "../Design/js/app"
 function SingUp(){
 
     const [username, setUsername] = useState('');
@@ -53,6 +52,17 @@ function SingUp(){
 
     const onChangeConfig = (event) => {
         setConfig(event.target.value);
+    }
+
+
+    const sign_in_btn = document.querySelector("#sign-in-btn");
+    const sign_up_btn = document.querySelector("#sign-up-btn");
+    const container = document.querySelector(".container");
+
+    const clickSignIn = () => {
+        sign_in_btn.addEventListener("click", () => {
+            container.classList.add("sign-up-mode");
+          });
     }
     
     return(
@@ -149,7 +159,7 @@ function SingUp(){
               Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
               ex ratione. Aliquid!
             </p>
-            <button class="btn transparent" id="sign-up-btn">
+            <button class="btn transparent" id="sign-up-btn" onClick={clickSignIn}>
               Sign up
             </button>
           </div>

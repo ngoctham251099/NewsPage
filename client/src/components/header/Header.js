@@ -11,6 +11,7 @@ import ForgotPassword from "../users/forgot-password";
 import SignIn from "../users/signin";
 import ResetPassword from '..//users/reset-user';
 import SignUp from "../users/signup";
+import CreateNews from "../news/create";
 
 export default function Header(props) {
     return (
@@ -28,13 +29,19 @@ export default function Header(props) {
                 <Link to="/department">Department</Link>
               </li>
               <li>
-                <Link to="/news">News</Link>
+                <Link to="/list-news">News</Link>
               </li>
               <li>
                 <Link to="/signup">SignUp</Link>
               </li>
+              <li>
+                <Link to="/news">News</Link>
+              </li>
             </ul>
             <Switch>
+            <Route path='/news/'>
+                <CreateNews/>
+              </Route>
               <Route
                 path="/department/edit/:id"
                 location={props.location}

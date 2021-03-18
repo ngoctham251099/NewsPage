@@ -75,13 +75,13 @@ function CreateNews() {
                             uploadUrl: '/api-news/upload', 
                 
                               // Enable the XMLHttpRequest.withCredentials property.
-                              withCredentials: false,
+                            //   withCredentials: false,
                 
-                              // Headers sent along with the XMLHttpRequest to the upload server.
-                              headers: {
-                                  'X-CSRF-TOKEN': 'CSFR-Token',
-                                   Authorization: 'Bearer <JSON Web Token>'
-                              }
+                            //   // Headers sent along with the XMLHttpRequest to the upload server.
+                            //   headers: {
+                            //       'X-CSRF-TOKEN': 'CSFR-Token',
+                            //        Authorization: 'Bearer <JSON Web Token>'
+                            //   }
                         } }
                     }
                     

@@ -12,25 +12,38 @@ module.exports.showNews = (req, res, next) => {
 }
 
 module.exports.create = (req, res, next) => {
-    const { title, content, author, date_submitted } = req.body;
-    const images = req.file
-    // if(!title || !content || !author || !date_submitted){
-    //     return res.json({message: 'Please fill in all fields'})
-    // }
+    const { title, content, author } = req.body;
+    console.log(req.file)
     const addnews = new News();
-
+    console.log(title, content)
     addnews.title = title;
     addnews.content = content;
     addnews.author = author;
     addnews.date_submitted = Date.now();
     addnews.status = 1;
+    addnews.IdUser = 1;
+    addnews.department = 1;
+    addnews.avatar = req.file.path;
 
     //1 = cho phe duyet, 2 = phe duyet cua truong phong, 3 = phe duyet cua giam doc, 4 = da phe duyet
 
     addnews.save()
     .then(
         (item) => {
-            res.json({message: 'Add news successfully'}
+            console.log(item)
+            res.json({message: 'Add news successfully',
+            message: "Created product successfully",
+            createdProduct: {
+                title: item.title,
+                content: item.content,
+                file: item.avatar,
+                _id: item._id,
+                request: {
+                    type: 'GET',
+                    url: "http://localhost:5000/api-news/create" + item._id
+                }
+        }
+        }
         )}
     )
     .catch(err => {

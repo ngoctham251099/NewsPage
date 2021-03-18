@@ -43,6 +43,7 @@ module.exports.postRegister = async (req, res, next) => {
             res.json({message: "Tao tai khoan thanh cong"})
         }
     }
+
 }
 
 module.exports.postLogIn = async (req, res, next) => {
@@ -53,7 +54,7 @@ module.exports.postLogIn = async (req, res, next) => {
         return res.json({auth: false, token: null, message: "Email khong ton tai"})
     }
 
-    if(!user.validPassword(password)){
+    if(!user.validPassword(password) || !password){
         return res.json({auth: false, token: null, message: "Mat khau khong dung"});
     }
 
@@ -65,7 +66,8 @@ getSignedToken = user => {
     return jwt.sign ({
         id: user._id,
         email: user.email,
-        username: user.username
+        username: user.username,
+        department: user.department,
     }, SECRET_KEY, { expiresIn: 86400 })
 }
 
@@ -122,7 +124,6 @@ module.exports.forgot = (req, res, next) =>{
             'If you did not request this, please ignore this email and your password will remain unchanged.\n'
         };
         transporter.sendMail(mailOptionns, function(err, response) {
-          console.log("dsjhzjkhkj")
           if(err){
             console.log("there was an error:", err);
           }else{

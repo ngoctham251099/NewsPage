@@ -1,9 +1,10 @@
 import React,{ useState, useEffect } from 'react';
 import axios from 'axios';
 import { Link, useHistory, useLocation } from 'react-router-dom';
- import "../Design/js/app.js";
 import "../Design/css/Signin.css"
 import image from "../Design/News1.png";
+import image1 from "../images/logo.svg";
+import image3 from "../images/logo3.svg";
 
 
 function SignIn(props){
@@ -44,6 +45,7 @@ function SignIn(props){
 
                     }
                 }else{
+                    console.log(res.data.message)
                     setMessage(res.data.message);
                 }
 
@@ -72,6 +74,26 @@ function SignIn(props){
         )
     }
 
+    // const sign_in_btn = document.querySelector("#sign-in-btn");
+    // const sign_up_btn = document.querySelector("#sign-up-btn");
+    // const container = document.querySelector(".container");
+
+    const clickSignUp = () => {
+        const container = document.querySelector(".container");
+
+        document.addEventListener("click", () => {
+            container.classList.add("sign-up-mode");
+          });
+    }
+
+    const clickSignIn = () => {
+        const container = document.querySelector(".container");
+
+        document.addEventListener("click", () => {
+            container.classList.remove("sign-up-mode");
+        });
+    }
+
     return(
         <div>
             <h1>Signin</h1>
@@ -88,18 +110,24 @@ function SignIn(props){
                 <div class="forms-container">
                     <div class="forms-container">
                         <div class="signin-signup">
+                        {(message) ? (
+                            <h2>{message}</h2>
+                        ):null}
                         <form action="#" class="sign-in-form">
                             <h2 class="title">Sign in</h2>
                             <div class="input-field">
                             <i class="fas fa-user"></i>
-                            <input type="text" placeholder="Username" />
+                            <input type="text" placeholder="Email" onChange={onChangeEmail}/>
                             </div>
                             <div class="input-field">
                             <i class="fas fa-lock"></i>
-                            <input type="password" placeholder="Password" />
+                            <input type="password" placeholder="Password" onChange={onChangePassword}/>
                             </div>
-                            <input type="submit" value="Login" class="btn solid" />
+                            <p><Link to='/forgot-password'>Forgot password</Link></p>
+                            {/* < type="submit" value="Login" class="btn solid" onClick={logIn}/> */}
+                            <button class="btn solid" color="red" onClick={logIn}>submit</button>
                             <p class="social-text">Or Sign in with social platforms</p>
+                            
                         </form>
                         <form action="#" class="sign-up-form">
                             <h2 class="title">Sign up</h2>
@@ -115,7 +143,7 @@ function SignIn(props){
                             <i class="fas fa-lock"></i>
                             <input type="password" placeholder="Password" />
                             </div>
-                            <input type="submit" class="btn" value="Sign up" />
+                            <input type="submit" class="btn" value="Sign up"/>
                             <p class="social-text">Or Sign up with social platforms</p>
                         </form>
                         </div>
@@ -130,11 +158,11 @@ function SignIn(props){
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
                         ex ratione. Aliquid!
                         </p>
-                        <button class="btn transparent" id="sign-up-btn">
+                        <button class="btn transparent" id="sign-up-btn" onClick={clickSignUp}>
                         Sign up
                         </button>
                     </div>
-                    <img src={image} class="image" alt="" />
+                    <img src={image3} class="image" alt="" />
                     </div>
                     <div class="panel right-panel">
                     <div class="content">
@@ -143,11 +171,11 @@ function SignIn(props){
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
                         laboriosam ad deleniti.
                         </p>
-                        <button class="btn transparent" id="sign-in-btn">
+                        <button class="btn transparent" id="sign-in-btn" onClick={clickSignIn} >
                         Sign in
                         </button>
                     </div>
-                        <img src={image} class="image" alt="" />
+                        <img src={image1} class="image" alt="" />
                     </div>
                 </div>
             </div>

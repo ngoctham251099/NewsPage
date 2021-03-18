@@ -10,6 +10,7 @@ const multipartMiddleware = multiparty({uploadDir: "./images"})
 const userRouter = require('./router/Users-router');
 const departmentRouter = require('./router/daperment-router');
 const newsRouter = require('./router/news-router');
+const controllerNews = require('./controllers/news-controller')
 
 const middleware = require('./middleware/auth');
 
@@ -43,7 +44,9 @@ app.use('/api-user', userRouter);
 
 app.use('/api-department', departmentRouter)
 
-app.use('/api-news', multipartMiddleware ,newsRouter); 
+app.use('/api-news' ,newsRouter); 
+
+app.post("/api-news/upload", multipartMiddleware, controllerNews.uploadImages)
 
 app.get('/api/example', middleware.auth , (req, res) => {
     console.log('ttttt  ');

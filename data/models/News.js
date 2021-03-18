@@ -6,7 +6,10 @@ const newsSchema = new Schema({
     content : String,
     author: String,
     date_submitted: Date,
-    status: String
+    status: String,
+    IdUser: String,
+    department: String,
+    avatar: String
 }, {
     collection: 'News'
 });
