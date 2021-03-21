@@ -2,8 +2,9 @@
 import './App.css';
 import Header from "./components/header/Header";
 import SignIn from './components/users/signin';
-import Create from "./components/news/create";
+import ViewsStatus from "./components/news/views-status";
 import { BrowserRouter as Router, Route, Switch , Link} from "react-router-dom";
+import NewsFromDate from "./components/news/newsfromDate";
 function App(props) {
   const getComponent = () => {
     let token = localStorage.getItem("token");
@@ -46,6 +47,8 @@ function App(props) {
             <Create/>
         </Route>
       </Router> */}
+      <ViewsStatus/>
+      <NewsFromDate/>
     </div> 
   );
 }

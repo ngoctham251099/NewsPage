@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Views from './Views';
+import moment from 'moment';
+import Moment from 'react-moment';
 
 function ListNews(){
 
@@ -58,7 +60,8 @@ function ListNews(){
                             <td><img width={400} src={`/api-news/viewFile/${item.avatar}`}></img></td>
                             <td>{item.author}</td>
                             <td>{listImages(item.images)}</td>
-                            <td>{item.date_submitted}</td>
+                            {/* <td>{moment(item.date_submitted).format('L')}</td> */}
+														<td><Moment format="DD/MM/YYYY">{item.date_submitted}</Moment></td>
                             <td>{item.status === "1" ? "Cho phe duyet": "Da Phe duyet"}</td>
                             <td><button onClick={() => ViewsId(item._id)}>View</button></td>
                         </tr>

@@ -17,11 +17,13 @@ function CreateNews() {
 
     const addNews = () => {
         const formData =  new FormData();
+        // const date_submitted = moment().subtract(10, 'days').calendar();
         formData.append("title", title)
         formData.append("author", author)
         formData.append("content", content)
         formData.append("avatar", avatar)
         formData.append('idUser', idUser)
+        //formData.append("date_submitted",date_submitted)
         for(const key of Object.keys(images)){
             formData.append('images', images[key])
         }

@@ -2,6 +2,7 @@ const News = require('../data/models/News');
 const path = require('path');
 const fs = require('fs');
 const Users = require('../data/models/Users')
+const moment= require('moment');
 
 module.exports.showNews = (req, res, next) => {
 	News.find()
@@ -17,7 +18,6 @@ module.exports.create = (req, res, next) => {
 	const reqFiles = [];
 	const { title, content, author, idUser} = req.body;
 	const {avatar, images} = req.files;
-	console.log(images.length)
 	const url = req.protocol + '://' + req.get('host');
 	const urlAvatar  = avatar[0].filename;
 	
@@ -25,15 +25,15 @@ module.exports.create = (req, res, next) => {
 	for(var i = 0; i < images.length; i++){
 		reqFiles.push(images[i].filename)
 	}
-	console.log(reqFiles);
-	//console.log(req.files)
-	//const avatar = req.file;
+	//new Date(date).setHours(00,00,00)
+	const date = Date.now();
 	const addnews = new News();
-	// console.log(title, content)
+	const date_submitted = moment(date).format('L');
+	console.log(date_submitted)
 	addnews.title = title;
 	addnews.content = content;
 	addnews.author = author;
-	addnews.date_submitted = Date.now();
+	addnews.date_submitted = date_submitted;
 	addnews.status = 1;
 	addnews.IdUser = idUser;
 	addnews.department = 1;
@@ -44,7 +44,6 @@ module.exports.create = (req, res, next) => {
 	addnews.save()
 	.then(
 		(item) => {
-			console.log(item)
 			res.json({message: 'Add news successfully',
 			news: item,
 			createdProduct: {
@@ -121,7 +120,7 @@ module.exports.uploadImages = (req, res) => {
 }
 
 module.exports.viewsId = (req, res ,next) => {
-	const id = req.query.id;
+	const id = req.params.id;
 	News.findOne({idUser: id})
 	.then(
 		item => {
@@ -132,15 +131,102 @@ module.exports.viewsId = (req, res ,next) => {
 }
 
 module.exports.statistical = (req, res) => {
-	News.findOne({status: "1"})
+	// const {name} = req.params;
+	News.findOne({status: "4"})
 	.then(
 		item => {
+			if(!item){
+				return res.json({message: 'Không có bài viết nào được phê duyệt'})
+			}
 			console.log(item);
-			res.json({news: item})
+			return res.json({news: item})
 		}
 	)
 }
-
-module.exports.updateStatus = (req, res) => {
-	
+//update của người sơ duyệt
+module.exports.updateStatus1 = async (req, res) => {
+	const id = req.params.id;
+	const user = await Users.findOne({_id: id})
+	if(user.power == "2"){
+		const editNews = await News.findById(req.params.idNews)
+		if(!editNews){
+			return res.json({message: "Không tìm thấy bài viết"})
+		}
+		editNews.status = 2;
+		await editNews.save();
+		return res.json({message: "Đã duyệt tin"})
+	}else{
+		return res.json({message: "Không được phép duyệt tin"})
+	}
 } 
+//update status của giám đốc khi tin bài đã được sơ duyệt
+module.exports.updateStatus2 = async (req, res) => {
+	const id = req.params.id;
+	const user = await Users.findOne({_id: id})
+	if(user.power == "3"){
+		const editNews = await News.findById(req.params.idNews)
+		if(!editNews){
+			return res.json({message: "Không tìm thấy bài viết"})
+		}
+		editNews.status = 3;
+		await editNews.save();
+		return res.json({message: "Đã duyệt tin"})
+	}
+} 
+
+//update status khi bị từ chối sơ duyệt
+module.exports.updateStatusNoReview = async (req, res) => {
+	const id = req.params.id;
+	const user = await Users.findOne({_id: id})
+	if(user.power == "3" || user.power == "2"){
+		const editNews = await News.findById(req.params.idNews)
+		if(!editNews){
+			return res.json({message: "Không tìm thấy bài viết"})
+		}
+		editNews.status = 0;
+		await editNews.save();
+		return res.json({message: "Đã từ chối duyệt tin"})
+	}else{
+		return res.json({message: "Không được phép sơ duyệt tin bài"})
+	}
+}
+
+//Thống kê tin bài theo ngày
+module.exports.statisticalFromDate = async (req, res) => {
+	const funt = (item) => {
+		return moment(item).format('L')
+	}
+	const { date } = req.body;
+	//console.log(date)
+	const dateMoment = moment(date).format('L');
+	console.log(dateMoment)
+	const allNews = await News.find({ date_submitted: new Date(date).setHours(00,00,00) });
+	if(allNews){
+		console.log(allNews.date_submitted)
+	//	return res.json({message:"Không tìm thấy bài viết"})
+		console.log(allNews)
+		return res.json({ newsFromDate : allNews })
+	}else{
+		return res.json({message:"Không tìm thấy bài viết"})
+	//return res.json({ newsFromDate : allNews })
+	}
+}
+
+//Thống kê theo tháng
+module.exports.statisticalFromMonth = async (req, res) => {
+	const { month } = req.query;
+	let date = new Date();
+	console.log(month)
+//	console.log(date.val(moment().format('D MMM, YYYY')))
+	console.log(date.setMonth('2021-03-21T16:04:24.525Z'));
+	const allNews = await News.find({})
+}
+
+//Thống kê tin bài từ ngày này đến ngày này
+module.exports.statisticalFromDateToDate = async (req, res) => {
+	const { fromDate, toDate } = req.body;
+
+	const allNews = await News.find({$or:{
+
+	}})
+}

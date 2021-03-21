@@ -36,5 +36,7 @@ router.post('update/:id', newsController.update);
 router.post('/view/:id', newsController.viewsId);
 router.get('/viewFile/:name', newsController.viewsImages)
 router.get('/viewsPower', newsController.statistical)
-
+router.post('/update-status/:id/:idNews', newsController.updateStatus1)
+router.post('/statisticalFromDate',newsController.statisticalFromDate)
+router.get('/statisticalFromMonth/search', newsController.statisticalFromMonth )
 module.exports = router;
