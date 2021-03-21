@@ -1,9 +1,7 @@
-import React,{ useState, useEffect } from 'react';
+import React,{ useState } from 'react';
 import axios from 'axios';
-import { Link, useHistory, useLocation } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import "../Design/css/Signin.css"
-import image from "../Design/News1.png";
-import image1 from "../images/logo.svg";
 import image3 from "../images/logo3.svg";
 
 
@@ -23,6 +21,7 @@ function SignIn(props){
             res => {
                 if(res.data.auth){
                     localStorage.setItem('token', res.data.token);
+                    localStorage.setItem('idUser', res.data.user._id)
                     setMessage(res.data.message);
                     console.log(res.data.user.power);
                     setPower(res.data.user.power);
@@ -106,7 +105,7 @@ function SignIn(props){
             <button onClick={userAuthenticated}> check</button>
             <Link to='/forgot-password'>Forgot password</Link>
 
-            <div class="container">
+            <div class="container" >
                 <div class="forms-container">
                     <div class="forms-container">
                         <div class="signin-signup">
@@ -129,7 +128,7 @@ function SignIn(props){
                             <p class="social-text">Or Sign in with social platforms</p>
                             
                         </form>
-                        <form action="#" class="sign-up-form">
+                        {/* <form action="#" class="sign-up-form">
                             <h2 class="title">Sign up</h2>
                             <div class="input-field">
                             <i class="fas fa-user"></i>
@@ -145,7 +144,7 @@ function SignIn(props){
                             </div>
                             <input type="submit" class="btn" value="Sign up"/>
                             <p class="social-text">Or Sign up with social platforms</p>
-                        </form>
+                        </form> */}
                         </div>
                     </div>
                 </div>
@@ -158,13 +157,14 @@ function SignIn(props){
                         Lorem ipsum, dolor sit amet consectetur adipisicing elit. Debitis,
                         ex ratione. Aliquid!
                         </p>
-                        <button class="btn transparent" id="sign-up-btn" onClick={clickSignUp}>
-                        Sign up
+                        <button class="btn transparent" id="sign-up-btn">
+                            <Link to="/signup">SIGN UP</Link>
+                        
                         </button>
                     </div>
                     <img src={image3} class="image" alt="" />
                     </div>
-                    <div class="panel right-panel">
+                    {/* <div class="panel right-panel">
                     <div class="content">
                         <h3>One of us ?</h3>
                         <p>
@@ -176,7 +176,7 @@ function SignIn(props){
                         </button>
                     </div>
                         <img src={image1} class="image" alt="" />
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

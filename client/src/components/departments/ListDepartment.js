@@ -7,7 +7,7 @@ import { BsPencil } from "react-icons/bs";
 
 function ListDepatment(props){
     const [departments, setDepartments] = useState([]);
-    const [message, setMessage] = useState();
+    // const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
         axios.get('/api-department/index')
@@ -40,9 +40,9 @@ function ListDepatment(props){
             <div className="list-department">
                 <h1 className="title">List department</h1>
                 <Link to="/department/add" >Add</Link>
-                {message ? (
+                {/* {message ? (
                     <div>{message}</div>
-                ): null}
+                ): null} */}
                 <table>
                     <thead>
                         <th>STT</th>
@@ -53,7 +53,7 @@ function ListDepatment(props){
                     <tbody>
                     { departments.map( (item , index) => (
                         <tr key={index}>
-                        <td>{item._id}</td>
+                        <td>{stt++}</td>
                         <td>
                             {item.name}
                         </td>

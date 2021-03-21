@@ -5,15 +5,15 @@ import Views from './Views';
 function ListNews(){
 
     const [news , setNews] = useState([]);
-    const [view, setView] = useState();
-    let stt = 1;
-
+    const [images, setImages] = useState();
+    const[view, setView] = useState();
+    let stt;
     useEffect(() => {
         axios.get('/api-news/')
         .then(
             res => {
-                console.log(res.data.page)
                setNews(res.data.page);
+               setImages(res.data.images)
             }
         )
     },[])
@@ -23,13 +23,20 @@ function ListNews(){
         .then(
             res => {
                 if(res.data){
-                    view= true;
+                    setView(true);
                 }else{}
                     
             }
         )
     }
-    
+
+    const listImages = (item) =>{
+        console.log(item)
+        item.forEach(element => {   
+            //console.log(element)
+            <img src={`/api-news/viewFile/${element}`}></img>
+        });
+    }
 
     return (
         <div>
@@ -38,15 +45,19 @@ function ListNews(){
                 <thead>
                     <th>STT</th>
                     <th>Title</th>
+                    <th>Avatar</th>
                     <th>Author</th>
                     <th>Date submitted</th>
+                    <th>Images</th>
                 </thead>
                 <tbody>
                     {news.map(item => (
-                        <tr>
+                        <tr key = {item._id}>
                             <td>{stt++}</td>
                             <td>{item.title}</td>
+                            <td><img width={400} src={`/api-news/viewFile/${item.avatar}`}></img></td>
                             <td>{item.author}</td>
+                            <td>{listImages(item.images)}</td>
                             <td>{item.date_submitted}</td>
                             <td>{item.status === "1" ? "Cho phe duyet": "Da Phe duyet"}</td>
                             <td><button onClick={() => ViewsId(item._id)}>View</button></td>

@@ -3,13 +3,16 @@ const Schema = mongoose.Schema;
 
 const newsSchema = new Schema({
     title: String,
+    avatar: String,
     content : String,
     author: String,
     date_submitted: Date,
     status: String,
     IdUser: String,
     department: String,
-    avatar: String
+    images: {
+        type: Array
+    }
 }, {
     collection: 'News'
 });
