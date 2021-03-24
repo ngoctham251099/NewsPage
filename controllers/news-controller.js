@@ -3,9 +3,11 @@ const path = require('path');
 const fs = require('fs');
 const Users = require('../data/models/Users')
 const moment= require('moment');
+const { match } = require('assert');
+const User = require('../data/models/Users');
 
 module.exports.showNews = (req, res, next) => {
-	News.find()
+	News.find().sort([])
 	.then(
 		newsPage => {
 			console.log(newsPage.images)
@@ -14,7 +16,7 @@ module.exports.showNews = (req, res, next) => {
 	)
 }
 
-module.exports.create = (req, res, next) => {
+module.exports.create = async (req, res, next) => {
 	const reqFiles = [];
 	const { title, content, author, idUser} = req.body;
 	const {avatar, images} = req.files;
@@ -25,44 +27,32 @@ module.exports.create = (req, res, next) => {
 	for(var i = 0; i < images.length; i++){
 		reqFiles.push(images[i].filename)
 	}
-	//new Date(date).setHours(00,00,00)
-	const date = Date.now();
+
+	let user = await Users.findOne({_id: idUser});
+
 	const addnews = new News();
-	const date_submitted = moment(date).format('L');
-	console.log(date_submitted)
+	//user
+	console.log(idUser)
+
+	let date = Date.now();
+	let dateMoment = moment(date).format('YYYY-MM-DD')
+	console.log(dateMoment)
+	let date_test = date.Date;
 	addnews.title = title;
 	addnews.content = content;
 	addnews.author = author;
-	addnews.date_submitted = date_submitted;
+	addnews.date_submitted = "2021-03-22";
 	addnews.status = 1;
 	addnews.IdUser = idUser;
-	addnews.department = 1;
+	addnews.department = user.department;
 	addnews.avatar = urlAvatar;
 	addnews.images = reqFiles;
+	addnews.kindNews = null;
 	//1 = cho phe duyet, 2 = phe duyet cua truong phong, 3 = phe duyet cua giam doc, 4 = da phe duyet
 	//fs
-	addnews.save()
-	.then(
-		(item) => {
-			res.json({message: 'Add news successfully',
-			news: item,
-			createdProduct: {
-				title: item.title,
-				content: item.content,
-				file: item.avatar,
-				_id: item._id,
-				request: {
-					type: 'GET',
-					url: "http://localhost:5000/api-news/create" + item._id
-				}
-		}
-		}
-		)}
-	)
-	.catch(err => {
-		console.log(req.body);
-		res.status(400).send("unable to save to database");
-	});
+	await addnews.save()
+	return res.json({message: 'Add news successfully'})
+
 }
 
 module.exports.viewsImages = (req, res) =>{
@@ -85,7 +75,7 @@ module.exports.delete = (res, req, next) => {
 module.exports.update = (req, res, next) => {
 	const id = req.params.id;
 
-	const {title, content, author} = req.body;
+	const {title, note} = req.body;
 
 	News.updateOne({_id: id}, {
 		$set: {
@@ -129,7 +119,38 @@ module.exports.viewsId = (req, res ,next) => {
 		}
 	)
 }
+//tim news cua tung truong phong de phe duyet
+module.exports.viewsDepartment = async (req, res) => {
+	const {id} = req.query;
+	console.log(id)
+//	const {power} = req.query;
+	const user = await Users.findOne({_id: id});
+	console.log(user)
+	if(user.power == "2"){
+		const listNews = await News.find({department: user.department})
+		console.log(listNews)
+		return res.json({listNews: listNews})
+	}else{
+		return res.json({message: 'Không được phép xem'})
+	}
+}
 
+//tim news cua tung giam doc de phe duyet
+module.exports.viewsDepartmentPresident = async (req, res) => {
+	const {id} = req.query;
+	console.log(id)
+//	const {power} = req.query;
+	const user = await Users.findOne({_id: id});
+	console.log(user)
+	if(user.power == "3"){
+		const listNews = await News.find({department: user.department})
+		console.log(listNews)
+		return res.json({listNews: listNews})
+	}else{
+		return res.json({message: 'Không được phép xem'})
+	}
+}
+//tin khong duoc duyet
 module.exports.statistical = (req, res) => {
 	// const {name} = req.params;
 	News.findOne({status: "4"})
@@ -143,9 +164,14 @@ module.exports.statistical = (req, res) => {
 		}
 	)
 }
-//update của người sơ duyệt
-module.exports.updateStatus1 = async (req, res) => {
-	const id = req.params.id;
+//update status của người sơ duyệt
+module.exports.updateStatusManager = async (req, res) => {
+	const {id} = req.params;
+	const {kind} = req.body;
+
+	if(!kind){
+		return res.json({message: "Chọn loại tin trước khi duyệt bài "})
+	}
 	const user = await Users.findOne({_id: id})
 	if(user.power == "2"){
 		const editNews = await News.findById(req.params.idNews)
@@ -160,8 +186,9 @@ module.exports.updateStatus1 = async (req, res) => {
 	}
 } 
 //update status của giám đốc khi tin bài đã được sơ duyệt
-module.exports.updateStatus2 = async (req, res) => {
+module.exports.updateStatusPresident = async (req, res) => {
 	const id = req.params.id;
+	const {note} = req.body;
 	const user = await Users.findOne({_id: id})
 	if(user.power == "3"){
 		const editNews = await News.findById(req.params.idNews)
@@ -169,6 +196,7 @@ module.exports.updateStatus2 = async (req, res) => {
 			return res.json({message: "Không tìm thấy bài viết"})
 		}
 		editNews.status = 3;
+		editNews.note = note;
 		await editNews.save();
 		return res.json({message: "Đã duyệt tin"})
 	}
@@ -192,41 +220,118 @@ module.exports.updateStatusNoReview = async (req, res) => {
 }
 
 //Thống kê tin bài theo ngày
-module.exports.statisticalFromDate = async (req, res) => {
-	const funt = (item) => {
-		return moment(item).format('L')
-	}
+module.exports.statisticalFromDate = (req, res) => {
 	const { date } = req.body;
-	//console.log(date)
-	const dateMoment = moment(date).format('L');
-	console.log(dateMoment)
-	const allNews = await News.find({ date_submitted: new Date(date).setHours(00,00,00) });
-	if(allNews){
-		console.log(allNews.date_submitted)
-	//	return res.json({message:"Không tìm thấy bài viết"})
-		console.log(allNews)
-		return res.json({ newsFromDate : allNews })
-	}else{
-		return res.json({message:"Không tìm thấy bài viết"})
-	//return res.json({ newsFromDate : allNews })
-	}
+	const dateMoment = moment(date).format('YYYY-MM-DD');
+	News.find({date_submitted: new Date(dateMoment)})
+	.then(item => {
+		return res.json({ newsFromDate : item })
+	})
+	
 }
 
 //Thống kê theo tháng
 module.exports.statisticalFromMonth = async (req, res) => {
-	const { month } = req.query;
-	let date = new Date();
-	console.log(month)
-//	console.log(date.val(moment().format('D MMM, YYYY')))
-	console.log(date.setMonth('2021-03-21T16:04:24.525Z'));
-	const allNews = await News.find({})
+	const { fromMonth } = req.body;
+	console.log(fromMonth)
+	let monthMoment = moment(fromMonth).format('YYYY-MM-DD');
+	console.log(monthMoment);
+	const aggegation = [{
+		$match:{
+			$expr: {
+				$eq: [{ $month: '$date_submitted' }, {$month: new Date(month)}]
+			}
+		}
+	}]
+	let allNews = await News.aggregate(aggegation);
+	return res.json({NewMonth: allNews})
+}
+
+//Thống ke theo quý
+module.exports.statisticalFromMonthtoMonth = async (req, res) => {
+	const {fromMonth, toMonth} = req.body;
+	const fromMonthMoment = moment(fromMonth).format('YYYY-MM-DD');
+	const toMonthMoment = moment(toMonth).format('YYYY-MM-DD');
+	const aggregation = [{
+		$match:{
+			$expr: {
+				$gte:[{ $month: '$date_submitted' }, { $month: new Date(fromMonthMoment) }]
+			},
+			$expr: {
+				$lt:[{ $month: '$date_submitted' }, { $month: new Date(toMonthMoment) }]
+			}
+		}
+	}]
+
+	let allNews = await News.aggregate(aggregation);
+	return res.json({NewMonth: allNews})
+}
+
+//Thống kê theo năm
+module.exports.statisticalFromYear = async (req, res) => {
+	const aggregation = [{
+		$match:{
+			$expr: {
+				$eq:[{ $year: '$date_submitted' }, { $year: new Date(fromMonthMoment) }]
+			}
+		}
+	}] 
+
+	const allNews = await News.aggregate(aggregation);
+	return res.json({NewMonth: allNews})
 }
 
 //Thống kê tin bài từ ngày này đến ngày này
+//thanh cong
 module.exports.statisticalFromDateToDate = async (req, res) => {
 	const { fromDate, toDate } = req.body;
+	console.log(fromDate, toDate)
 
-	const allNews = await News.find({$or:{
-
+	let fromDateMoment = moment(fromDate).format('YYYY-MM-DD');
+	let toDateMoment =moment(toDate).format('YYYY-MM-DD');
+//	console.log(fromDateMoment, toDateMoment)
+	const allNews = await News.find({date_submitted: {
+		$gte: new Date(fromDateMoment),
+		$lt: new Date(toDateMoment)
 	}})
+	let count = allNews.count().exec();
+	return res.json({ News : allNews,
+										count: count})
 }
+
+//Thống kê theo tên tác giả
+// module.exports.statisticalAuthor = async (req, res) => {
+// 	const {nameOfUser} = req.body;
+// 	console.log(nameOfUser)
+// 	const user = await User.findOne({username: nameOfUser});
+	
+// 	const listNews = await News.findOne({IdUser: user._id});
+// 	if(listNews){
+// 		return res.json({listNews: listNews})
+// 	}else{
+// 		return res.json({message: "Không tìm thấy"})
+// 	}
+// }
+
+
+module.exports.statisticalAuthor = async (req, res) => {
+	const {nameOfUser} = req.body;
+	console.log(nameOfUser)
+	//const user = await User.findOne({username: nameOfUser});
+	
+	const listNews = await News.find();
+	if(listNews){
+		let count = listNews.count({author: nameOfUser});
+		return res.json({listNews: listNews,
+											count: count
+		 })
+	}else{
+		return res.json({message: "Không tìm thấy"})
+	}
+}
+
+// //Update loai  tin
+// module.exports.UpdateKindNews = (req, res) => {
+
+// }
+

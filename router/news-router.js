@@ -36,7 +36,22 @@ router.post('update/:id', newsController.update);
 router.post('/view/:id', newsController.viewsId);
 router.get('/viewFile/:name', newsController.viewsImages)
 router.get('/viewsPower', newsController.statistical)
-router.post('/update-status/:id/:idNews', newsController.updateStatus1)
+router.post('/update-status/:id', newsController.updateStatusManager)
+//update sts
+//View list news theo department cho truong phong
+router.get('/views-manager', newsController.viewsDepartment)
+//view list news theo department cho giam doc
+router.get('/views-president', newsController.viewsDepartmentPresident)
+//Thống kê theo ngày
 router.post('/statisticalFromDate',newsController.statisticalFromDate)
-router.get('/statisticalFromMonth/search', newsController.statisticalFromMonth )
+//Thống kê theo tháng
+router.post('/statisticalFromMonth', newsController.statisticalFromMonth )
+//Thống kee từ ngày này đến ngày kia
+router.post('/statisticalFromDateToDate', newsController.statisticalFromDateToDate )
+//Thống kê từ tháng này đến tháng kia
+router.post('/statisticalFromMonthtoMonth', newsController.statisticalFromMonthtoMonth)
+//Thống kê theo năm
+router.post('/statisticalFromYear', newsController.statisticalFromYear)
+//Thống kê theo tên tác giả
+router.post('/statisticalAuthor', newsController.statisticalAuthor)
 module.exports = router;

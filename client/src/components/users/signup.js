@@ -1,12 +1,13 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { Link, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, useHistory, Switch } from 'react-router-dom';
 import image1 from "../images/logo.svg";
 import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlineMail } from "react-icons/ai";
 import { IoKeyOutline } from "react-icons/io5";
 import { AiFillLock } from "react-icons/ai";
 import { BsFillHouseFill } from "react-icons/bs";
+import SignIn from "./signin"
 function SingUp(){
     let history = useHistory();
 
@@ -131,7 +132,7 @@ function SingUp(){
                         laboriosam ad deleniti.
                         </p>
                         <button class="btn transparent" id="sign-in-btn">
-                          <Link to="/user">Sign in </Link>
+                          <Link to="/signin">Sign in</Link>
                         </button>
                     </div>
                         <img src={image1} class="image" alt="" />

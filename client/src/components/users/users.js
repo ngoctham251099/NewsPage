@@ -6,6 +6,7 @@ import { BsPencil } from "react-icons/bs";
 
 function Users(){
     const [users, setUsers] = useState([]);
+    const [name, setName] = useState('');
     let stt = 1;
 
     useEffect(()=>{
@@ -50,6 +51,17 @@ function Users(){
         await axios.delete(`/api-user/delete/${id}`)
         showItemAfterDelete();
     }
+
+    // const nameDapartment = async (id) => {
+    //     const res = await axios.post(`/api-department/viewById/${id}`)
+    //     let posts = res.data;
+
+    //     setName(
+    //         name.map((item) => (
+    //             <td>{item.name}</td>
+    //         ))
+    //     )
+    // }
     
     return(
         <div className="list-user">
@@ -71,7 +83,7 @@ function Users(){
                 </thead>
                 <tbody>
                     {users.map(item => (
-                        <tr key={item.objectID}>
+                        <tr key={item._id}>
                             <td>{stt++}</td>
                             <td>{item.username}</td>
                             <td>{item.email}</td>

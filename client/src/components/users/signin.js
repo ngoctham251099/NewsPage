@@ -1,8 +1,9 @@
 import React,{ useState } from 'react';
 import axios from 'axios';
-import { Link, useHistory } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, useHistory, Switch } from 'react-router-dom';
 import "../Design/css/Signin.css"
 import image3 from "../images/logo3.svg";
+import SingUp from './signup';
 
 
 function SignIn(props){
@@ -29,7 +30,7 @@ function SignIn(props){
                         console.log('ahsbdjha')
                         localStorage.setItem("power", res.data.user.power);
                         console.log({pathname: "shsf"});
-                        history.replace("/admin");
+                        history.replace("/");
                     }else if(res.data.user.power === "2"){
                         localStorage.setItem("power",  res.data.user.power);
                         history.replace("/department")
@@ -73,10 +74,6 @@ function SignIn(props){
         )
     }
 
-    // const sign_in_btn = document.querySelector("#sign-in-btn");
-    // const sign_up_btn = document.querySelector("#sign-up-btn");
-    // const container = document.querySelector(".container");
-
     const clickSignUp = () => {
         const container = document.querySelector(".container");
 
@@ -95,15 +92,15 @@ function SignIn(props){
 
     return(
         <div>
-            <h1>Signin</h1>
+            {/* <h1>Signin</h1> */}
             {(message) ? (
                 <div>{message}</div>
             ):null}
-            <input type="text" placeholder='email' onChange={onChangeEmail}></input>
+            {/* <input type="text" placeholder='email' onChange={onChangeEmail}></input>
             <input type="password" placeholder='password' onChange={onChangePassword}></input>
             <button onClick={logIn}>submit</button>
             <button onClick={userAuthenticated}> check</button>
-            <Link to='/forgot-password'>Forgot password</Link>
+            <Link to='/forgot-password'>Forgot password</Link> */}
 
             <div class="container" >
                 <div class="forms-container">
@@ -179,6 +176,14 @@ function SignIn(props){
                     </div> */}
                 </div>
             </div>
+
+            <Router>
+                <Switch>
+                    <Route path="/signup">
+                        <SingUp/>
+                    </Route>
+                </Switch>
+            </Router>
         </div>
     )
 

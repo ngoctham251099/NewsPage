@@ -9,6 +9,7 @@ const multiparty = require('connect-multiparty');
 const multipartMiddleware = multiparty({uploadDir: "./images"})
 const userRouter = require('./router/Users-router');
 const departmentRouter = require('./router/daperment-router');
+const kindRouter = require('./router/kindOfNews-router');
 const newsRouter = require('./router/news-router');
 const controllerNews = require('./controllers/news-controller')
 
@@ -43,6 +44,8 @@ app.get('/', (req, res) => {
 app.use('/api-user', userRouter);
 
 app.use('/api-department', departmentRouter)
+
+app.use('/api-kind', kindRouter)
 
 app.use('/api-news' ,newsRouter); 
 

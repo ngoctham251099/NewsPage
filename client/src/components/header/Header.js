@@ -16,14 +16,13 @@ import CreateNews from "../news/create";
 export default function Header(props) {
     return (
         <div className="App">
-        
           <Router>
             <ul>
               <li>
                 <Link to="/">Home</Link>
               </li>
               <li>
-                <Link to="/user">User</Link>
+                <Link to="/user"> </Link>
               </li>
               <li>
                 <Link to="/department">Department</Link>
@@ -81,7 +80,7 @@ export default function Header(props) {
                 <SignUp/>
               </Route>
               <Route  path="/user">
-                <SignIn/>
+                <Users/>
               </Route>
               <Route  path="/department">
                 <Department/>

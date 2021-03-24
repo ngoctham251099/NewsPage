@@ -11,10 +11,11 @@ function ListNews(){
     let stt=0;
     let d=0;
     useEffect(() => {
-        axios.get('/api-news/')
+
+        axios.get(`/api-news/views-department?id=${localStorage.getItem('idUser')}`,{id: localStorage.getItem('idUser')})
         .then(
             res => {
-               setNews(res.data.page);
+               setNews(res.data.listNews);
                setImages(res.data.images)
             }
         )
@@ -32,26 +33,26 @@ function ListNews(){
         )
     }
 
-    useEffect(()=>{
-        const countNews = () =>{
-            news.forEach( item => {
-                d++;
-            })
-            setCount(d);
+    // useEffect(()=>{
+    //     const countNews = () =>{
+    //         news.forEach( item => {
+    //             d++;
+    //         })
+    //         setCount(d);
 
-            let list = news.filter((elem, index, seft) => {
+    //         let list = news.filter((elem, index, seft) => {
 
-                seft.findIndex(
-                    t => {return (t.author == elem.author ) === index}
-                )
-            })  
-            console.log(list)  
+    //             seft.findIndex(
+    //                 t => {return (t.author == elem.author ) === index}
+    //             )
+    //         })  
+    //         console.log(list)  
 
-            // list = list.filter((elem, index, self) => self.findIndex(
-            //     (t) => {return (t.x === elem.x && t.y === elem.y)}) === index)
-        }
-        countNews()
-    },[])
+    //         // list = list.filter((elem, index, self) => self.findIndex(
+    //         //     (t) => {return (t.x === elem.x && t.y === elem.y)}) === index)
+    //     }
+    //     countNews()
+    // },[])
 
 
     return (
@@ -75,7 +76,7 @@ function ListNews(){
                 <tbody>
                     {news.map(item => (
                         <tr key = {item._id}>
-                            <td>{stt++}</td>
+                          <td>{stt++}</td>
                             <td>{item.title}</td>
                             <td><img width={400} src={`/api-news/viewFile/${item.avatar}`}></img></td>
                             <td>{item.author}</td>

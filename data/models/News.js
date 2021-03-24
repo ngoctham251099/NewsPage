@@ -12,11 +12,12 @@ const newsSchema = new Schema({
     department: String,
     images: {
         type: Array
-    }
+    },
+    kindNews: String,
+    note: String
 }, {
     collection: 'News'
 });
-
 const newsModel = mongoose.model('newsModel', newsSchema);
 
 module.exports = newsModel;

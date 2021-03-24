@@ -27,7 +27,7 @@ function CreateUSer(){
             email: email,
             department: department,
             password: password,
-            configPassword: config
+            confirmPassword: config
         })
         .then(res => {
             console.log(res.data.message)
@@ -69,7 +69,7 @@ function CreateUSer(){
             <select onChange={onChangeDepartment} value={department}>
                 <option value="0">---Chon phong---</option>
                 {departments.map((item)=> (
-                            <option value={item.name}>{item.name}</option>
+                            <option value={item._id}>{item.name}</option>
                 ))}
             </select>
             <label>Mật khẩu</label>

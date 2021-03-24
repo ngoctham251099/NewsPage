@@ -55,3 +55,12 @@ module.exports.updateDepartment = (req, res, next) => {
         .catch( err => res.status(400).json('Err: ' + err));
     })
 }
+
+module.exports.findById = async (req, res) => {
+    const {id} = req.body;
+    console.log(id)
+    const department = await Departments.findOne({_id: id});
+    if(department){
+        return res.json(department)
+    }
+}

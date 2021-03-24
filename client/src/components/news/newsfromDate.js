@@ -9,7 +9,7 @@ export default function ListNewsFromDate(){
 
   const onSubmit = async () => {
     const res = await axios.post('/api-news/statisticalFromDate',{
-      date: moment(date).format()
+      date: date
     });
     console.log(res.data.newsFromDate)
     setNews(res.data.newsFromDate)
