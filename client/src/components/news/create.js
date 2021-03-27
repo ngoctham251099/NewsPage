@@ -3,6 +3,19 @@ import axios from 'axios';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
+import { makeStyles } from '@material-ui/core/styles';
+import Input from '../UI/Input'
+import Button from '../UI/Button'
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+      '& > *': {
+        margin: theme.spacing(1),
+        width: '100ch',
+      },
+    },
+  }));
+
 function CreateNews() {
 
     const [title, setTitle] = useState();
@@ -76,29 +89,37 @@ function CreateNews() {
         setImages(e.target.files)
     }
 
+    const classes = useStyles();
 
     return (
         <div>
             <h1 className="title">Create News</h1>
-            <form>
+            <form className={classes.root} noValidate autoComplete="off">
                 <div className="item">
                     <label className="title-news">Title</label>
-                    <input type="text" placeholder="title" onChange={onChangeTitle} ></input>
+                    <Input
+                        title="Tiêu đề"
+                        onChange={onChangeTitle}
+                    ></Input>
+                    {/* <input type="text" placeholder="title" onChange={onChangeTitle} ></input> */}
                 </div>
 
                 <div className="item">
                     <label>Author</label>
-                    <input type="text" placeholder="author" onChange={onChangeAuthor}></input>
+                    <Input
+                        title="Tác giả"
+                        onChange={onChangeAuthor}
+                    ></Input>
+                    {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
                 </div>
 
                 <div className="item">
                     <label>Avatar</label>
-                    <input type="file" name="avatar" placeholder="author" onChange={onChangeAvarta}></input>
-                </div>
-
-                <div className="item">
-                    <label>Dare submitted</label>
-                    <input type="date" placeholder="date submitted" onChange={onChangeDate} ></input>
+                    <Input
+                        onChange={onChangeAvarta}
+                        type = 'file'
+                    ></Input>
+                    {/* <input type="file" name="avatar" placeholder="author" onChange={onChangeAvarta}></input> */}
                 </div>
                 <div>
                 <CKEditor
@@ -108,8 +129,11 @@ function CreateNews() {
                             {
                             ckfinder: {
                                 // The URL that the images are uploaded to.
-                                uploadUrl: '/api-news/upload'
-                            } }
+                                uploadUrl: '/api-news/upload',
+                            },
+														height: '300px',
+														width: '1200px'
+													}
                         }
                         
                     />
@@ -118,7 +142,10 @@ function CreateNews() {
                     
                 <div className="item">
                     <label>Imaegs</label>
-                    <input type="file" name="images" placeholder="images" onChange={onChangeImages} multiple></input>
+                    <Button
+											onChange={onChangeImages}
+										></Button>
+                    {/* <input type="file" name="images" placeholder="images" onChange={onChangeImages} multiple></input> */}
                 </div>
             </form>
 

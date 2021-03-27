@@ -1,6 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
-import {useHistory} from "react-router-dom"
+import {useHistory} from "react-router-dom";
+
+import { makeStyles } from '@material-ui/core/styles';
+import Input from '../UI/Input'
+import Select from '../UI/select';
 
 export default function UpdateUser(props){
     let history = useHistory();
@@ -11,6 +15,14 @@ export default function UpdateUser(props){
         email: "",
         power: ""
     });
+
+    const [power, setPower] = useState([
+        {id: 1 , value: "Admin"},
+        {id: 2 , value: "Tổng biên tập"},
+        {id: 3 , value: "Biên tập viên"},
+        {id: 4 , value: "Nhân viên"},
+        {id: 5 , value: "Thư ký"}
+    ])
     useEffect(() => {
         axios.get('/api-department/index')
         .then(
@@ -22,8 +34,10 @@ export default function UpdateUser(props){
     },[])
 
     useEffect(() => {
-        // console.log(props.match.params.id)
-         axios.post(`/api-user/edit/${props.match.params.id}`)
+        console.log(props.match.params.id)
+         axios.post(`/api-user/edit/${props.match.params.id}`,{
+             id: props.match.params.id
+         })
          .then(
              res => {
                  setUser(res.data.user);
@@ -42,13 +56,13 @@ export default function UpdateUser(props){
                     return "Admin";
                     break;
                 case "2":
-                    return "Tổng duyệt tin";
+                    return "Tổng biên tập";
                     break;
                 case "3":
-                    return "Sơ duyệt";
+                    return "Biên tập viên";
                     break;
                 case "4":
-                    return "Viết tin";
+                    return "Nhân viên";
                     break;
                 default:
                     break;
@@ -65,11 +79,12 @@ export default function UpdateUser(props){
     }
 
     const onChangeDepartment = (event) => {
+        console.log(event.target.value)
         setUser({...user, department: event.target.value});
     }
 
     const onChangePower = (event) => {
-        //console.log(event.target.value)
+        console.log(event.target.value)
         setUser({...user, power: event.target.value});
     }
 
@@ -89,7 +104,7 @@ export default function UpdateUser(props){
         })
         .then(
             res => {
-                history.push('/user');
+                history.push('/admin/users');
             }
         ).catch(
             err => {
@@ -99,27 +114,33 @@ export default function UpdateUser(props){
     }
     return(
         <div>
-            <h1>Update User</h1>
+            <h1>Cập nhật tài khoản</h1>
             <form>
             <label>Tên người dùng</label>
-            <input type="text" onChange={onChangeName} value={user.username} ref={React.createRef()}></input>
+            <Input type="text" onChange={onChangeName} value={user.username} ref={React.createRef()}></Input>
             <label>Email</label>
-            <input type="email" placeholder="Email" onChange={onChangeEmail} value={user.email} ref={React.createRef()}></input>
+            <Input type="email" placeholder="Email" onChange={onChangeEmail} value={user.email} ref={React.createRef()}></Input>
             <label>Phòng ban</label>
-            <select onChange={onChangeDepartment} value={user.department} ref={React.createRef()}>
+
+            {/* <select onChange={onChangeDepartment} value={user.department} ref={React.createRef()}>
                 <option value={user.department}>{user.department}</option>
             {departments.map((item)=> (
                         <option value={item.name}>{item.name}</option>
             ))}
-            </select>
+            </select> */}
+
+            <Select value={user.department} onChange={onChangeDepartment} list={departments}></Select>
             <label>Quyen han</label>
-            <select onChange={onChangePower} ref={React.createRef()}>
+
+            {/* <select onChange={onChangePower} ref={React.createRef()}>
                 <option value={user.power}>{user.power}</option>
                 <option value="1">Admin</option>
                 <option value="2">Tổng duyệt tin</option>
                 <option value="3">Sơ duyệt</option>
                 <option value="4">Viết tin</option>
-            </select>
+            </select> */}
+
+            <Select onChange={onChangePower} value={user.power} listPower={power}></Select>
                 {/* <input type="text" onChange={onChangePower} value={user.power} ref={React.createRef()}></input> */}
             <button onClick={onSubmit}>Submit</button>
             </form>

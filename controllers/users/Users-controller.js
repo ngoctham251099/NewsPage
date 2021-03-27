@@ -80,7 +80,6 @@ module.exports.logout = (req, res, next) =>{
 
 module.exports.forgot = (req, res, next) =>{
 		const email = req.body.email;
-		console.log(email)
 		Async.waterfall([
 			(done) => {
 				crypto.randomBytes(20, (err, buf)=>{
@@ -129,7 +128,6 @@ module.exports.forgot = (req, res, next) =>{
 					if(err){
 						console.log("there was an error:", err);
 					}else{
-						console.log("here is the res:" , response);
 						return res.json({message: 'An e-mail has been sent to ' + user.email + ' with further instructions.',
 											user: user
 					 })
@@ -143,38 +141,32 @@ module.exports.forgot = (req, res, next) =>{
 		})
 	}
 
-module.exports.resetPassword = (req, res, next) => {
+module.exports.resetPassword = async (req, res, next) => {
 	const token = req.params.token;
 	console.log(token)
-	Users.findOne({
+	const user = await Users.findOne({
 			resetPasswordToken: token,
 	})
-	.then(
-		user => {
-			if(user == null){
-				return res.json({message: "Password reset link is invalid or has expired"});
-			}else{
-				res.json({message: "password reset link a-ok",
-									username: user.username
-				})
-			}
+	if(user){
+		if(!user){
+			return res.json({message: "Password reset link is invalid or has expired"});
+		}else{
+			res.json({message: "password reset link a-ok",
+								username: user.username
+			})
 		}
-	)
+	}
 }
 
 module.exports.updatePasswordViaEmail = (req, res, next) => {
 	console.log(req.params.token)
-	const token = req.params.token
+	const {token} = req.params;
 	const newPassword = req.body.newPassword
 	const confirmPassword = req.body.confirmPassword
 	console.log(newPassword)
 	Async.waterfall([
 		function(done) {
 			Users.findOne({resetPasswordToken: req.params.token}, function(err, user) {
-				if (!user) {
-					//req.flash('result_reset', 'Password reset token is invalid or has expired.');
-					return res.json({message: 'Password reset token is invalid or has expired.'});
-				}
 
 				if(newPassword.length < 6){
 					return res.json({message: 'Must be greater than 6 characters'});
@@ -233,7 +225,9 @@ module.exports.delete = (req, res, next) => {
 }
 
 module.exports.editUser = (req, res, next) => {
-	Users.findById(req.params.id)
+	const {id} = req.params;
+	console.log(id)
+	Users.findById(id)
 	.then(
 			user => {
 					res.json({user: user});

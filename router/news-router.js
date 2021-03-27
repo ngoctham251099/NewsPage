@@ -54,4 +54,12 @@ router.post('/statisticalFromMonthtoMonth', newsController.statisticalFromMontht
 router.post('/statisticalFromYear', newsController.statisticalFromYear)
 //Thống kê theo tên tác giả
 router.post('/statisticalAuthor', newsController.statisticalAuthor)
+
+//----------------------------------
+//Danh sách tin đã được duyệt
+router.get('/list-news-approved', newsController.listNewsApproved)
+
+//----------------------------------
+//Danh sách tin chờ được duyệt
+router.get('/list-news-waiting-for-approval', newsController.listNewsWaitingForApproval)
 module.exports = router;

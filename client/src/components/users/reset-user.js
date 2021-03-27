@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 export default function Reset(props){
     const [TestUpdate, setTestUpdate] = useState({
@@ -11,6 +11,8 @@ export default function Reset(props){
     const [newPassword, setNewPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();
     const [message, setMessage] = useState();
+
+    let history = useHistory();
 
     useEffect( () => {
         console.log(props.match.params.token);
@@ -48,6 +50,7 @@ export default function Reset(props){
         })
         .then( response => {
             setMessage(response.data.message);
+            history.push('/');
         })
         .catch(
             error => {

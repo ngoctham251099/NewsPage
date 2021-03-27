@@ -1,7 +1,8 @@
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;6001&display=swap');
 
 :root{
-	--main-color: #DD2F6E;
+	/* --main-color: #DD2F6E; */
+	--main-color: #4481eb;
 	--color-dark: #1D2231; 
 	--text-grey: #8390A2;
 }
@@ -41,14 +42,14 @@
 	margin-bottom: 1rem;
 }
 
-.sidebar-menu a {
+.sidebar-menu div {
 	padding-left: 1rem;
 	display: block;
 	color: #fff;
 	font-size: 1.2rem;
 }
 
-.sidebar-menu a.active {
+.sidebar-menu div.active {
 	background: #fff;
 	padding-top: 1rem;
 	padding-bottom: 1rem;
@@ -56,11 +57,11 @@
 	border-radius: 30px 0px 0px 30px;
 }
 
-.sidebar-menu a.active::before{
+.sidebar-menu div.active::before{
 	background-color: #fff;
 }
 
-.sidebar-menu a span:first-child{
+.sidebar-menu div span:first-child{
 	font-size: 1.5rem;
 	padding-right: 1rem;
 }
@@ -75,12 +76,12 @@
 	text-align: center;
 }
 
-#nav-toggle:checked + .sidebar li a{
+#nav-toggle:checked + .sidebar li .a{
 	padding-left: 0rem;
 }
 
 #nav-toggle:checked + .sidebar .sidebar-brand h2 span:last-child,
-#nav-toggle:checked + .sidebar li a span:last-child{
+#nav-toggle:checked + .sidebar li .a span:last-child{
 	display: none;
 }
 
@@ -208,7 +209,7 @@ main{
 	margin-top: 3.5rem;
 	display: grid;
 	grid-gap: 2rem;
-	grid-template-columns: 65% auto;
+	grid-template-columns: 100% auto;
 }
 
 .card{
@@ -254,6 +255,7 @@ td{
 	padding: .5rem 1rem;
 	font-size: .9rem;
 	color: #222;
+	text-align: center;
 }
 
 td .status{
@@ -286,36 +288,6 @@ tr td:last-child{
 	overflow-x: auto;
 }
 
-.customer{
-	display: flex;
-	justify-content: space-between;
-	align-items: center;
-	padding: .5rem .7rem;
-}
-
-.info{
-	display: flex;
-	align-items: center;
-}
-
-.info img{
-	border-radius: 50%;
-	margin-right: 1rem;
-	color: #333;
-}
-
-.info small{
-	font-weight: 600;
-	color: var(--text-grey);
-}
-
-.contact span{
-	font-size: 1.2rem;
-	display: inline-block;
-	margin-left: .5rem;
-	color: var(--main-color)
-}
-
 @media only screen and (max-width: 1200px){
 	.sidebar{
 		width: 70px;
@@ -327,12 +299,12 @@ tr td:last-child{
 		text-align: center;
 	}
 	
-	.sidebar li a{
+	.sidebar li .a{
 		padding-left: 0rem;
 	}
 	
 	.sidebar .sidebar-brand h2 span:last-child,
-	.sidebar li a span:last-child{
+	.sidebar li .a span:last-child{
 		display: none;
 	}
 	
@@ -356,12 +328,12 @@ tr td:last-child{
 		text-align: left;
 	}
 	
-	.sidebar:hover li a{
+	.sidebar:hover li .a{
 		padding-left: 1rem;
 	}
 	
 	.sidebar:hover .sidebar-brand h2 span:last-child,
-	.sidebar:hover li a span:last-child{
+	.sidebar:hover li .a span:last-child{
 		display: inline;
 	}
 }
@@ -439,12 +411,12 @@ tr td:last-child{
 		text-align: left;
 	}
 	
-	#nav-toggle:checked + .sidebar li a{
+	#nav-toggle:checked + .sidebar li .a{
 		padding-left: 1rem;
 	}
 
 	#nav-toggle:checked + .sidebar .sidebar-brand h2 span:last-child,
-	#nav-toggle:checked + .sidebar li a span:last-child{
+	#nav-toggle:checked + .sidebar li .a span:last-child{
 		display: inline;
 	}
 

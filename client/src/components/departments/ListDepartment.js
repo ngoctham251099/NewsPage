@@ -36,41 +36,46 @@ function ListDepatment(props){
 
 
 
-    return  (
-            <div className="list-department">
-                <h1 className="title">List department</h1>
-                <Link to="/department/add" >Add</Link>
-                {/* {message ? (
-                    <div>{message}</div>
-                ): null} */}
-                <table>
-                    <thead>
-                        <th>STT</th>
-                        <th>Department</th>
-                        <th>Edit</th>
-                        <th>Remove</th>
-                    </thead>
-                    <tbody>
-                    { departments.map( (item , index) => (
-                        <tr key={index}>
-                        <td>{stt++}</td>
-                        <td>
-                            {item.name}
-                        </td>
-                        <td>
-                            <Link to={`/department/edit/${item._id}`} className="btn btn-primary"><BsPencil/></Link>
-                        </td>
-                        <td>
-                            <button className="btn btn-danger" onClick={() => Remove(item._id)}><BsTrashFill/></button>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-    )
+  return  (
+    <div>
+      <div className="card-header">
+        <h3>Danh sách phòng ban</h3>
+        <button>See all <span class="las la-arrow-right"></span></button>
+      </div>
+      
+      <div className="card-body">
+      <div className="table-responsive">
+        <table width="100%">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Department</th>
+                <th>Edit</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              { departments.map( (item , index) => (
+                <tr key={index}>
+                  <td>{stt++}</td>
+                  <td>
+                      {item.name}
+                  </td>
+                  <td>
+                      <Link to={`/department/edit/${item._id}`}><BsPencil/></Link>
+                  </td>
+                  <td>
+                      <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>)
 }
 
 export default ListDepatment;

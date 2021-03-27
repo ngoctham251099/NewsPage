@@ -1,24 +1,30 @@
 import Header from "./components/header/Header";
 import SignIn from './components/users/signin';
-import ViewsStatus from "./components/news/views-status";
 import { BrowserRouter as Router, Route, Switch , Link} from "react-router-dom";
-import NewsFromDate from "./components/news/newsfromDate";
-import ListNewsFromDateToDate from "./components/news/views-fromdate-todate";
-import CreateUser from './components/users/create-user';
 import SignUp from './components/users/signup';
-import ViewsManager  from "./components/list-update-status/user-manager";
 import Admin from './components/header/admin';
-import TemplaceUser from './components/templace user/templace-user'
+import TemplaceUser from './components/templace user/templace-user';
+import ForgetPassword from './components/users/forgot-password';
+import ResetPassword from './components/users/reset-user';
+import Editor from "./components/header/editor";
+import ChiefEditor from "./components/header/ chief-editor";
+import NewsWriter from "./components/header/news-writer";
+import Secretary from "./components/header/secretary";
 
-function App(props) {
+function App( ) {
   const getComponent = () => {
     let token = localStorage.getItem("token");
     let power = localStorage.getItem("power");
-    if(token){
-      console.log(power)
+    console.log(token)
+    
+    if(token === null){
+      return (
+        <Route exact path="/" component={SignIn}></Route>
+      )
+    }else{
       switch (power) {
         case "1":
-          return (<Admin/>);
+          return (<Route path="/admin" component={Admin}></Route>);
         case "2":
           return <Header/>;
 
@@ -29,38 +35,25 @@ function App(props) {
         default:
           <TemplaceUser/>;
       }
-    }else{
-      return (
-        <Router>
-        <Route path="/signin">
-          <SignIn/>
-        </Route>
-      </Router> 
-      )
-    }
+    } 
   }
   return (
     <div className="App">
-          {/* <Router>
-            <Switch>
-              <Route path="/signup">
-                <SignUp/>
-              </Route>
-              
-              <Route path="/signin">
-                <SignIn/>
-              </Route>
-            </Switch>
-          </Router> */}
-      {/* <Router>
-        
-      </Router> */}
-      {getComponent()}
-      {/* <ViewsStatus/>
-      <NewsFromDate/>
-      <ListNewsFromDateToDate/>
-      <CreateUser/> */}
-      {/* <ViewsManager/> */}
+      <Router>
+        <Switch>
+          <Route path="/auth/reset/:token" component={ResetPassword}></Route>
+          <Route path="/admin" component={Admin}></Route> //---------------------------1
+          <Route path="/chief-editor" component={ChiefEditor}></Route> //-----------------------2
+          <Route path="/editor" component={Editor}></Route> //-----------------------3
+          <Route path="/news-writer" component={NewsWriter}></Route> //-----------------------4
+          <Route path="/secretary" component={Secretary}></Route> //-----------------------5
+          <Route path="/forgot-password" component={ForgetPassword}></Route>
+          <Route path="/signup" component={SignUp}></Route>
+          <Route path="/" component={SignIn}></Route>
+          {getComponent()}
+          <Route path="*" component={() => "404 Not Found"}/>
+        </Switch>
+      </Router>
     </div> 
   );
 }

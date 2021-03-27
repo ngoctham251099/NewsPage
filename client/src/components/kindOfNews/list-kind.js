@@ -46,7 +46,7 @@ function ListDepatment(props){
                 <table>
                     <thead>
                         <th>STT</th>
-                        <th>Department</th>
+                        <th>Loại tin</th>
                         <th>Edit</th>
                         <th>Remove</th>
                     </thead>
@@ -58,10 +58,10 @@ function ListDepatment(props){
                             {item.name}
                         </td>
                         <td>
-                            <Link to={`/department/edit/${item._id}`} className="btn btn-primary"><BsPencil/></Link>
+                            <Link to={`/department/edit/${item._id}`}><BsPencil/></Link>
                         </td>
                         <td>
-                            <button className="btn btn-danger" onClick={() => Remove(item._id)}><BsTrashFill/></button>
+                            <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
                         </td>
                         <td>
                         </td>

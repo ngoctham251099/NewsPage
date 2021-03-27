@@ -13,10 +13,10 @@ function ListNews(){
     let stt=1;
     let d=0;
     useEffect(() => {
-        axios.get('/api-news/')
+        axios.get('/api-news/list-news-approved')
         .then(
             res => {
-               setNews(res.data.page);
+                setNews(res.data.listNewsApproved);
                setImages(res.data.images)
             }
         )
@@ -74,6 +74,7 @@ function ListNews(){
                                 <th>Ngày viết</th>
                                 <th>Trạng thái</th>
                                 <th>Phòng ban</th>
+                                <th>View</th>
                             </tr>
                         </thead>
                         <tbody>

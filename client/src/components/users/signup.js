@@ -44,7 +44,7 @@ function SingUp(){
             console.log(res.data.info)
             
             if(res.data.info){
-              history.replace('/signin')
+              history.replace('/')
             }else
             {
               setStatus(res.data.message)
@@ -131,8 +131,12 @@ function SingUp(){
                         Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
                         laboriosam ad deleniti.
                         </p>
-                        <button class="btn transparent" id="sign-in-btn">
-                          <Link to="/signin">Sign in</Link>
+                        <button class="btn transparent" id="sign-in-btn" onClick={
+                            () => {
+                                history.push('/')
+                            }
+                        }>
+                          Sign in
                         </button>
                     </div>
                         <img src={image1} class="image" alt="" />

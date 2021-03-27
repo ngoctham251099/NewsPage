@@ -1,6 +1,10 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
 
+import Input from '../UI/Input'
+import Select from '../UI/select';
+import Button from '../UI/button-add';
+
 function CreateUSer(){
 
     const [username, setUsername] = useState('');
@@ -62,21 +66,23 @@ function CreateUSer(){
                 <p>{status}</p>
             ): null}
             <label>Tên người dùng</label>
-            <input type="text" placeholder="Username" onChange={onChangeName} value={username}></input>
+            <Input type="text" placeholder="Username" onChange={onChangeName} value={username}></Input>
             <label>Email</label>
-            <input type="email" placeholder="Email" onChange={onChangeEmail} value={email}></input>
+            <Input type="email" placeholder="Email" onChange={onChangeEmail} value={email}></Input>
             <label>Phòng ban</label>
-            <select onChange={onChangeDepartment} value={department}>
+            {/* <select onChange={onChangeDepartment} value={department}>
                 <option value="0">---Chon phong---</option>
                 {departments.map((item)=> (
                             <option value={item._id}>{item.name}</option>
                 ))}
-            </select>
+            </select> */}
+
+            <Select onChange={onChangeDepartment} list={departments}></Select>
             <label>Mật khẩu</label>
-            <input type="password" placeholder="Password" onChange={onChangePassword} value={password}></input>
+            <Input type="password" placeholder="Password" onChange={onChangePassword} value={password}></Input>
             <label>Nhập lại mật khẩu</label>
-            <input type="password" placeholder="Config Password" onChange={onChangeConfig} value={config}></input>
-            <button onClick={register}>Add</button>
+            <Input type="password" placeholder="Config Password" onChange={onChangeConfig} value={config}></Input>
+            <Button onClick={register}></Button>
         </div>
     )
 }

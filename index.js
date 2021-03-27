@@ -55,6 +55,7 @@ app.get('/api/example', middleware.auth , (req, res) => {
     console.log('ttttt  ');
 })
 
+
 const port = 5000;
 app.listen(port, () => {
     console.log(`App listening on port ${port}`)

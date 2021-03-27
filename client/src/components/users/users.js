@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import {Link} from "react-router-dom";
+import {Link, useHistory} from "react-router-dom";
 import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 
 function Users(){
+    let history = useHistory();
     const [users, setUsers] = useState([]);
     const [name, setName] = useState('');
     let stt = 1;
@@ -23,13 +24,16 @@ function Users(){
                 return "Admin";
                 break;
             case "2":
-                return "Tổng duyệt tin";
+                return "Tổng biên tập";
                 break;
             case "3":
-                return "Sơ duyệt";
+                return "Biên tập viên";
                 break;
             case "4":
-                return "Viết tin";
+                return "Nhân viên";
+                break;
+            case "5":
+                return "Thư ký";
                 break;
             default:
                 break;
@@ -64,40 +68,47 @@ function Users(){
     // }
     
     return(
-        <div className="list-user">
-            <h1 className="title">List user</h1>
-            <button>
-                <Link to="/user/add">Create user</Link>
-            </button>
-            <table>
-                <thead>
-                <tr>
-                    <th className="stt">STT</th>
-                    <th className="username">Tên người dùng</th>
-                    <th className="email">Email</th>
-                    <th className="department">Phòng ban</th>
-                    <th className="power">Quyền hạn</th>
-                    <th className="edit">Edit</th>
-                    <th className="remove">Remove</th>
-                </tr>
-                </thead>
-                <tbody>
-                    {users.map(item => (
-                        <tr key={item._id}>
-                            <td>{stt++}</td>
-                            <td>{item.username}</td>
-                            <td>{item.email}</td>
-                            <td>{item.department}</td>
-                            <td>{getPower(item.power)}</td>
-                            <td>
-                                <Link to={`/user/edit/${item._id}`}><BsPencil/></Link>
-                            </td>
-                            <td><button onClick={() => Remove(item._id)}><BsTrashFill/></button></td>
+        <div>
+            <div className="card-header">
+				<h3>Recent Projects</h3>
+				{/* <button>See all <span class="las la-arrow-right"></span></button> */}
+			</div>
+            <button onClick={()=>{
+                history.push('/admin/users/add')
+            }}>Thêm</button>
+            <div className="card-body">
+                <div className="table-responsive">
+                    <table width="100%">
+                        <thead>
+                        <tr>
+                            <th className="stt">STT</th>
+                            <th className="username">Tên người dùng</th>
+                            <th className="email">Email</th>
+                            <th className="department">Phòng ban</th>
+                            <th className="power">Quyền hạn</th>
+                            <th className="edit">Edit</th>
+                            <th className="remove">Remove</th>
                         </tr>
-                    ))}
-                </tbody>
-                
-            </table>
+                        </thead>
+                        <tbody>
+                            {users.map(item => (
+                                <tr key={item._id}>
+                                    <td>{stt++}</td>
+                                    <td>{item.username}</td>
+                                    <td>{item.email}</td>
+                                    <td>{item.department}</td>
+                                    <td>{getPower(item.power)}</td>
+                                    <td>
+                                        <Link to={`/admin/users/edit/${item._id}`}><BsPencil/></Link>
+                                    </td>
+                                    <td><button onClick={() => Remove(item._id)}><BsTrashFill/></button></td>
+                                </tr>
+                            ))}
+                        </tbody>
+                        
+                    </table>
+                </div>
+            </div>
             
         </div>
     )

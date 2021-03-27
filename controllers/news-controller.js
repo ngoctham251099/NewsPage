@@ -330,8 +330,25 @@ module.exports.statisticalAuthor = async (req, res) => {
 	}
 }
 
-// //Update loai  tin
-// module.exports.UpdateKindNews = (req, res) => {
+//Danh sach tin da phe duyet
+module.exports.listNewsApproved = async (req, res) => {
+	const listNews = await News.find({status: "3"});
+	if(!listNews){
+		return res.json({message: "Không có tin nào được duyệt"})
+	}else{
+		return res.json({listNewsApproved: listNews})
+	}
+}
 
-// }
+//Danh sach tin cho phe duyet
+module.exports.listNewsWaitingForApproval= async (req, res) => {
+	const listNews = await News.find({status: "1"});
+	if(!listNews){
+		return res.json({message: "Không có tin nào chờ phê duyệt"})
+	}else{
+		return res.json({listNewsApproved: listNews})
+	}
+}
+
+
 
