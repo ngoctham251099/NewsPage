@@ -108,10 +108,10 @@ module.exports.uploadImages = (req, res) => {
 		})
 	}
 }
-
+//view theo tai khoan
 module.exports.viewsId = (req, res ,next) => {
 	const id = req.params.id;
-	News.findOne({idUser: id})
+	News.find({IdUser: id})
 	.then(
 		item => {
 			console.log(item);
@@ -119,6 +119,20 @@ module.exports.viewsId = (req, res ,next) => {
 		}
 	)
 }
+
+//view tin theo id
+module.exports.viewsIdNews = async (req, res, next) => {
+	const {id} = req.params;
+	console.log(id)	
+	const arrNews = await News.findById(id);
+
+	if(arrNews) {
+		return res.json({arrNews: arrNews});
+	}else{
+		return res.json({error: "Không tìm thấy bài viết"})
+	}
+}
+
 //tim news cua tung truong phong de phe duyet
 module.exports.viewsDepartment = async (req, res) => {
 	const {id} = req.query;
@@ -239,7 +253,7 @@ module.exports.statisticalFromMonth = async (req, res) => {
 	const aggegation = [{
 		$match:{
 			$expr: {
-				$eq: [{ $month: '$date_submitted' }, {$month: new Date(month)}]
+				$eq: [{ $month: '$date_submitted' }, {$month: new Date(monthMoment)}]
 			}
 		}
 	}]
@@ -269,10 +283,13 @@ module.exports.statisticalFromMonthtoMonth = async (req, res) => {
 
 //Thống kê theo năm
 module.exports.statisticalFromYear = async (req, res) => {
+	const {year} = req.body;
+	console.log(year)
+	const fromYear = moment(year).format('YYYY-MM-DD');
 	const aggregation = [{
 		$match:{
 			$expr: {
-				$eq:[{ $year: '$date_submitted' }, { $year: new Date(fromMonthMoment) }]
+				$eq:[{ $year: '$date_submitted' }, { $year: new Date(fromYear) }]
 			}
 		}
 	}] 
@@ -337,6 +354,16 @@ module.exports.listNewsApproved = async (req, res) => {
 		return res.json({message: "Không có tin nào được duyệt"})
 	}else{
 		return res.json({listNewsApproved: listNews})
+	}
+}
+
+//Danh sach tin da xac nhan
+module.exports.listNewsConfirmed = async (req, res) => {
+	const listNews = await News.find({status: "2"});
+	if(!listNews){
+		return res.json({message: "Không có tin nào được duyệt"})
+	}else{
+		return res.json({listNewsConfirmed: listNews})
 	}
 }
 

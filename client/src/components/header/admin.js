@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {BrowserRouter as Router, Link, Route, Switch, useHistory } from 'react-router-dom';
+import {BrowserRouter as Router, Link, Route, Switch, useHistory, useLocation } from 'react-router-dom';
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
 import ListUser from "../users/users";
@@ -11,9 +11,20 @@ import ListDepartment from "../departments/ListDepartment";
 import ListKinds from "../kindOfNews/list-kind";
 import CreateUser from "../users/create-user";
 import UpdateUser from "../users/update-user";
+import NewsFromDate from "../news/newsfromDate";
+import NewsFromMonth from "../news/newsFromMonth";
+import NewsFromYear from "../news/newsFromYear";
+import ViewNews from "../news/ViewsNews";
+import UpdateDepartment  from '../departments/update-department';
+import CreateDepartment from '../departments/Create';
+import CreateKind from '../kindOfNews/create-kind';
+import UpdateKind from '../kindOfNews/update-kind';
 
-export default function Admin(){
+export default function Admin(props){
   let history = useHistory();
+	let location = useLocation();
+	const [path, setPath] = useState("/admin")
+
 	useEffect(()=>{
 			const linkColor = document.querySelectorAll('.nav__link')
 			function colorLink(){
@@ -49,7 +60,7 @@ export default function Admin(){
 	}
 
 	const clickStatiscal = () => {
-		history.push("/admin/statiscal")
+		history.push("/admin/statistical")
 	}
 
 	const clickNewsApproved = () => {
@@ -141,22 +152,70 @@ export default function Admin(){
 				</header>
 
 				<main>
-						<div></div>
 						<Switch>
-							<Route path="/admin/statiscal" component={StatiscalTemplace}></Route>
+							<Route path= {`${path}/statistical`}>
+								<StatiscalTemplace path={path}></StatiscalTemplace>
+							</Route>
 						</Switch>
 					<div class="recent-grid">
 						<div className="projects">
 							<div className="card">
 								<Switch>
-									<Route path="/admin/users/add" component={CreateUser}/>
-									<Route path="/admin/users/edit/:id" component={UpdateUser}/>
-									<Route path ="/admin/users" component={ListUser}/>
-									<Route path ="/admin/departments" component={ListDepartment}/>
-									<Route path ="/admin/news" component={ListNews}/>
-									<Route path = "/admin/kinds" component={ListKinds}/>
-									<Route path="/admin/news-approved" component={ListNewsApproved}></Route>
-									<Route path="/admin/news-waiting-for-approval"component={ListNewsWaitingForApproval}/>
+									<Route path={`${path}/users/add`} component={CreateUser}/>
+									<Route path={`${path}/users/edit/:id`} component={UpdateUser}/>
+									<Route path = {`${path}/users`} component={ListUser}/>
+									<Route path={`${path}/departments/edit/:id`}
+												key={props.location.key} 
+												render={({ 
+														match 
+												}) => (
+														<UpdateDepartment key={props.location.key} match={match} path={path}/>
+									)} ></Route>
+									<Route path={`${path}/departments/add`}>
+										<CreateDepartment></CreateDepartment>
+									</Route>
+									<Route path = {`${path}/departments`}>
+										<ListDepartment path={path}></ListDepartment>
+									</Route>
+
+									<Route path={`${path}/news/views/:id`}
+												key={props.location.key} 
+												render={({ 
+														match 
+												}) => (
+														<ViewNews key={props.location.key} match={match} />
+									)} >
+									</Route>
+									<Route path = {`${path}/news`}>
+										<ListNews path = {path}></ListNews>
+									</Route>
+
+									<Route path={`${path}/kinds/edit/:id`}
+												key={props.location.key} 
+												render={({ 
+														match 
+												}) => (
+														<UpdateKind key={props.location.key} match={match} path={path}/>
+									)} ></Route>
+									<Route path={`${path}/kinds/add`}>
+										<CreateKind></CreateKind>
+									</Route>
+
+									<Route path =  {`${path}/kinds`}>
+											<ListKinds path={path}></ListKinds>
+									</Route>
+									
+									<Route path= {`${path}/news-approved`} component={ListNewsApproved}></Route>
+									<Route path= {`${path}/news-waiting-for-approval`} component={ListNewsWaitingForApproval}/>
+									<Route path = {`${path}/statistical/date`} >
+										<NewsFromDate path={path}></NewsFromDate>
+									</Route>
+									<Route path = {`${path}/statistical/month`} >
+										<NewsFromMonth></NewsFromMonth>
+									</Route>
+									<Route path = {`${path}/statistical/year`} >
+										<NewsFromYear/>
+									</Route>
 							</Switch>
 							</div>
 						</div>

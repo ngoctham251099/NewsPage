@@ -1,3 +1,4 @@
+const { response } = require('express');
 const express = require('express');
 const Kinds = require('../data/models/KindOfNews');
 const News = require('../data/models/News');
@@ -39,18 +40,14 @@ module.exports.createKindOfNews = async (req, res, next) => {
 //delete kind
 module.exports.deleteKindOfNews = async (req, res, next) => {
     const {id} = req.params;
-    const news = await News.find({kind: id});
-    let count = news.count();
+    const news = await News.findOne({kind: id});
     if(news){
-        return res.json({message: `Đã có ${count} bài viết thuộc loại tin này. Hãy xóa ${count} bài viết trước khi xoa loại tin này.`})
+        return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xóa loại tin này.`})
     }
 
     await Kinds.deleteOne({_id: id});
     return res.json({message: `Đã xóa thành công`})
     
-    // Kinds.findByIdAndDelete(id)
-    // .then(kind => res.json({message :"Xóa thành công"}))
-    // .catch(err => res.status(400).json('Err: ' + err))
 }
 
 module.exports.editKindOfNews = (req, res, next) => {
@@ -67,18 +64,32 @@ module.exports.editKindOfNews = (req, res, next) => {
 }
 
 //update kind
-module.exports.updateKindOfNews = async (req, res, next) => {
+module.exports.updateKindOfNews = (req, res, next) => {
+    const {id} = req.params;
+    console.log(id)
     let {nameChange} = req.body;
-    const news = await News.find({kind: id});
-    let count = news.count();
-    if(news){
-        return res.json({message: `Đã có ${count} bài viết thuộc loại tin này. Hãy xóa ${count} bài viết trước khi xoa loại tin này.`})
-    }
-    Kinds.findById(req.params.id)
-    .then(kind => {
-        kind.name = nameChange;
-        kind.save()
-        .then(() => res.json({message:'Exercise update'}))
-        .catch( err => res.status(400).json('Err: ' + err));
-    })
+    console.log(nameChange)
+    Kinds.findById(id)
+    .then(
+        kind => {
+            if(kind) {
+                News.findOne({kindNews: kind.name})
+                .then(
+                    response => {
+                        if(response){
+                            return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xoa loại tin này.`})
+                        }else{
+                            console.log(nameChange)
+                            kind.name = nameChange;
+                            kind.save()
+                            res.json({message:'Exercise update'})
+                        }
+                    }
+                )
+            }else{
+                console.log('ashdj')
+            }
+        }
+    )
+    
 }

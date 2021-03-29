@@ -50,10 +50,6 @@ const useStyles = makeStyles((theme) => ({
 
 export default function CustomizedSelects(props) {
   const classes = useStyles();
-  const [age, setAge] = React.useState('');
-  const handleChange = (event) => {
-    setAge(event.target.value);
-  };
   return (
     <div>
       <FormControl className={classes.margin}>
@@ -69,12 +65,21 @@ export default function CustomizedSelects(props) {
           {props.list ? 
             (props.list.map((item, index) => (
               <MenuItem value={item.name}>{item.name}</MenuItem>
-            ))): null}
+            ))): null
+          }
             
           {
             props.listPower ? (
               (props.listPower.map((item) => (
                 <MenuItem value={item.id}>{item.value}</MenuItem>
+              )))
+            ): null
+          }
+
+          {
+            props.month ? (
+              (props.month.map((item) => (
+                <MenuItem value={item}>{item}</MenuItem>
               )))
             ): null
           }

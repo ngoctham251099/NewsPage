@@ -7,7 +7,7 @@ import { BsPencil } from "react-icons/bs";
 function Users(){
     let history = useHistory();
     const [users, setUsers] = useState([]);
-    const [name, setName] = useState('');
+    const [message, setMessage] = useState('');
     let stt = 1;
 
     useEffect(()=>{
@@ -22,19 +22,14 @@ function Users(){
         switch (power) {
             case "1":
                 return "Admin";
-                break;
             case "2":
                 return "Tổng biên tập";
-                break;
             case "3":
                 return "Biên tập viên";
-                break;
             case "4":
                 return "Nhân viên";
-                break;
             case "5":
                 return "Thư ký";
-                break;
             default:
                 break;
         }
@@ -46,6 +41,7 @@ function Users(){
             axios.get("/api-user")
             .then( res => {
                 setUsers(res.data);
+                setMessage("Xóa thành công")
             })
         },100)
     }
@@ -54,28 +50,21 @@ function Users(){
     const Remove = async (id) => {
         await axios.delete(`/api-user/delete/${id}`)
         showItemAfterDelete();
+       
     }
 
-    // const nameDapartment = async (id) => {
-    //     const res = await axios.post(`/api-department/viewById/${id}`)
-    //     let posts = res.data;
-
-    //     setName(
-    //         name.map((item) => (
-    //             <td>{item.name}</td>
-    //         ))
-    //     )
-    // }
     
     return(
         <div>
+
+            //------------sua lại-------------
+            {message ? (<div>{message}</div>): null}
             <div className="card-header">
 				<h3>Recent Projects</h3>
-				{/* <button>See all <span class="las la-arrow-right"></span></button> */}
-			</div>
-            <button onClick={()=>{
+				<button onClick={()=>{
                 history.push('/admin/users/add')
             }}>Thêm</button>
+			</div>
             <div className="card-body">
                 <div className="table-responsive">
                     <table width="100%">
@@ -97,7 +86,7 @@ function Users(){
                                     <td>{item.username}</td>
                                     <td>{item.email}</td>
                                     <td>{item.department}</td>
-                                    <td>{getPower(item.power)}</td>
+                                    <td>{getPower(item.power)}</td> 
                                     <td>
                                         <Link to={`/admin/users/edit/${item._id}`}><BsPencil/></Link>
                                     </td>

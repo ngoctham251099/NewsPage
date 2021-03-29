@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
-function Create(){
+
+import Input from "../UI/Input";
+import Button from "../UI/button-add";
+function Create(props){
 	const [name, setName] = useState("");
 	let history = useHistory();
 
@@ -12,7 +15,7 @@ function Create(){
 			.then(
 					res => {
 							console.log(res.data.message);
-							history.replace("/department")
+							history.replace(`${props.path}`)
 					}
 			)
 	}
@@ -25,10 +28,10 @@ function Create(){
 			<div>
 					<h3>Add department</h3>
 					<label>Deparment</label>
-					<input
+					<Input
 							onChange={onChange}
-					></input>
-					<button onClick={addDepartment}>Add</button>
+					></Input>
+					<Button onClick={addDepartment} title="Thêm">Add</Button>
 			</div>
 	)
 }

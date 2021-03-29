@@ -82,7 +82,7 @@ function CreateUSer(){
             <Input type="password" placeholder="Password" onChange={onChangePassword} value={password}></Input>
             <label>Nhập lại mật khẩu</label>
             <Input type="password" placeholder="Config Password" onChange={onChangeConfig} value={config}></Input>
-            <Button onClick={register}></Button>
+            <Button onClick={register} title="Thêm"></Button>
         </div>
     )
 }

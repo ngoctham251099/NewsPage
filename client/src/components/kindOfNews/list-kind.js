@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
+import { reset } from 'nodemon';
 
 
-function ListDepatment(props){
-    const [departments, setDepartments] = useState([]);
-    // const [message, setMessage] = useState();
+export default function ListKinds(props){
+    let history = useHistory();
+    const [kinds, setKinds] = useState([]);
+    const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('/api-department/index')
+        axios.get('/api-kind/')
         .then(
             res => {    
-                console.log(res.data.department);
-                setDepartments(res.data.department);
+                console.log(res.data.kind);
+                setKinds(res.data.kind);
             }
         )
     },[])
@@ -22,55 +24,72 @@ function ListDepatment(props){
     
     let show_item_after_delete=()=>{
         setTimeout(()=>{
-          axios.get(`/api-department/index`).then(res=>{
-            setDepartments(res.data.department)
+          axios.get(`/api-kind`).then(res=>{
+            setKinds(res.data.kind)
 
         })
         },100)
       }
 
-    let Remove = async (id) =>{
-        await axios.delete(`/api-department/delete/${id}`)
-        show_item_after_delete();
+    let Remove = (id) =>{
+        axios.delete(`/api-kind/delete/${id}`)
+        .then(
+            res => {
+                console.log(res.data.message)
+                if(res.data.message == 'Đã xóa thành công'){
+                    setMessage(res.data.message)
+                    show_item_after_delete();
+                }else{
+                    setMessage(res.data.message)
+                }
+            }
+        )
+
+       
     }
 
+    const add = () => {
+      history.push(`${props.path}/kinds/add`)
+    }
 
-
-    return  (
-            <div className="list-department">
-                <h1 className="title">List department</h1>
-                <Link to="/department/add" >Add</Link>
-                {/* {message ? (
-                    <div>{message}</div>
-                ): null} */}
-                <table>
-                    <thead>
-                        <th>STT</th>
-                        <th>Loại tin</th>
-                        <th>Edit</th>
-                        <th>Remove</th>
-                    </thead>
-                    <tbody>
-                    { departments.map( (item , index) => (
-                        <tr key={index}>
-                        <td>{stt++}</td>
-                        <td>
-                            {item.name}
-                        </td>
-                        <td>
-                            <Link to={`/department/edit/${item._id}`}><BsPencil/></Link>
-                        </td>
-                        <td>
-                            <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
-                        </td>
-                        <td>
-                        </td>
-                    </tr>
-                    ))}
-                    </tbody>
-                </table>
-            </div>
-    )
+  return  (
+    <div>
+      <div className="card-header">
+        <h3>Danh sách phòng ban</h3>
+        <button onClick={add}>Thêm <span class="las la-arrow-right"></span></button>
+      </div>
+      
+      <div className="card-body">
+      <div className="table-responsive">
+        <table width="100%">
+            <thead>
+              <tr>
+                <th>STT</th>
+                <th>Loại tin</th>
+                <th>Edit</th>
+                <th>Remove</th>
+              </tr>
+            </thead>
+            <tbody>
+              { kinds.map( (item , index) => (
+                <tr key={index}>
+                  <td>{stt++}</td>
+                  <td>
+                      {item.name}
+                  </td>
+                  <td>
+                      <Link to={`${props.path}/kinds/edit/${item._id}`}><BsPencil/></Link>
+                  </td>
+                  <td>
+                      <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
+                  </td>
+                  <td>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>)
 }
-
-export default ListDepatment;

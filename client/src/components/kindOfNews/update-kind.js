@@ -2,33 +2,40 @@ import React, { useState, useEffect } from "react";
 import {  useHistory } from "react-router-dom";
 import axios from 'axios';
 
-export default function UpdateDepartment(props){
+import Button from "../UI/button-add";
+import Input from "../UI/Input";
 
-   const [department, setDepartment] = useState([]);
+export default function UpdateKind(props){
+
+   const [kind, setKind] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
-       // console.log(props.match.params.id)
-        axios.post(`/api-department/edit/${props.match.params.id}`)
+       console.log(props.match.params.id)
+        axios.post(`/api-kind/edit/${props.match.params.id}`)
         .then(
             res => {
-                setDepartment(res.data.departmentId);
+                setKind(res.data.kindId);
             }
         )
     },[])
 
     const onChange = (e)=>{
-        setDepartment(e.target.value);
+        console.log(e.target.value)
+        setKind(e.target.value);
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
-        axios.post(`/api-department/update/${props.match.params.id}`,{
-            nameChange : department
+        console.log(props.match.params.id)
+        axios.post(`/api-kind/update/${props.match.params.id}`,{
+            id: props.match.params.id,
+            nameChange : kind
         })
         .then(
             res => {
-                history.push('/department');
+                console.log(props.path)
+                history.push(`${props.path}/kinds`);
             }
         ).catch(
             err => {
@@ -40,16 +47,8 @@ export default function UpdateDepartment(props){
     return(
         <div>
             <h1>update</h1>
-            {
-                console.log(department.name)
-            }
-            <form onSubmit={onSubmit}>
-                <input name="name" type="text" ref={React.createRef()} onChange={onChange
-                } value={department.name}></input>
-                <button type="submit">Submit</button>
-            </form>
-            
-            
-        </div>
+            <Input ref={React.createRef()} onChange={onChange} value={kind.name}></Input>
+            <button onClick={onSubmit} title="Cập nhật">Submit</button>
+        </div>  
     )
 }

@@ -1,28 +1,54 @@
+
 import React, { useEffect, useState } from 'react';
-import {useHistory } from 'react-router-dom';
+import Moment from 'react-moment';
+import axios from 'axios';
+import {BrowserRouter as Router, Link, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
-import Signin from "../users/signin"
+import Signin from "../users/signin";
 
 export default function Admin(){
     let history = useHistory();
+    let path = "/chief-editor";
+    let stt = 1;
 
-    useEffect(()=>{
-        const linkColor = document.querySelectorAll('.nav__link')
-        function colorLink(){
-            if(linkColor){
-                linkColor.forEach(l=> l.classList.remove('active'))
-                this.classList.add('active')
-            }
-        }
-        linkColor.forEach(l=> l.addEventListener('click', colorLink))
-    },[])
+    const [newsComfirm, setNewsConfirm] = useState([]);
+    const [error, setError] = useState();
+
+    // useEffect(()=>{
+    //     const linkColor = document.querySelectorAll('.nav__link')
+    //     function colorLink(){
+    //         if(linkColor){
+    //             linkColor.forEach(l=> l.classList.remove('active'))
+    //             this.classList.add('active')
+    //         }
+    //     }
+    //     linkColor.forEach(l=> l.addEventListener('click', colorLink))
+    // },[])
+
+
+    //list danh sach cho phe duyet
+
+    // useEffect(async()=>{
+    //     const res = await axios.get('/api-news/list-news-comfirmed');
+    //     if(res){
+    //         console.log(res.data.listNewsConfirmed)
+    //         setNewsConfirm(res.data.listNewsConfirmed)
+    //     }else{
+    //         setError("Không tìm thấy")
+    //     }
+    // })
 
     const logout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('power');
         localStorage.removeItem('idUser');
         history.push('/');
+    }
+
+    const listNews = () => {
+        history.push(`${path}`)
     }
   return (
          <div>
@@ -35,11 +61,11 @@ export default function Admin(){
             <div class="sidebar-menu">
                 <ul>
                     <li>
-                        <div href="#" class="nav__link active"><span class="las la-igloo"></span>
+                        <div onClick={listNews} href="#" class="nav__link active"><span class="las la-igloo"></span>
                             <span>Dashboard</span></div>
                     </li>
                     <li>
-                        <div onClick={logout} class="nav__link active a"><span class="las la-igloo"></span>
+                        <div onClick={logout} class="nav__link a"><span class="las la-igloo"></span>
                             <span>Đăng xuất</span></div>
                     </li>
                 </ul>
@@ -69,25 +95,15 @@ export default function Admin(){
             </header>
 
             <main>
-                <div class="cards">
-                    
-                
-                    
-                    {/* <div class="card-single">
-                        <div>
-                            <h1>$6k</h1>
-                            <span>Income</span>
-                        </div>
-                        <div>
-                            <span class="las la-google-wallet"></span>
-                        </div>
-                    </div> */}
-                </div>
+					<div class="recent-grid">
+						<div className="projects">
+							<div className="card">
 
-                <div class="recent-grid">
-                </div>
-            </main>
+							</div>
+						</div>
+					</div>
+				</main>
         </div>
-        </div>
+    </div>
   )
 }

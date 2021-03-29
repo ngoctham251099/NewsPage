@@ -1,6 +1,6 @@
 import Header from "./components/header/Header";
 import SignIn from './components/users/signin';
-import { BrowserRouter as Router, Route, Switch , Link} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import SignUp from './components/users/signup';
 import Admin from './components/header/admin';
 import TemplaceUser from './components/templace user/templace-user';

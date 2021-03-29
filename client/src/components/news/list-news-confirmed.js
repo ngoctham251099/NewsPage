@@ -3,11 +3,9 @@ import axios from 'axios';
 import Moment from 'react-moment';
 
 import Card from "../UI/List"
-import { get } from 'mongoose';
-import { useHistory, Link } from 'react-router-dom';
 
-function ListNews(props){
-    let history = useHistory();
+function ListNews(){
+
     const [news , setNews] = useState([]);
     const [images, setImages] = useState();
     const[view, setView] = useState();
@@ -15,33 +13,14 @@ function ListNews(props){
     let stt=1;
     let d=0;
     useEffect(() => {
-        axios.get('/api-news/')
+        axios.get('/api-news/list-news-approved')
         .then(
             res => {
-               setNews(res.data.page);
+                setNews(res.data.listNewsApproved);
                setImages(res.data.images)
             }
         )
     },[])
-
-    const getStatus = (power) => {
-        switch (power) {
-            case "1":
-                return "Chờ phê duyệt";
-                break;
-            case "2":
-                return "Đã xác nhận";
-                break;
-            case "3":
-                return "Đã phê duyệt";
-                break;
-            case "4":
-                return "Từ chối";
-                break;
-            default:
-                break;
-        }
-    }
 
     const ViewsId = (id) => {
         axios.post(`/api-news/view/${id}`)
@@ -55,25 +34,26 @@ function ListNews(props){
         )
     }
 
-    // useEffect(()=>{
-    //     const countNews = () =>{
-    //         news.forEach( item => {
-    //             d++;
-    //         })
-    //         setCount(d);
+    useEffect(()=>{
+        const countNews = () =>{
+            news.forEach( item => {
+                d++;
+            })
+            setCount(d);
 
-    //         let list = news.filter((elem, index, seft) => {
+            let list = news.filter((elem, index, seft) => {
 
-    //             seft.findIndex(
-    //                 t => {return (t.author == elem.author ) === index}
-    //             )
-    //         })  
+                seft.findIndex(
+                    t => {return (t.author == elem.author ) === index}
+                )
+            })  
+            console.log(list)  
 
-    //         // list = list.filter((elem, index, self) => self.findIndex(
-    //         //     (t) => {return (t.x === elem.x && t.y === elem.y)}) === index)
-    //     }
-    //     countNews()
-    // },[])
+            // list = list.filter((elem, index, self) => self.findIndex(
+            //     (t) => {return (t.x === elem.x && t.y === elem.y)}) === index)
+        }
+        countNews()
+    },[])
 
 
 	return (
@@ -94,7 +74,7 @@ function ListNews(props){
                                 <th>Ngày viết</th>
                                 <th>Trạng thái</th>
                                 <th>Phòng ban</th>
-                                <th>Views</th>
+                                <th>View</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -108,10 +88,9 @@ function ListNews(props){
                                     {/* <td>{item.images.map(element => (
                                         <img width={400} src={`/api-news/viewFile/${element}`}></img>
                                     ))}</td>					     */}
-                                    <td>{getStatus(item.status)}</td>
-                                    {/* <td>{item.status}</td> */}
+                                    <td>{item.status === "1" ? "Cho phe duyet": "Da Phe duyet"}</td>
                                     <td>{item.department}</td>
-                                    <td><Link to={`${props.path}/news/views/${item._id}`}>Views</Link></td>
+                                    <td><button onClick={() => ViewsId(item._id)}>View</button></td>
                                 </tr>
                             ))}
                         </tbody>

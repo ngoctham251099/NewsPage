@@ -17,8 +17,8 @@ export default function ButtonSizes(props) {
   return (
     <div>
       <div>
-        <Button variant="contained" size="large" color="primary" className={classes.margin} onClick={props.onClick}>
-          Large
+        <Button variant="contained" size="large" color="primary" className={classes.margin} onClick={props.onClick} type={props.type}>
+          {props.title}
         </Button>
       </div>
     </div>

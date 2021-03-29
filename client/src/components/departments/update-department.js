@@ -2,6 +2,9 @@ import React, { useState, useEffect } from "react";
 import {  useHistory } from "react-router-dom";
 import axios from 'axios';
 
+import Button from "../UI/button-add";
+import Input from "../UI/Input";
+
 export default function UpdateDepartment(props){
 
    const [department, setDepartment] = useState([]);
@@ -18,17 +21,20 @@ export default function UpdateDepartment(props){
     },[])
 
     const onChange = (e)=>{
+        console.log(e.target.value)
         setDepartment(e.target.value);
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
+        console.log(props.match.params.id)
         axios.post(`/api-department/update/${props.match.params.id}`,{
             nameChange : department
         })
         .then(
             res => {
-                history.push('/department');
+                console.log(props.path)
+                history.push(`${props.path}/departments`);
             }
         ).catch(
             err => {
@@ -40,16 +46,10 @@ export default function UpdateDepartment(props){
     return(
         <div>
             <h1>update</h1>
-            {
-                console.log(department.name)
-            }
-            <form onSubmit={onSubmit}>
-                <input name="name" type="text" ref={React.createRef()} onChange={onChange
-                } value={department.name}></input>
-                <button type="submit">Submit</button>
-            </form>
+            <Input ref={React.createRef()} onChange={onChange} value={department.name}></Input>
+            <button onClick={onSubmit} title="Cập nhật">Submit</button>
             
             
-        </div>
+        </div>  
     )
 }

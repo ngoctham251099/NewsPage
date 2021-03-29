@@ -1,10 +1,10 @@
-const express = require('express');
 const Departments = require('../data/models/Department');
+const News = require('../data/models/News')
 
 //show list department
 module.exports.showsDepartments = (req, res, next) => {
     Departments.find()
-    .then(department => {
+    .then(department => {s
         res.send({department: department});
     })
     .catch(err => console.log(err))
@@ -27,10 +27,25 @@ module.exports.createDepartment = (req, res, next) => {
 
 //delete department
 module.exports.deleteDepartment = (req, res, next) => {
-    console.log(req.params.id)
-    Departments.findByIdAndDelete(req.params.id)
-    .then(department => res.json(department))
-    .catch(err => res.status(400).json('Err: ' + err))
+    // const {id} = req.params;
+    // console.log(id)
+    // Departments.findById(id)
+    // .then(
+    //     department => {
+    //         console.log(department)
+    //         News.findOne({department: department.name})
+    //         .then(
+    //             news => {
+    //                 if(news) {
+    //                     return res.json({message: `Đã có bài viết thuộc phòng ban này. Hãy xóa bài viết trước khi xóa phòng ban này.`})
+    //                 }else{
+    //                     Departments.deleteOne({_id: id})
+    //                     return res.json({message: `Đã xóa thành công`})
+    //                 }
+    //             }
+    //         )
+    //     }
+    // )
 }
 
 module.exports.editDepartment = (req, res, next) => {
@@ -47,12 +62,23 @@ module.exports.editDepartment = (req, res, next) => {
 //update department
 module.exports.updateDepartment = (req, res, next) => {
     let nameChange = req.body.nameChange;
-    Departments.findById(req.params.id)
+    const {id} = req.params
+    Departments.findById(id)
     .then(department => {
-        department.name = nameChange;
-        department.save()
-        .then(() => res.json({message:'Exercise update'}))
-        .catch( err => res.status(400).json('Err: ' + err));
+        News.findOne({department: department.name})
+        .then(
+            response => {
+                if(response) {
+                    return res.json({message: `Đã có bài viết thuộc phòng ban này. Hãy xóa bài viết trước khi xóa phòng ban này.`})
+                }else{
+                    department.name = nameChange;
+                    department.save()
+                    .then(() => res.json({message:'Exercise update'}))
+                    .catch( err => res.status(400).json('Err: ' + err));
+                    }
+            }
+        )
+        
     })
 }
 

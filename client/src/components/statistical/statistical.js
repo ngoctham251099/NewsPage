@@ -1,11 +1,21 @@
 import React from 'react';
-import {Link, useHistory} from "react-router-dom";
+import {Link, useHistory, useLocation} from "react-router-dom";
 
-export default function Statiscal(){
+export default function Statiscal(props){
   let history = useHistory();
+  let location = useLocation();
   const LinkDate = () => {
-    history.push('/admin/statistical/date')
+    history.push(`${props.path}/statistical/date`)
   }
+
+  const LinkMonth = () => {
+    history.push(`${props.path}/statistical/month`)
+  }
+
+  const LinkYear = () => {
+    history.push(`${props.path}/statistical/year`)
+  }
+
   return(
     <div className="cards">
       <div class="card-single">
@@ -16,7 +26,7 @@ export default function Statiscal(){
               <span class="las la-users"></span>
           </div>
       </div>
-      <div class="card-single">
+      <div onClick={LinkMonth} class="card-single">
           <div>
               <h1>Tháng</h1>
           </div>
@@ -24,7 +34,7 @@ export default function Statiscal(){
               <span class="las la-clipboard"></span>
           </div>
       </div>
-      <div class="card-single">
+      <div onClick={LinkYear} class="card-single">
           <div>
               <h1>Năm</h1>
           </div>

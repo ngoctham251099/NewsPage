@@ -35,6 +35,9 @@ router.delete('/remove/:id', newsController.delete);
 router.post('update/:id', newsController.update);
 router.post('/view/:id', newsController.viewsId);
 router.get('/viewFile/:name', newsController.viewsImages)
+//vieư bai viet
+router.post('/views-news/:id', newsController.viewsIdNews)
+
 router.get('/viewsPower', newsController.statistical)
 router.post('/update-status/:id', newsController.updateStatusManager)
 //update sts
@@ -58,6 +61,9 @@ router.post('/statisticalAuthor', newsController.statisticalAuthor)
 //----------------------------------
 //Danh sách tin đã được duyệt
 router.get('/list-news-approved', newsController.listNewsApproved)
+
+//Danh sách tin đã xac nhan
+router.get('/list-news-comfirmed', newsController.listNewsConfirmed)
 
 //----------------------------------
 //Danh sách tin chờ được duyệt
