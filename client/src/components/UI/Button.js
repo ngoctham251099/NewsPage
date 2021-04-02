@@ -1,16 +1,16 @@
-import React from "react";
-import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
-import CloudUploadIcon from '@material-ui/icons/CloudUpload';
+import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
+import Button from '@material-ui/core/Button';
+
 const useStyles = makeStyles((theme) => ({
   root: {
-    "& > *": {
-      margin: theme.spacing(1)
-    }
+    '& > *': {
+      margin: theme.spacing(1),
+    },
   },
   input: {
-    display: "none"
-  }
+    display: 'none',
+  },
 }));
 
 export default function UploadButtons(props) {
@@ -27,7 +27,7 @@ export default function UploadButtons(props) {
         onChange={props.onChange}
       />
       <label htmlFor="contained-button-file">
-        <Button variant="contained" color="default" component="span" startIcon={<CloudUploadIcon />}>
+        <Button variant="contained" color="primary" component="span">
           Upload
         </Button>
       </label>

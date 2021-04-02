@@ -53,9 +53,8 @@ export default function CustomizedSelects(props) {
   return (
     <div>
       <FormControl className={classes.margin}>
-        {/* <InputLabel id="demo-customized-select-label">Age</InputLabel> */}
+        <InputLabel id="demo-customized-select-label">{props.value}</InputLabel>
         <Select
-          labelId="demo-customized-select-label"
           id="demo-customized-select"
           value={props.value}
           onChange={props.onChange}
@@ -86,6 +85,23 @@ export default function CustomizedSelects(props) {
 
         </Select>
       </FormControl>
+      {/* <FormControl variant="outlined" className={classes.formControl}>
+        <InputLabel id="demo-simple-select-outlined-label">{props.value}</InputLabel>
+        <Select
+          labelId="demo-simple-select-outlined-label"
+          id="demo-simple-select-outlined"
+          value={props.value}
+          onChange={props.onChange}
+          label={props.value}
+        >
+          <MenuItem value="">
+            <em>None</em>
+          </MenuItem>
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl> */}
     </div>
   );
 }

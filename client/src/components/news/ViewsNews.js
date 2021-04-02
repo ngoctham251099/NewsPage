@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
+import parse from 'html-react-parser';
 
 export default function Views(props){
     const [news, setNews] = useState([]);
@@ -38,7 +39,7 @@ export default function Views(props){
     // }
     return (
         <div>
-            {news.content}
+            {news.content ?  parse(news.content) : null}
         </div>
     )
 }

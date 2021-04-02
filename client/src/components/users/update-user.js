@@ -2,7 +2,6 @@ import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import {useHistory} from "react-router-dom";
 
-import { makeStyles } from '@material-ui/core/styles';
 import Input from '../UI/Input'
 import Select from '../UI/select';
 
@@ -24,7 +23,7 @@ export default function UpdateUser(props){
         {id: 5 , value: "Thư ký"}
     ])
     useEffect(() => {
-        axios.get('/api-department/index')
+        axios.get('/api-department/')
         .then(
             res => {
                 //console.log(res.data.department);
@@ -46,29 +45,28 @@ export default function UpdateUser(props){
          )
      },[])
 
-     const getPower = () => {
-        const power = localStorage.getItem("power");
-        const token = localStorage.getItem("token");
+    //  const getPower = () => {
+    //     const power = localStorage.getItem("power");
+    //     const token = localStorage.getItem("token");
 
-        if(token){
-            switch (power) {
-                case "1":
-                    return "Admin";
-                    break;
-                case "2":
-                    return "Tổng biên tập";
-                    break;
-                case "3":
-                    return "Biên tập viên";
-                    break;
-                case "4":
-                    return "Nhân viên";
-                    break;
-                default:
-                    break;
-            }
-        }
-    }
+    //     if(token){
+    //         switch (power) {
+    //             case "1":
+    //                 return "Admin";
+    //             case "2":
+    //                 return "Tổng biên tập";
+    //                 // break;
+    //             case "3":
+    //                 return "Biên tập viên";
+    //                 // break;
+    //             case "4":
+    //                 return "Nhân viên";
+    //                 // break;
+    //             default:
+    //                 break;
+    //         }
+    //     }
+    // }
 
     const onChangeName = (event) => {
         setUser({...user,username:  event.target.value});
@@ -89,9 +87,7 @@ export default function UpdateUser(props){
     }
 
     const onSubmit = (e) => {
-        console.log(user)
         const username = user.username;
-        console.log(user.email)
         const department = user.department;
         const email = user.email;
         const power = user.power;
@@ -117,9 +113,9 @@ export default function UpdateUser(props){
             <h1>Cập nhật tài khoản</h1>
             <form>
             <label>Tên người dùng</label>
-            <Input type="text" onChange={onChangeName} value={user.username} ref={React.createRef()}></Input>
+            <Input type="text" onChange={onChangeName} value={user.username} ></Input>
             <label>Email</label>
-            <Input type="email" placeholder="Email" onChange={onChangeEmail} value={user.email} ref={React.createRef()}></Input>
+            <Input type="email" placeholder="Email" onChange={onChangeEmail} value={user.email}></Input>
             <label>Phòng ban</label>
 
             {/* <select onChange={onChangeDepartment} value={user.department} ref={React.createRef()}>

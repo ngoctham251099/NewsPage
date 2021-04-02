@@ -3,8 +3,6 @@ import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
-import { reset } from 'nodemon';
-
 
 export default function ListKinds(props){
     let history = useHistory();
@@ -22,7 +20,7 @@ export default function ListKinds(props){
     },[])
 
     
-    let show_item_after_delete=()=>{
+    let show_item_after_delete = ()=>{
         setTimeout(()=>{
           axios.get(`/api-kind`).then(res=>{
             setKinds(res.data.kind)

@@ -4,11 +4,12 @@ import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 
-function Users(){
-    let history = useHistory();
+export default function Users(){
     const [users, setUsers] = useState([]);
     const [message, setMessage] = useState('');
     let stt = 1;
+
+    let history = useHistory();
 
     useEffect(()=>{
         const getUser = async () => {
@@ -102,5 +103,3 @@ function Users(){
         </div>
     )
 }
-
-export default Users;

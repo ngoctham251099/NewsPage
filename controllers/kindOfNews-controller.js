@@ -40,14 +40,19 @@ module.exports.createKindOfNews = async (req, res, next) => {
 //delete kind
 module.exports.deleteKindOfNews = async (req, res, next) => {
     const {id} = req.params;
-    const news = await News.findOne({kind: id});
-    if(news){
-        return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xóa loại tin này.`})
-    }
 
-    await Kinds.deleteOne({_id: id});
-    return res.json({message: `Đã xóa thành công`})
-    
+    const find = await Kinds.findOne({_id: id})
+    if(find){
+        const news = await News.findOne({kindNews: find.name})    
+        if(news) {
+            console.log(news)
+            return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xóa loại tin này.`})
+        }else{
+            console.log(id);
+            await Kinds.deleteOne({_id: id})
+            return res.json({message: `Đã xóa thành công`})
+        }
+    }   
 }
 
 module.exports.editKindOfNews = (req, res, next) => {
@@ -64,12 +69,13 @@ module.exports.editKindOfNews = (req, res, next) => {
 }
 
 //update kind
-module.exports.updateKindOfNews = (req, res, next) => {
+module.exports.updateKindOfNews = async (req, res, next) => {
     const {id} = req.params;
     console.log(id)
     let {nameChange} = req.body;
     console.log(nameChange)
-    Kinds.findById(id)
+
+    Kinds.findOne({_id:id})
     .then(
         kind => {
             if(kind) {

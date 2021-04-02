@@ -1,10 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Router, Switch } from 'react-router-dom';
+import { Route, Switch , useHistory} from 'react-router-dom';
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
-import Signin from "../users/signin"
+import ViewNews from "../news/ViewsNews";
+import ListEditor from '../news/list_editor';
+import CreateNews from "../news/create";
+import UpdateNews from "../news/edit-news";
 
-export default function Admin(){
+
+export default function Admin(props){
+    let path = "/editor"
+    let history = useHistory();
+    const [news, setNews] = useState([]);
+    let stt=1;
     useEffect(()=>{
         const linkColor = document.querySelectorAll('.nav__link')
         function colorLink(){
@@ -15,6 +23,30 @@ export default function Admin(){
         }
         linkColor.forEach(l=> l.addEventListener('click', colorLink))
     },[])
+
+    const getStatus = (power) => {
+        switch (power) {
+            case "1":
+                return "Chờ phê duyệt";
+                break;
+            case "2":
+                return "Đã xác nhận";
+                break;
+            case "3":
+                return "Đã phê duyệt";
+                break;
+            case "4":
+                return "Từ chối";
+                break;
+            default:
+                break;
+        }
+    }
+
+    const onClick = () => {
+        history.push(`${path}`)
+    }
+
   return (
          <div>
         <input type="checkbox" id="nav-toggle"/>
@@ -26,12 +58,12 @@ export default function Admin(){
             <div class="sidebar-menu">
                 <ul>
                     <li>
-                        <div href="#" class="nav__link active"><span class="las la-igloo"></span>
+                        <div onClick = {onClick} class="nav__link active"><span class="las la-igloo"></span>
                             <span>Dashboard</span></div>
                     </li>
 
                     <li>
-                        <div href="#" class="nav__link active"><span class="las la-igloo"></span>
+                        <div href="#" class="nav__link"><span class="las la-igloo"></span>
                             <span>Đăng xuất</span></div>
                     </li>
                 </ul>
@@ -62,22 +94,42 @@ export default function Admin(){
 
             <main>
                 <div class="cards">
-                    
-                
-                    
-                    {/* <div class="card-single">
-                        <div>
-                            <h1>$6k</h1>
-                            <span>Income</span>
-                        </div>
-                        <div>
-                            <span class="las la-google-wallet"></span>
-                        </div>
-                    </div> */}
                 </div>
 
                 <div class="recent-grid">
-                </div>
+                    <div className="projects">
+                        <div className="card">
+                            <Switch>
+                                <Route path={`${path}/news/views/:id`}
+                                    key={props.location.key} 
+                                    render={({ 
+                                            match 
+                                    }) => (
+                                        <ViewNews key={props.location.key} match={match} />
+                                )} >
+                                </Route>
+
+                                <Route path={`${path}/news/:id`}
+                                        key={props.location.key} 
+                                        render={({ 
+                                                match 
+                                        }) => (
+                                        <UpdateNews key={props.location.key} match={match} />
+                                    )} >
+                                </Route>
+
+                                <Route path = {`${path}/news/add`}>
+                                    <CreateNews path={path}/>
+                                </Route>
+                                
+
+                                <Route path={`${path}`}>
+                                    <ListEditor path={path}/>
+                                </Route>
+                            </Switch>
+                        </div>
+                    </div>
+		        </div>  
             </main>
         </div>
         </div>

@@ -5,10 +5,12 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const multiparty = require('connect-multiparty');
+const path = require('path');
 
 const multipartMiddleware = multiparty({uploadDir: "./images"})
 const userRouter = require('./router/Users-router');
 const departmentRouter = require('./router/daperment-router');
+const categoriesRouter = require('./router/categories-router')
 const kindRouter = require('./router/kindOfNews-router');
 const newsRouter = require('./router/news-router');
 const controllerNews = require('./controllers/news-controller')
@@ -36,14 +38,13 @@ app.use(bodyParser.urlencoded({ extended: false }))
 // parse application/json
 app.use(bodyParser.json());
 
-app.use(express.static("uploads"));
+app.use(express.static('uploads'))
 
-app.get('/', (req, res) => {
-    res.json({hello: 'alo anh binh gold day phai khong a'})
-})
 app.use('/api-user', userRouter);
 
 app.use('/api-department', departmentRouter)
+
+app.use('/api-categories', categoriesRouter)
 
 app.use('/api-kind', kindRouter)
 

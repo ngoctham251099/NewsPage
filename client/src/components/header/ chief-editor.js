@@ -6,39 +6,40 @@ import {BrowserRouter as Router, Link, Route, Switch, useHistory, useLocation } 
 
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
-import Signin from "../users/signin";
+import ListChiefEditor from '../news/list-chief-editor';
+import ViewNews from "../news/ViewsNews";
+import CreateNews from "../news/create";
+import UpdateNews from "../news/edit-news";
 
-export default function Admin(){
+export default function ChiefEditor(props){
     let history = useHistory();
     let path = "/chief-editor";
-    let stt = 1;
 
     const [newsComfirm, setNewsConfirm] = useState([]);
     const [error, setError] = useState();
 
-    // useEffect(()=>{
-    //     const linkColor = document.querySelectorAll('.nav__link')
-    //     function colorLink(){
-    //         if(linkColor){
-    //             linkColor.forEach(l=> l.classList.remove('active'))
-    //             this.classList.add('active')
-    //         }
-    //     }
-    //     linkColor.forEach(l=> l.addEventListener('click', colorLink))
-    // },[])
-
+    useEffect(()=>{
+        const linkColor = document.querySelectorAll('.nav__link')
+        function colorLink(){
+            if(linkColor){
+                linkColor.forEach(l=> l.classList.remove('active'))
+                this.classList.add('active')
+            }
+        }
+        linkColor.forEach(l=> l.addEventListener('click', colorLink))
+    },[])
 
     //list danh sach cho phe duyet
 
-    // useEffect(async()=>{
-    //     const res = await axios.get('/api-news/list-news-comfirmed');
-    //     if(res){
-    //         console.log(res.data.listNewsConfirmed)
-    //         setNewsConfirm(res.data.listNewsConfirmed)
-    //     }else{
-    //         setError("Không tìm thấy")
-    //     }
-    // })
+    useEffect(async()=>{
+        const res = await axios.get('/api-news/list-news-comfirmed');
+        if(res){
+            console.log(res.data.listNewsConfirmed)
+            setNewsConfirm(res.data.listNewsConfirmed)
+        }else{
+            setError("Không tìm thấy")
+        }
+    },[])
 
     const logout = () => {
         localStorage.removeItem('token');
@@ -98,7 +99,32 @@ export default function Admin(){
 					<div class="recent-grid">
 						<div className="projects">
 							<div className="card">
+                                <Switch>
+                                    <Route path={`${path}/news/views/:id`}
+                                        key={props.location.key} 
+                                        render={({ 
+                                                match 
+                                        }) => (
+                                            <ViewNews key={props.location.key} match={match} />
+                                    )} >
+                                    </Route>
 
+                                    <Route path = {`${path}/news/add`}>
+                                        <CreateNews path={path}/>
+                                    </Route>
+                                    
+                                    <Route path={`${path}/news/:id`}
+                                            key={props.location.key} 
+                                            render={({ 
+                                                    match 
+                                            }) => (
+                                            <UpdateNews key={props.location.key} match={match} />
+                                        )} >
+                                    </Route>
+                                    <Route path={`${path}`}>
+                                        <ListChiefEditor path={path}/>
+                                    </Route>
+                                </Switch>
 							</div>
 						</div>
 					</div>

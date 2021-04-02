@@ -13,7 +13,7 @@ module.exports.getUsers = async (req, res, next) => {
 		return res.status(200).send(user);
 }
 
-//create user
+//sign in user
 module.exports.postRegister = async (req, res, next) => {
 		const { username, email, department, password, confirmPassword} = req.body;
 
@@ -31,6 +31,10 @@ module.exports.postRegister = async (req, res, next) => {
 				return res.json({message: "Mật khẩu phải lớn hơn 6 ký tự"})
 		}
 
+		if(password !== confirmPassword){
+			return res.json({message: "Mật khẩu không trùng khớp"})
+		}	
+
 		const searchUser = await Users.findOne({email: email})
 		if(searchUser){
 				return res.json({message: "Tài khoản đã tồn tại"})
@@ -45,6 +49,42 @@ module.exports.postRegister = async (req, res, next) => {
 				await newUser.save();
 				return res.json({info: "Tao tai khoan thanh cong"})
 		}
+
+}
+
+//create user
+module.exports.createUser = async (req, res, next) => {
+	const { username, email, department, password, confirmPassword, power} = req.body;
+
+	console.log(power)
+	if(!username || !password || !department || !confirmPassword){
+		 // console.log(username, password, department, configPassword)
+			return res.json({message: "Please fill in all fields"})
+	}
+	console.log(password)
+	if(password.length < 6){
+		 // console.log(username, password, department, configPassword)
+			return res.json({message: "Mật khẩu phải lớn hơn 6 ký tự"})
+	}
+
+	if(password !== confirmPassword){
+		return res.json({message: "Mật khẩu không trùng khớp"})
+	}
+
+	const searchUser = await Users.findOne({email: email})
+	if(searchUser){
+			return res.json({message: "Tài khoản đã tồn tại"})
+	}else{
+			const newUser = new Users();
+			newUser.username = username;
+			newUser.password = newUser.generateHash(password);
+			newUser.department = department;
+			newUser.email = email;
+			newUser.power = power;
+
+			await newUser.save();
+			return res.json({info: "Tao tai khoan thanh cong"})
+	}
 
 }
 

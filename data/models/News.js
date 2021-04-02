@@ -14,6 +14,7 @@ const newsSchema = new Schema({
         type: Array
     },
     kindNews: String,
+    categories: String,
     note: String
 }, {
     collection: 'News'

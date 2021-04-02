@@ -4,7 +4,7 @@ const News = require('../data/models/News')
 //show list department
 module.exports.showsDepartments = (req, res, next) => {
     Departments.find()
-    .then(department => {s
+    .then(department => {
         res.send({department: department});
     })
     .catch(err => console.log(err))
@@ -26,26 +26,21 @@ module.exports.createDepartment = (req, res, next) => {
 }
 
 //delete department
-module.exports.deleteDepartment = (req, res, next) => {
-    // const {id} = req.params;
-    // console.log(id)
-    // Departments.findById(id)
-    // .then(
-    //     department => {
-    //         console.log(department)
-    //         News.findOne({department: department.name})
-    //         .then(
-    //             news => {
-    //                 if(news) {
-    //                     return res.json({message: `Đã có bài viết thuộc phòng ban này. Hãy xóa bài viết trước khi xóa phòng ban này.`})
-    //                 }else{
-    //                     Departments.deleteOne({_id: id})
-    //                     return res.json({message: `Đã xóa thành công`})
-    //                 }
-    //             }
-    //         )
-    //     }
-    // )
+module.exports.deleteDepartment = async (req, res, next) => {
+    const {id} = req.params;
+
+    const find = await Departments.findOne({_id: id})
+    if(find){
+        const news = await News.findOne({department: find.name})    
+        if(news) {
+            console.log(news)
+            return res.json({message: `Đã có bài viết thuộc phòng ban này. Hãy xóa bài viết trước khi xóa phòng ban này.`})
+        }else{
+            console.log(id);
+            await Departments.deleteOne({_id: id})
+            return res.json({message: `Đã xóa thành công`})
+        }
+    }
 }
 
 module.exports.editDepartment = (req, res, next) => {

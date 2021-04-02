@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
+
 const fs = require('fs');
 const multer = require('multer');
 
@@ -32,17 +32,29 @@ const  newsController = require('../controllers/news-controller');
 router.get('/', newsController.showNews);
 router.post('/create', cpUpload,newsController.create);
 router.delete('/remove/:id', newsController.delete);
-router.post('update/:id', newsController.update);
+
 router.post('/view/:id', newsController.viewsId);
+
+//edit news
+router.post('/edit/:id', newsController.editNews)
+
+router.post('/update/:id', cpUpload, newsController.updateNews)
+
 router.get('/viewFile/:name', newsController.viewsImages)
 //vieư bai viet
 router.post('/views-news/:id', newsController.viewsIdNews)
 
 router.get('/viewsPower', newsController.statistical)
-router.post('/update-status/:id', newsController.updateStatusManager)
+
+//view theo tung thang viet bai
+router.get('/view-writer', newsController.viewsWriter)
+
+router.post('/update-status/:id/:idNews', newsController.updateStatusManager)
+router.post('/update-chief-editor/:id/:idNews', newsController.updateStatusPresident)
+router.post('/update-refuse/:id/:idNews', newsController.updateStatusNoReview)
 //update sts
-//View list news theo department cho truong phong
-router.get('/views-manager', newsController.viewsDepartment)
+//View list news theo department cho truong phong vaf status
+router.get('/views-editor', newsController.viewsDepartment)
 //view list news theo department cho giam doc
 router.get('/views-president', newsController.viewsDepartmentPresident)
 //Thống kê theo ngày

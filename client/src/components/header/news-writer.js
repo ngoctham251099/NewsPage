@@ -1,10 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Link, Route, Router, Switch } from 'react-router-dom';
+import { Link, Route, Router, Switch, useHistory } from 'react-router-dom';
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
-import Signin from "../users/signin"
+import ListNewsWriter from "../news/list_writer";
+import ViewNews from "../news/ViewsNews";
+import CreateNews from "../news/create";
+import UpdateNews from "../news/edit-news";
 
-export default function Admin(){
+export default function Admin(props){
+    const path = "/news-writer";
+    const history = useHistory();
     useEffect(()=>{
         const linkColor = document.querySelectorAll('.nav__link')
         function colorLink(){
@@ -26,7 +31,9 @@ export default function Admin(){
             <div class="sidebar-menu">
                 <ul>
                     <li>
-                        <div href="#" class="nav__link active"><span class="las la-igloo"></span>
+                        <div onClick={()=>{
+                            history.push(`${path}`)
+                        }} class="nav__link active"><span class="las la-igloo"></span>
                             <span>Dashboard</span></div>
                     </li>
         
@@ -88,6 +95,36 @@ export default function Admin(){
                 </div>
 
                 <div class="recent-grid">
+                    <div className="projects">
+                        <div className="card">
+                            <Switch>
+                                <Route path={`${path}/news/views/:id`}
+                                    key={props.location.key} 
+                                    render={({ 
+                                            match 
+                                    }) => (
+                                        <ViewNews key={props.location.key} match={match} />
+                                )} >
+                                </Route>
+
+                                <Route path = {`${path}/news/add`}>
+                                    <CreateNews path={path}/>
+                                </Route>
+                                
+                                <Route path={`${path}/news/:id`}
+                                        key={props.location.key} 
+                                        render={({ 
+                                                match 
+                                        }) => (
+                                        <UpdateNews key={props.location.key} match={match} />
+                                    )} >
+                                </Route>
+                                <Route path={`${path}`}>
+                                    <ListNewsWriter path={path}/>
+                                </Route>
+                            </Switch>
+                        </div>
+                    </div>
                 </div>
             </main>
         </div>

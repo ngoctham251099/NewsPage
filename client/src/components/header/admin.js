@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {BrowserRouter as Router, Link, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+import {BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
 import ListUser from "../users/users";
@@ -19,11 +19,16 @@ import UpdateDepartment  from '../departments/update-department';
 import CreateDepartment from '../departments/Create';
 import CreateKind from '../kindOfNews/create-kind';
 import UpdateKind from '../kindOfNews/update-kind';
+import UpdateNews from '../news/edit-news';
+import CreateNews from '../news/create';
+
+import ListCategories from '../categories/listCategories';
+import CreateCategories from '../categories/Create';
+import UpdateCategories from '../categories/update-categories';
 
 export default function Admin(props){
   let history = useHistory();
-	let location = useLocation();
-	const [path, setPath] = useState("/admin")
+	const path = "/admin";
 
 	useEffect(()=>{
 			const linkColor = document.querySelectorAll('.nav__link')
@@ -45,6 +50,10 @@ export default function Admin(props){
 
 	const clickDepartment = () => {
 		history.push("/admin/departments")
+	}
+
+	const clickCategories = () => {
+		history.push("/admin/categories")
 	}
 
 	const clickUsers = () => {
@@ -74,75 +83,80 @@ export default function Admin(props){
   return (
     <div>
 			<input type="checkbox" id="nav-toggle"/>
-			<div class="sidebar">
-					<div class="sidebar-brand">
-							<h2><span class="lab la-accusoft"></span><span>Accusoft</span></h2>
+			<div className="sidebar">
+					<div className="sidebar-brand">
+							<h2><span className="lab la-accusoft"></span><span>Accusoft</span></h2>
 					</div>
 
-					<div class="sidebar-menu">
+					<div className="sidebar-menu">
 							<ul>
 									<li>
-											<div  class="nav__link"><span class="las la-igloo"></span>
+											<div  className="nav__link"><span className="las la-igloo"></span>
 													<span>Dashboard</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickUsers} class="nav__link"><span class="las la-users"></span>
+											<div onClick={clickUsers} className="nav__link"><span className="las la-users"></span>
 													<span>Người dùng</span></div>
 									</li>
 
 									<li>
-											<div onClick={clickDepartment} class="nav__link"><span class="las la-users"></span>
+											<div onClick={clickDepartment} className="nav__link"><span className="las la-users"></span>
 													<span>Phòng ban</span></div>
 									</li>
 
 									<li>
-											<div onClick={clickKinds} class="nav__link"><span class="las la-users"></span>
+											<div onClick={clickCategories} className="nav__link"><span className="las la-users"></span>
+													<span>Chuyên mục đăng</span></div>
+									</li>
+
+									<li>
+											<div onClick={clickKinds} className="nav__link"><span className="las la-users"></span>
 													<span>Loại tin</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickNews} class="nav__link" ><span class="las la-clipboard-list"></span>
+											<div onClick={clickNews} className="nav__link" ><span className="las la-clipboard-list"></span>
 													<span>Danh sách bài viết</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickStatiscal} class="nav__link"><span class="las la-clipboard-list"></span>
+											<div onClick={clickStatiscal} className="nav__link"><span className="las la-clipboard-list"></span>
 													<span>Thống kê</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickNewsApproved} class="nav__link"><span class="las la-receipt"></span>
+											<div onClick={clickNewsApproved} className="nav__link"><span className="las la-receipt"></span>
 													<span>Danh sách tin đã duyệt</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickNewsWaitingForApproval} class="nav__link"><span class="las la-user-circle"></span>
+											<div onClick={clickNewsWaitingForApproval} className="nav__link"><span className="las la-user-circle"></span>
 													<span>Danh sách tin chờ phê duyệt</span></div>
 									</li>
 			
 									<li>
-											<div onClick={logout}  class="nav__link "><span class="las la-igloo"></span>
+											<div onClick={logout}  className="nav__link "><span className="las la-igloo"></span>
 													<span>Đăng xuất</span></div>
 									</li>
 							</ul>
 					</div>
 			</div>
 
-			<div class="main-content">
+			<div className="main-content">
 				<header>
 						<h2>
 								<label for="nav-toggle">
-										<span class="las la-bars"></span>
+										<span className="las la-bars"></span>
 								</label>
 								Dashboard
 						</h2>
-						<div class="search-wrapper">
-								<span class="las la-search"></span>
+						<div className="search-wrapper">
+								<span className="las la-search"></span>
 								<input type="search" placeholder="Search here"/>
 						</div>
 
-						<div class="user-wrapper">
+						<div className="user-wrapper">
 								<img src="#" width="40px" height="40px" alt=""/>
 								<div>
 										<h4>John Doe</h4>
@@ -157,7 +171,7 @@ export default function Admin(props){
 								<StatiscalTemplace path={path}></StatiscalTemplace>
 							</Route>
 						</Switch>
-					<div class="recent-grid">
+					<div className="recent-grid">
 						<div className="projects">
 							<div className="card">
 								<Switch>
@@ -178,6 +192,20 @@ export default function Admin(props){
 										<ListDepartment path={path}></ListDepartment>
 									</Route>
 
+									<Route path={`${path}/categories/edit/:id`}
+												key={props.location.key} 
+												render={({ 
+														match 
+												}) => (
+														<UpdateCategories key={props.location.key} match={match} path={path}/>
+									)} ></Route>
+									<Route path={`${path}/categories/add`}>
+										<CreateCategories/>
+									</Route>
+									<Route path = {`${path}/categories`}>
+										<ListCategories path={path}/>
+									</Route>
+
 									<Route path={`${path}/news/views/:id`}
 												key={props.location.key} 
 												render={({ 
@@ -186,6 +214,19 @@ export default function Admin(props){
 														<ViewNews key={props.location.key} match={match} />
 									)} >
 									</Route>
+									
+									<Route path = {`${path}/news/add`}>
+										<CreateNews path = {path}></CreateNews>
+									</Route>
+
+									<Route path={`${path}/news/:id`}
+												key={props.location.key} 
+												render={({ 
+														match 
+												}) => (
+												<UpdateNews key={props.location.key} match={match} path={path}/>
+									)} ></Route>
+
 									<Route path = {`${path}/news`}>
 										<ListNews path = {path}></ListNews>
 									</Route>
@@ -210,6 +251,7 @@ export default function Admin(props){
 									<Route path = {`${path}/statistical/date`} >
 										<NewsFromDate path={path}></NewsFromDate>
 									</Route>
+
 									<Route path = {`${path}/statistical/month`} >
 										<NewsFromMonth></NewsFromMonth>
 									</Route>

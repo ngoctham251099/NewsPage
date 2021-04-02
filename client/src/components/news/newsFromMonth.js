@@ -18,61 +18,36 @@ export default function ListNewsFromDate(){
   const [refuse , setRefuse] = useState(0);
 
   let stt = 1;
-  let count= 0;
+  let counted = [];
+
+  let obj = {}
 
   const onSubmit = async (props) => {
     const res = await axios.post('/api-news/statisticalFromMonth',{
       fromMonth: selectedDate
     });
-    console.log(res.data.NewMonth)
-    await setNews(res.data.NewMonth)
-    res.data.NewMonth.forEach(element => {
-      count++;
-    });
-    console.log(count)
-    setCountAll(count);
+    // console.log(res.data.NewMonth)
+    // await setNews(res.data.NewMonth)
+    if(res.data.NewMonth) {
+      let arrStatus = res.data.NewMonth.filter(item => item.status == "3")
 
-    const arr = res.data.NewMonth.filter(item =>{
-        return item.status == "1";
-    })
-    count = 0;
-    arr.forEach(item => {
-      count++;
-    })
-    console.log(count)
-    setCountWaitingApproval(count)
-    //--------------
-    const arr1 = res.data.NewMonth.filter(item =>{
-      return item.status == "2";
-    })
-    count = 0;
-    arr1.forEach(item => {
-      count++;
-    })
-    console.log(count)
-    setCountConfirmed(count)
-    //-------------------
-    const arr2 = res.data.NewMonth.filter(item =>{
-      return item.status == "3";
-    })
-    count = 0;
-    arr2.forEach(item => {
-      count++;
-    })
-    console.log(count)
-    setCountApproval(count)
-
-    //-----------------
-    const arr3 = res.data.NewMonth.filter(item =>{
-      return item.status == "3";
-    })
-    count = 0;
-    arr3.forEach(item => {
-      count++;
-    })
-    console.log(count)
-    setRefuse(count)
-
+      let arrMap = arrStatus.map(item =>{
+        obj = item.department;
+        return obj;
+      })
+    
+      for(let c of arrMap){
+        const alreadyCounted = counted.map(c => c.name);
+    
+        if (alreadyCounted.includes(c) ) {
+          counted[alreadyCounted.indexOf(c)].count += 1
+        } else {
+          counted.push({ 'name': c, 'count': 1})
+        }
+      }
+      console.log(counted);
+      setNews(counted)
+    }
   }
 
   const handleDateChange = (date) => {
@@ -91,38 +66,17 @@ export default function ListNewsFromDate(){
 
       <div className="card-body">
 				<div className="table-responsive">
-          <h2>Số lượng bài viết</h2>
-          <br></br>
-          <table width="100%">
-            <thead>
-              <tr>
-                <th>Tổng số lượng tin</th>
-                <th>Số tin chờ phê duyệt</th>
-                <th>Số tin đã được xác nhận</th>
-                <th>Số tin đã phê duyệt</th>
-                <th>Số tin đã phê duyệt</th>
-              </tr>
-            </thead>
-            <tbody>
-              <td>{countAll != 0 ? countAll : 0}</td>
-              <td>{countWaitingApproval != 0 ? countWaitingApproval : 0}</td>
-              <td>{countConfirmed != 0 ? countConfirmed : 0}</td>
-              <td>{countApproval != 0 ? countApproval : 0}</td>
-              <td>{refuse != 0 ? refuse : 0}</td>
-            </tbody>
-          </table>
-          <br></br>
           <h2>Danh sách bài viết</h2>
           <br></br>
           <table width="100%">
               <thead>
                   <tr>
                       <th>STT</th>
-                      <th>Tiêu đề</th>
-                      <th>Tác giả</th>
-                      <th>Ngày viết</th>
-                      <th>Trạng thái</th>
                       <th>Phòng ban</th>
+                      <th>Số lượng tin </th>
+                      {/* <th>Ngày viết</th>
+                      <th>Trạng thái</th>
+                      <th>Phòng ban</th> */}
                   </tr>
               </thead>
               <tbody>
@@ -130,15 +84,13 @@ export default function ListNewsFromDate(){
                     news.map(item => (
                       <tr key = {item._id}>
                           <td>{stt++}</td>
-                          <td>{item.title}</td>
-                          <td><img width={150} src={`/api-news/viewFile/${item.avatar}`}></img></td>
-                          <td>{item.author}</td>
-                          <td><Moment format="DD/MM/YYYY">{item.date_submitted}</Moment></td>
-                          {/* <td>{item.images.map(element => (
-                              <img width={400} src={`/api-news/viewFile/${element}`}></img>
-                          ))}</td>					     */}
+                          <td>{item.name}</td>
+                          <td>{item.count}</td>
+                          {/* <td>{item.author}</td>
+                          <td><Moment format="DD/MM/YYYY">{item.date_submitted}</Moment></td>			     
                           <td>{item.status === "1" ? "Cho phe duyet": "Da Phe duyet"}</td>
-                          <td>{item.department}</td>
+                          <td>{item.department}</td> */}
+                          <td></td>
                       </tr>
                   ))
                   ):null}

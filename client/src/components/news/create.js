@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import parse from 'html-react-parser';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
 import { makeStyles } from '@material-ui/core/styles';
 import Input from '../UI/Input'
 import Button from '../UI/Button'
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -16,7 +18,8 @@ const useStyles = makeStyles((theme) => ({
     },
   }));
 
-function CreateNews() {
+function CreateNews(props) {
+    let history = useHistory();
 
     const [title, setTitle] = useState();
     const [author, setAuthor] = useState();
@@ -51,7 +54,7 @@ function CreateNews() {
         .then(
             res => {
                 console.log(res.data);
-                //console.log(res.data.file)
+                history.push(`${props.path}/news`)
             }
         )
     }
@@ -105,7 +108,7 @@ function CreateNews() {
                 </div>
 
                 <div className="item">
-                    <label>Author</label>
+                    <label>Tác giả</label>
                     <Input
                         title="Tác giả"
                         onChange={onChangeAuthor}
@@ -143,8 +146,9 @@ function CreateNews() {
                 <div className="item">
                     <label>Imaegs</label>
                     <Button
-											onChange={onChangeImages}
-										></Button>
+                        onChange={onChangeImages}
+                        title="Ảnh trong bản tin trên"
+                    ></Button>
                     {/* <input type="file" name="images" placeholder="images" onChange={onChangeImages} multiple></input> */}
                 </div>
             </form>

@@ -3,6 +3,7 @@ const Schema = mongoose.Schema;
 
 const kindSchema = new Schema({
     name: String,
+    unitPrice: Number
 },{
     collection: 'KindsOfNews'
 })

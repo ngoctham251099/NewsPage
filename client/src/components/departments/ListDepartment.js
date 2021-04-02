@@ -8,10 +8,10 @@ import { BsPencil } from "react-icons/bs";
 function ListDepatment(props){
     let history = useHistory();
     const [departments, setDepartments] = useState([]);
-    // const [message, setMessage] = useState();
+    const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('/api-department/index')
+        axios.get('/api-department')
         .then(
             res => {    
                 console.log(res.data.department);
@@ -23,7 +23,8 @@ function ListDepatment(props){
     
     let show_item_after_delete=()=>{
         setTimeout(()=>{
-          axios.get(`/api-department/index`).then(res=>{
+          axios.get(`/api-department`).then(res=>{
+            console.log(res.data.department)
             setDepartments(res.data.department)
 
         })
@@ -31,8 +32,14 @@ function ListDepatment(props){
       }
 
     let Remove = async (id) =>{
-        await axios.delete(`/api-department/delete/${id}`)
-        show_item_after_delete();
+        const res = await axios.delete(`/api-department/delete/${id}`)
+        if(res.data.message == "Đã xóa thành công"){
+          setMessage(res.data.message)
+          show_item_after_delete();
+        }else{
+          setMessage(res.data.message)
+        }
+        
     }
 
     const add = () => {

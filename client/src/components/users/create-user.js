@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import Input from '../UI/Input'
 import Select from '../UI/select';
-import Button from '../UI/button-add';
+import Button  from '../UI/button-add';
 
 function CreateUSer(){
 
@@ -14,9 +14,18 @@ function CreateUSer(){
     const [config, setConfig] = useState('');
     const [status,setStatus] = useState('');
     const [departments, setDepartments] = useState([]);
-    
+    const [powerUser, setPowerUser] = useState();
+
+    const [power, setPower] = useState([
+        {id: 1 , value: "Admin"},
+        {id: 2 , value: "Tổng biên tập"},
+        {id: 3 , value: "Biên tập viên"},
+        {id: 4 , value: "Nhân viên"},
+        {id: 5 , value: "Thư ký"}
+    ])
+
     useEffect(() => {
-        axios.get('/api-department/index')
+        axios.get('/api-department')
         .then(
             res => {
                 console.log(res.data.department);
@@ -26,12 +35,13 @@ function CreateUSer(){
     },[])
 
     const register = () => {
-        axios.post('/api-user/signup',{
+        axios.post('/api-user/create',{
             username: username,
             email: email,
             department: department,
             password: password,
-            confirmPassword: config
+            confirmPassword: config,
+            power: powerUser
         })
         .then(res => {
             console.log(res.data.message)
@@ -58,6 +68,11 @@ function CreateUSer(){
     const onChangeConfig = (event) => {
         setConfig(event.target.value);
     }
+
+    const onChangePower = (event) => {
+        console.log(event.target.value)
+        setPowerUser(event.target.value);
+    }
     
     return(
         <div>
@@ -78,6 +93,17 @@ function CreateUSer(){
             </select> */}
 
             <Select onChange={onChangeDepartment} list={departments}></Select>
+            <label>Quyền hạn</label>
+
+            {/* <select onChange={onChangePower} ref={React.createRef()}>
+                <option value={user.power}>{user.power}</option>
+                <option value="1">Admin</option>
+                <option value="2">Tổng duyệt tin</option>
+                <option value="3">Sơ duyệt</option>
+                <option value="4">Viết tin</option>
+            </select> */}
+
+            <Select onChange={onChangePower} listPower={power} ></Select>
             <label>Mật khẩu</label>
             <Input type="password" placeholder="Password" onChange={onChangePassword} value={password}></Input>
             <label>Nhập lại mật khẩu</label>

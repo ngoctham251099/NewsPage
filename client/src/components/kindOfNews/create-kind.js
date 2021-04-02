@@ -27,7 +27,6 @@ function Create(props){
 	return(
 			<div>
 					<h3>Thêm loại tin</h3>
-					<label>Deparment</label>
 					<Input
 							onChange={onChange}
 					></Input>

@@ -6,13 +6,15 @@ const useStyles = makeStyles((theme) => ({
   root: {
     '& > *': {
       margin: theme.spacing(1),
-      width: '80%',
+      width: '99%',
     },
   },
 }));
 
-export default function Input(props) {
+function Input(props) {
+
   const classes = useStyles();
+
 
   return (
     <div className={classes.root} noValidate autoComplete="off">
@@ -30,3 +32,5 @@ export default function Input(props) {
     </div>
   );
 }
+
+export default Input;
