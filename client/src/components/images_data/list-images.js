@@ -4,53 +4,57 @@ import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 
-
-function ListDepatment(props){
+export default function ListKinds(props){
     let history = useHistory();
-    const [departments, setDepartments] = useState([]);
+    const [images, setImages] = useState([]);
     const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('/api-department')
+        axios.get('/api-images/')
         .then(
             res => {    
-                console.log(res.data.department);
-                setDepartments(res.data.department);
+                console.log(res.data.images);
+                setImages(res.data.images);
             }
         )
     },[])
 
     
-    let show_item_after_delete=()=>{
+    let show_item_after_delete = ()=>{
         setTimeout(()=>{
-          axios.get(`/api-department`).then(res=>{
-            console.log(res.data.department)
-            setDepartments(res.data.department)
+          axios.get(`/api-images`).then(res=>{
+            setImages(res.data.images)
 
         })
         },100)
       }
 
-    let Remove = async (id) =>{
-        const res = await axios.delete(`/api-department/delete/${id}`)
-        if(res.data.message == "Đã xóa thành công"){
-          setMessage(res.data.message)
-          show_item_after_delete();
-        }else{
-          setMessage(res.data.message)
-        }
-        
+    let Remove = (id) =>{
+        axios.delete(`/api-images/delete/${id}`)
+        .then(
+            res => {
+                console.log(res.data.message)
+                if(res.data.message == 'Đã xóa thành công'){
+                    setMessage(res.data.message)
+                    show_item_after_delete();
+                }else{
+                    setMessage(res.data.message)
+                }
+            }
+        )
+
+       
     }
 
     const add = () => {
-      history.push(`${props.path}/departments/add`)
+      history.push(`${props.path}/list-images/add`)
     }
 
   return  (
     <div>
       <div className="card-header">
         <h3>Danh sách phòng ban</h3>
-        <button onClick={add}>See all <span class="las la-arrow-right"></span></button>
+        <button onClick={add}>Thêm <span class="las la-arrow-right"></span></button>
       </div>
       
       <div className="card-body">
@@ -59,23 +63,27 @@ function ListDepatment(props){
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Department</th>
+                <th>Đuôi hình ảnh</th>
+                <th>Đơn giá</th>
                 <th>Edit</th>
                 <th>Remove</th>
               </tr>
             </thead>
             <tbody>
-              { departments.map( (item , index) => (
+              { images.map( (item , index) => (
                 <tr key={index}>
                   <td>{stt++}</td>
                   <td>
                       {item.name}
                   </td>
                   <td>
-                      <Link to={`${props.path}/departments/edit/${item._id}`}><BsPencil/></Link>
+                      {item.price}
                   </td>
                   <td>
-                      <span onClick={() => Remove(item._id)}><BsTrashFill/></span >
+                      <Link to={`${props.path}/list-images/edit/${item._id}`}><BsPencil/></Link>
+                  </td>
+                  <td>
+                      <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
                   </td>
                   <td>
                   </td>
@@ -87,5 +95,3 @@ function ListDepatment(props){
     </div>
   </div>)
 }
-
-export default ListDepatment;

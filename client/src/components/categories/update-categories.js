@@ -47,7 +47,7 @@ export default function UpdateDepartment(props){
         <div>
             <h1>Cập nhật</h1>
             <Input ref={React.createRef()} onChange={onChange} value={categories.name}></Input>
-            <button onClick={onSubmit} title="Cập nhật">Submit</button>
+            <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
             
             
         </div>  

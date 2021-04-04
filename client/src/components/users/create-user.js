@@ -4,9 +4,10 @@ import axios from 'axios';
 import Input from '../UI/Input'
 import Select from '../UI/select';
 import Button  from '../UI/button-add';
+import { useHistory } from 'react-router-dom';
 
-function CreateUSer(){
-
+function CreateUSer(props){
+    let history = useHistory();
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [department, setDepartment] = useState('');
@@ -44,8 +45,13 @@ function CreateUSer(){
             power: powerUser
         })
         .then(res => {
-            console.log(res.data.message)
-            setStatus(res.data.message)
+            if(res.data.info){
+                //console.log('ashhd')
+                history.push(`${props.path}/users`)
+            }else{
+                setStatus(res.data.message)
+            }
+            
         })
     }
 
@@ -76,7 +82,7 @@ function CreateUSer(){
     
     return(
         <div>
-            <h1>Create user</h1>
+            <h1>Thêm người dùng</h1>
             {(status) ? (
                 <p>{status}</p>
             ): null}

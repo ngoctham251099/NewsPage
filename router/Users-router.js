@@ -13,6 +13,7 @@ router.post('/update/:id', userController.updateUser);
 router.post('/forgotPassword', userController.forgot);
 router.get('/reset/:token', userController.resetPassword)
 router.put('/updatePasswordViaEmail/:token', userController.updatePasswordViaEmail)
+router.post('/user-id/:id', userController.findById)
 
 
 module.exports = router;

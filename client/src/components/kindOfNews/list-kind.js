@@ -64,6 +64,7 @@ export default function ListKinds(props){
               <tr>
                 <th>STT</th>
                 <th>Loại tin</th>
+                <th>Đơn giá</th>
                 <th>Edit</th>
                 <th>Remove</th>
               </tr>
@@ -74,6 +75,9 @@ export default function ListKinds(props){
                   <td>{stt++}</td>
                   <td>
                       {item.name}
+                  </td>
+                  <td>
+                      {item.unitPrice} VND
                   </td>
                   <td>
                       <Link to={`${props.path}/kinds/edit/${item._id}`}><BsPencil/></Link>

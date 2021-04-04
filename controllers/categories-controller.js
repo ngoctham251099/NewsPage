@@ -72,18 +72,23 @@ module.exports.updateCategories = (req, res, next) => {
     Categories.findById(id)
     .then(categories => {
         console.log(categories.name)
-        News.findOne({categories: categories.name})
+        Categories.findOne({name: nameChange})
         .then(
-            response => {
-                console.log(response)
-                if(response) {
-                    return res.json({message: `Đã có bài viết thuộc chuyên mục này. Hãy xóa bài viết trước khi xóa chuyên mục này.`})
-                }else{
-                    categories.name = nameChange;
-                    categories.save()
-                    .then(() => res.json({message:'Exercise update'}))
-                    .catch( err => res.status(400).json('Err: ' + err));
-                    }
+            item => {
+                News.findOne({categories: categories.name})
+                .then(
+									response => {
+											console.log(response)
+											if(response) {
+													return res.json({message: `Đã có bài viết thuộc chuyên mục này. Hãy xóa bài viết trước khi xóa chuyên mục này.`})
+											}else{
+													categories.name = nameChange;
+													categories.save()
+													.then(() => res.json({message:'Exercise update'}))
+													.catch( err => res.status(400).json('Err: ' + err));
+													}
+            }
+        )
             }
         )
         

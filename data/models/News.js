@@ -8,6 +8,7 @@ const newsSchema = new Schema({
     author: String,
     date_submitted: Date,
     status: String,
+    summary: String,
     IdUser: String,
     department: String,
     images: {

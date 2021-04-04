@@ -5,43 +5,43 @@ import axios from 'axios';
 import Button from "../UI/button-add";
 import Input from "../UI/Input";
 
-export default function UpdateKind(props){
+export default function UpdateImages(props){
 
-   const [kind, setKind] = useState({
+   const [images, setImages] = useState({
        name: '',
-       unitPrice: ''
+       price: ''
    });
     const history = useHistory();
 
     useEffect(() => {
        console.log(props.match.params.id)
-        axios.post(`/api-kind/edit/${props.match.params.id}`)
+        axios.post(`/api-images/edit/${props.match.params.id}`)
         .then(
             res => {
-                setKind(res.data.kindId);
+                setImages(res.data.Images);
             }
         )
     },[])
 
-    const onChangePrice = (e)=>{
-        setKind({...kind, unitPrice: e.target.value});
+    const onChange = (e)=>{
+        setImages({...images, name: e.target.value});
     }
 
-    const onChange = (e)=>{
-        setKind({...kind, name: e.target.value});
+    const onChangePrice = (e)=>{
+        setImages({...images, price: e.target.value});
     }
 
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(props.match.params.id)
-        axios.post(`/api-kind/update/${props.match.params.id}`,{
+        axios.post(`/api-images/update/${props.match.params.id}`,{
             id: props.match.params.id,
-            nameChange : kind.name,
-            price: kind.unitPrice
+            nameChange : images.name,
+            price: images.price
         })
         .then(
             res => {
-                history.push(`${props.path}/kinds`);
+                history.push(`${props.path}/list-images`);
             }
         ).catch(
             err => {
@@ -52,11 +52,11 @@ export default function UpdateKind(props){
 
     return(
         <div>
-            <h1>Cập nhật loại tin</h1>
+            <h1>Cập nhật chuyên mục</h1>
             <label>Tên loại tin</label>
-            <Input ref={React.createRef()} onChange={onChange} value={kind.name}></Input>
+            <Input ref={React.createRef()} onChange={onChange} value={images.name}></Input>
             <label>Mệnh giá</label>
-            <Input ref={React.createRef()} onChange={onChangePrice} value={kind.unitPrice}></Input>
+            <Input ref={React.createRef()} onChange={onChangePrice} value={images.price}></Input>
             <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
         </div>  
     )

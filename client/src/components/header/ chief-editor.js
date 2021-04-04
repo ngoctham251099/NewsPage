@@ -1,8 +1,9 @@
 
 import React, { useEffect, useState } from 'react';
-import Moment from 'react-moment';
 import axios from 'axios';
 import {BrowserRouter as Router, Link, Route, Switch, useHistory, useLocation } from 'react-router-dom';
+
+import {AiOutlineLogout} from "react-icons/ai";
 
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
@@ -66,7 +67,7 @@ export default function ChiefEditor(props){
                             <span>Dashboard</span></div>
                     </li>
                     <li>
-                        <div onClick={logout} class="nav__link a"><span class="las la-igloo"></span>
+                        <div onClick={logout} class="nav__link a"><span><AiOutlineLogout/></span>
                             <span>Đăng xuất</span></div>
                     </li>
                 </ul>

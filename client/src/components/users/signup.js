@@ -1,13 +1,12 @@
 import React, { useState, useEffect} from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Link, useHistory, Switch } from 'react-router-dom';
 import image1 from "../images/logo.svg";
 import { AiOutlineUser } from "react-icons/ai";
 import { AiOutlineMail } from "react-icons/ai";
 import { IoKeyOutline } from "react-icons/io5";
 import { AiFillLock } from "react-icons/ai";
 import { BsFillHouseFill } from "react-icons/bs";
-import SignIn from "./signin"
+import { useHistory } from 'react-router-dom';
 function SingUp(){
     let history = useHistory();
 
@@ -29,7 +28,8 @@ function SingUp(){
         )
     },[])
 
-    const register = () => {
+    const register = (event) => {
+        event.preventDefault()
         axios.post('/api-user/signup',{
             username: username,
             email: email,
@@ -112,11 +112,11 @@ function SingUp(){
                               <i class="fas fa-lock"><AiFillLock/></i>
                               <input type="password" placeholder="Confirm password" onChange={onChangeConfig} />
                             </div>
-                              {/* <input type="submit" class="btn" value="Sign up"/> */}
+                              {/* <input onClick={register}  class="btn" value="             Sign up"/> */}
+                              <button class="btn" onClick={register}>Sign Up</button>
                               
                               <p class="social-text">Or Sign up with social platforms</p>
                         </form>
-                          <button class="btn" onClick={register}></button>
                         </div>
                     </div>
                 </div>

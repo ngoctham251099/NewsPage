@@ -1,22 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {Link, Prompt} from "react-router-dom";
+import {Link} from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Moment from "react-moment";
-import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import Button from "../UI/button-add";
-import Select from "../UI/select";
 
 export default function ListEditor(props){
     let history = useHistory();
     let stt = 1;
+    let checked = false;
 
     const [success , setSuccess] = useState();
     const [error, setError] = useState();
     const [listKind, setListKind] = useState([]);
     const [note, setNote] = useState();
-    // const [checked, setChecked] = useState(false);
 
     const [news, setNews] = useState([]);
     const [message, setMessage] = useState();
@@ -62,6 +60,18 @@ export default function ListEditor(props){
         }
     }
 
+    const show_item_after_delete=()=>{
+        setTimeout( async()=>{
+            const id = localStorage.getItem('idUser');
+            const res  = await axios.get(`/api-news/views-president?id=${id}`, {
+                id: localStorage.getItem('idUSer')
+            });
+            if(res.data.listNews){
+                setNews(res.data.listNews)
+            }
+        },100)
+      }
+
 
     const updateStatus = async (idNews) => {
         const id = localStorage.getItem('idUser');
@@ -70,7 +80,7 @@ export default function ListEditor(props){
         })
         if(res.data.message == "Đã duyệt tin"){
             setSuccess(res.data.message);
-            history.push(`${props.path}/`)
+            show_item_after_delete();
         }else{
             setError(res.data.message);
         }
@@ -84,7 +94,7 @@ export default function ListEditor(props){
         if(res.data.message == "Đã từ chối duyệt tin"){
             setSuccess(res.data.message);
             console.log("shygfjdsj")
-            history.push(`${props.path}/`)
+            show_item_after_delete();
         }else{
             setError(res.data.message);
         }
@@ -94,6 +104,10 @@ export default function ListEditor(props){
     const onChangeNote = e => {
       console.log(e.target.value)
         setNote(e.target.value);
+    }
+
+    const onclick = ()=>{
+        checked = true;
     }
 
 
@@ -107,7 +121,9 @@ export default function ListEditor(props){
               history.push(`${props.path}/news/add`)
           }}>Thêm <span class="las la-arrow-right"></span></button>
       </div>
+
       <div className="card-body">
+          <label>Note</label>
           <div className="table-responsive">
               <table width="100%">
                   <thead>
@@ -123,6 +139,7 @@ export default function ListEditor(props){
                           <th>Edit</th>
                           <th>Chấp nhận</th>
                           <th>Từ chối</th>
+                          <th>Ghi chú</th>
                       </tr>
                   </thead>
                   <tbody>
@@ -148,6 +165,9 @@ export default function ListEditor(props){
                               </td>
                               <td>
                                   <Button title='Từ chối' onClick={()=>updateRefuse(item._id)} ></Button>
+                              </td>
+                              <td>
+                                  <Button title='Ghi chú' onClick={onclick} ></Button>
                               </td>
                               <td></td>
                           </tr>

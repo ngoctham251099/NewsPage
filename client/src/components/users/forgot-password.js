@@ -3,7 +3,7 @@ import {  useHistory} from "react-router-dom";
 import axios from 'axios';
 
 export default function ForgotPassword(){
-    let history = useHistory();
+    // let history = useHistory();
     const [userForgot, setUserForgot] = useState({
         email: "",
         showError: false,

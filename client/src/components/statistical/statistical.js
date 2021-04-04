@@ -3,7 +3,7 @@ import {Link, useHistory, useLocation} from "react-router-dom";
 
 export default function Statiscal(props){
   let history = useHistory();
-  let location = useLocation();
+  
   const LinkDate = () => {
     history.push(`${props.path}/statistical/date`)
   }

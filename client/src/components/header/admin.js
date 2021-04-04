@@ -1,5 +1,21 @@
 import React, { useEffect, useState } from 'react';
 import {BrowserRouter as Router, Route, Switch, useHistory } from 'react-router-dom';
+import axios from "axios"
+
+import {AiOutlineTeam} from "react-icons/ai";
+import {AiOutlineUnorderedList} from "react-icons/ai";
+import { BiFoodMenu } from "react-icons/bi";
+import {GoChecklist} from "react-icons/go";
+import {AiFillFileImage} from "react-icons/ai";
+import {AiOutlineOrderedList} from "react-icons/ai";
+import {BsTable} from "react-icons/bs";
+import {BsCardChecklist} from "react-icons/bs";
+import {BsListTask} from "react-icons/bs";
+import {AiOutlineLogout} from "react-icons/ai";
+import {BsPeopleCircle} from "react-icons/bs";
+import user from "../images/user.png"
+
+ 
 import '../Design/css/admin.css'
 import '../Design/js/jsAdmin'
 import ListUser from "../users/users";
@@ -26,9 +42,14 @@ import ListCategories from '../categories/listCategories';
 import CreateCategories from '../categories/Create';
 import UpdateCategories from '../categories/update-categories';
 
+import ListImages from '../images_data/list-images';
+import CreateImages from '../images_data/create-images';
+import UpdateImages from '../images_data/update-images';
+
 export default function Admin(props){
   let history = useHistory();
 	const path = "/admin";
+	const [username, setUsername] = useState();
 
 	useEffect(()=>{
 			const linkColor = document.querySelectorAll('.nav__link')
@@ -39,6 +60,18 @@ export default function Admin(props){
 					}
 			}
 			linkColor.forEach(l=> l.addEventListener('click', colorLink))
+	},[])
+
+	useEffect(()=>{
+		const id = localStorage.getItem('idUser');
+		console.log(id)
+		axios.post(`/api-user/user-id/${id}`)
+		.then(
+			res => {
+				console.log(res.data.News)
+				setUsername(res.data.News)
+			}
+		)
 	},[])
 
 	const logout = () => {
@@ -62,6 +95,10 @@ export default function Admin(props){
 
 	const clickKinds = () => {
 		history.push("/admin/kinds")
+	}
+
+	const clickImages = () => {
+		history.push(`${path}/list-images`)
 	}
 
 	const clickNews = () => {
@@ -91,52 +128,62 @@ export default function Admin(props){
 					<div className="sidebar-menu">
 							<ul>
 									<li>
-											<div  className="nav__link"><span className="las la-igloo"></span>
+											<div  className="nav__link a"><span className="las la-igloo"></span>
 													<span>Dashboard</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickUsers} className="nav__link"><span className="las la-users"></span>
+											<div onClick={clickUsers} className="nav__link a"><span><AiOutlineTeam/></span>
 													<span>Người dùng</span></div>
 									</li>
 
 									<li>
-											<div onClick={clickDepartment} className="nav__link"><span className="las la-users"></span>
+											<div onClick={clickDepartment} className="nav__link a"><span ><AiOutlineUnorderedList/></span>
 													<span>Phòng ban</span></div>
 									</li>
 
 									<li>
-											<div onClick={clickCategories} className="nav__link"><span className="las la-users"></span>
+											<div onClick={clickCategories} className="nav__link a"><span><BiFoodMenu/></span>
 													<span>Chuyên mục đăng</span></div>
 									</li>
 
 									<li>
-											<div onClick={clickKinds} className="nav__link"><span className="las la-users"></span>
+											<div onClick={clickKinds} className="nav__link a"><span><GoChecklist/></span>
 													<span>Loại tin</span></div>
 									</li>
-			
+									
 									<li>
-											<div onClick={clickNews} className="nav__link" ><span className="las la-clipboard-list"></span>
-													<span>Danh sách bài viết</span></div>
+											<div onClick={clickImages} className="nav__link a"><span><AiFillFileImage/></span>
+													<span>Đuôi hình ảnh</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickStatiscal} className="nav__link"><span className="las la-clipboard-list"></span>
+											<div onClick={clickNews} className="nav__link a" ><span ><AiOutlineOrderedList/></span>
+													<span>Danh sách bài viết</span></div>
+									</li>
+									
+									<li>
+											<div onClick={clickStatiscal} className="nav__link a" ><span ><BsTable/></span>
 													<span>Thống kê</span></div>
 									</li>
 			
+									{/* <li>
+											<div onClick={clickStatiscal} className="nav__link"><span><BsTable/></span>
+													<span>Thống kê</span></div>
+									</li> */}
+			
 									<li>
-											<div onClick={clickNewsApproved} className="nav__link"><span className="las la-receipt"></span>
+											<div onClick={clickNewsApproved} className="nav__link a"><span><BsCardChecklist/></span>
 													<span>Danh sách tin đã duyệt</span></div>
 									</li>
 			
 									<li>
-											<div onClick={clickNewsWaitingForApproval} className="nav__link"><span className="las la-user-circle"></span>
+											<div onClick={clickNewsWaitingForApproval} className="nav__link a"><span><BsListTask/></span>
 													<span>Danh sách tin chờ phê duyệt</span></div>
 									</li>
-			
+
 									<li>
-											<div onClick={logout}  className="nav__link "><span className="las la-igloo"></span>
+											<div onClick={logout} className="nav__link a"><span><AiOutlineLogout/></span>
 													<span>Đăng xuất</span></div>
 									</li>
 							</ul>
@@ -157,10 +204,11 @@ export default function Admin(props){
 						</div>
 
 						<div className="user-wrapper">
-								<img src="#" width="40px" height="40px" alt=""/>
+								<img src={user} width="40px" height="40px" alt=""/>
+								
 								<div>
-										<h4>John Doe</h4>
-										<small>Super admin</small>
+										<h4>{username ? username.username : null}</h4>
+										{/* <small>{username ? username.power : null}</small> */}
 								</div>
 						</div>
 				</header>
@@ -175,7 +223,9 @@ export default function Admin(props){
 						<div className="projects">
 							<div className="card">
 								<Switch>
-									<Route path={`${path}/users/add`} component={CreateUser}/>
+									<Route path={`${path}/users/add`}>
+										<CreateUser path={path}></CreateUser>
+									</Route>
 									<Route path={`${path}/users/edit/:id`} component={UpdateUser}/>
 									<Route path = {`${path}/users`} component={ListUser}/>
 									<Route path={`${path}/departments/edit/:id`}
@@ -229,6 +279,21 @@ export default function Admin(props){
 
 									<Route path = {`${path}/news`}>
 										<ListNews path = {path}></ListNews>
+									</Route>
+
+									<Route path={`${path}/list-images/edit/:id`}
+												key={props.location.key} 
+												render={({ 
+														match 
+												}) => (
+														<UpdateImages key={props.location.key} match={match} path={path}/>
+									)} ></Route>
+									<Route path={`${path}/list-images/add`}>
+										<CreateImages></CreateImages>
+									</Route>
+
+									<Route path =  {`${path}/list-images`}>
+											<ListImages path={path}></ListImages>
 									</Route>
 
 									<Route path={`${path}/kinds/edit/:id`}

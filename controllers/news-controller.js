@@ -16,17 +16,18 @@ module.exports.showNews = (req, res, next) => {
 
 module.exports.create = async (req, res, next) => {
 	const reqFiles = [];
-	const { title, content, author, idUser } = req.body;
+	const { title, content, author, idUser , summary} = req.body;
 	const { avatar, images } = req.files;
-	const url = req.protocol + '://' + req.get('host');
 	const urlAvatar = avatar[0].filename;
 
 	console.log(images[0].filename)
+	console.log(idUser)
 	for (var i = 0; i < images.length; i++) {
 		reqFiles.push(images[i].filename)
 	}
 
 	let user = await Users.findOne({ _id: idUser });
+	console.log(user.department)
 
 	const addnews = new News();
 	//user
@@ -46,6 +47,9 @@ module.exports.create = async (req, res, next) => {
 	addnews.avatar = urlAvatar;
 	addnews.images = reqFiles;
 	addnews.kindNews = null;
+	addnews.categories = null;
+	addnews.note = null;
+	addnews.summary = summary;
 	//1 = cho phe duyet, 2 = phe duyet cua truong phong, 3 = phe duyet cua giam doc, 4 = da phe duyet
 	//fs
 	await addnews.save()
@@ -59,15 +63,17 @@ module.exports.viewsImages = (req, res) => {
 	res.sendFile(path.resolve(`./upload/${name}`));
 }
 
-module.exports.delete = (req, res, next) => {
+module.exports.deleteNews = (req, res, next) => {
 	const { id } = req.params;
-	News.findById(id)
-		.then(
-			item => {
-				News.deleteOne({ _id: id })
-				res.json({ message: 'Đã xóa thành công' })
-			}
-		)
+	console.log("uygyjhjbj")
+
+	News.deleteOne({ _id: id})
+	.then(
+		item => {
+			return res.json({ message: 'Đã xóa thành công' })
+		}
+	)
+	
 }
 
 module.exports.editNews = (req, res, next) => {
@@ -84,9 +90,10 @@ module.exports.editNews = (req, res, next) => {
 module.exports.updateNews = async (req, res) => {
 	const reqFiles = [];
 	const { id } = req.params;
-	const { title, content, author, status, kindNews, note } = req.body;
+	const { title, content, author, status, kindNews, note, categories} = req.body;
 	const { avatar, images } = req.files;
 
+	console.log(note)
 	const urlAvatar = avatar[0].filename;
 	console.log(status)
 	for (var i = 0; i < images.length; i++) {
@@ -108,6 +115,7 @@ module.exports.updateNews = async (req, res) => {
 		news.images = reqFiles;
 		news.status = status;
 		news.kindNews = kindNews;
+		news.categories = categories;
 		news.note = note;
 
 		await news.save();
@@ -251,6 +259,7 @@ module.exports.updateStatusManager = async (req, res) => {
 		return res.json({ message: "Không được phép duyệt tin" })
 	}
 }
+
 //update status của giám đốc khi tin bài đã được sơ duyệt
 module.exports.updateStatusPresident = async (req, res) => {
 	const id = req.params.id;
@@ -266,6 +275,29 @@ module.exports.updateStatusPresident = async (req, res) => {
 		}
 		editNews.status = 3;
 		editNews.note = note;
+		await editNews.save();
+		return res.json({ message: "Đã duyệt tin" })
+	}
+}
+
+//update status của thư ký
+module.exports.updateStatusSecretary = async (req, res) => {
+	const id = req.params.id;
+	const { categories } = req.body;
+	console.log(categories)
+	const user = await Users.findById(id)
+	if (!categories) {
+		return res.json({ message: "Chọn chuyên mục trước khi duyệt bài" })
+	}
+	console.log(user)
+	if (user.power == "5") {
+		console.log(req.params.idNews)
+		const editNews = await News.findById(req.params.idNews)
+		if (!editNews) {
+			return res.json({ message: "Không tìm thấy bài viết" })
+		}
+		editNews.status = 5;
+		editNews.categories = categories;
 		await editNews.save();
 		return res.json({ message: "Đã duyệt tin" })
 	}

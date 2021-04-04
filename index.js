@@ -14,6 +14,7 @@ const categoriesRouter = require('./router/categories-router')
 const kindRouter = require('./router/kindOfNews-router');
 const newsRouter = require('./router/news-router');
 const controllerNews = require('./controllers/news-controller')
+const imagesRouter = require('./router/images-router');
 
 const middleware = require('./middleware/auth');
 
@@ -49,6 +50,8 @@ app.use('/api-categories', categoriesRouter)
 app.use('/api-kind', kindRouter)
 
 app.use('/api-news' ,newsRouter); 
+
+app.use('/api-images' ,imagesRouter); 
 
 app.post("/api-news/upload", multipartMiddleware, controllerNews.uploadImages)
 

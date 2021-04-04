@@ -78,10 +78,10 @@ module.exports.updateDepartment = (req, res, next) => {
 }
 
 module.exports.findById = async (req, res) => {
-    const {id} = req.body;
+    const {id} = req.params;
     console.log(id)
     const department = await Departments.findOne({_id: id});
     if(department){
-        return res.json(department)
+        return res.json({department: department.name})
     }
 }

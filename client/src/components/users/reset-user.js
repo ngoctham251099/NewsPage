@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import axios from 'axios';
-import { Link, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export default function Reset(props){
-    const [TestUpdate, setTestUpdate] = useState({
-        update: '',
-        error: ''
-    });
+    // const [TestUpdate, setTestUpdate] = useState({
+    //     update: '',
+    //     error: ''
+    // });
     const [newUser, setNewUser] = useState();
     const [newPassword, setNewPassword] = useState();
     const [confirmPassword, setConfirmPassword] = useState();

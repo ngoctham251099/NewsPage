@@ -1,10 +1,8 @@
 import React,{ useState } from 'react';
 import axios from 'axios';
-import { BrowserRouter as Router, Route, Link, useHistory, Switch } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import "../Design/css/Signin.css"
 import image3 from "../images/logo3.svg";
-import SignUp from './signup';
-
 
 function SignIn(props){
     const [email, setEmail] = useState();
@@ -20,7 +18,7 @@ function SignIn(props){
             password: password
         }).then(
             res => {
-                console.log()
+                console.log(res.data.auth)
                 if(res.data.auth){
                     localStorage.setItem('token', res.data.token);
                     localStorage.setItem('idUser', res.data.user._id);
@@ -66,33 +64,33 @@ function SignIn(props){
         setPassword(event.target.value);
     }
 
-    const userAuthenticated = () => {
-        axios.get('/api/example',{
-            headers: {"x-access-token": localStorage.getItem('token')}
-        })
-        .then(
-            res => {
-               // console.log(res.data.auth);
-                setPower(res.data.user.power);
-            }
-        )
-    }
+    // const userAuthenticated = () => {
+    //     axios.get('/api/example',{
+    //         headers: {"x-access-token": localStorage.getItem('token')}
+    //     })
+    //     .then(
+    //         res => {
+    //            // console.log(res.data.auth);
+    //             setPower(res.data.user.power);
+    //         }
+    //     )
+    // }
 
-    const clickSignUp = () => {
-        const container = document.querySelector(".container");
+    // const clickSignUp = () => {
+    //     const container = document.querySelector(".container");
 
-        document.addEventListener("click", () => {
-            container.classList.add("sign-up-mode");
-          });
-    }
+    //     document.addEventListener("click", () => {
+    //         container.classList.add("sign-up-mode");
+    //       });
+    // }
 
-    const clickSignIn = () => {
-        const container = document.querySelector(".container");
+    // const clickSignIn = () => {
+    //     const container = document.querySelector(".container");
 
-        document.addEventListener("click", () => {
-            container.classList.remove("sign-up-mode");
-        });
-    }
+    //     document.addEventListener("click", () => {
+    //         container.classList.remove("sign-up-mode");
+    //     });
+    // }
 
     return(
         <div>
@@ -129,27 +127,10 @@ function SignIn(props){
                                         Forgot password
                                 </button>
                                 {/* < type="submit" value="Login" class="btn solid" onClick={logIn}/> */}
-                                <button class="btn solid" color="red" onClick={logIn}>submit</button>
+                                <button class="btn solid" color="red" onClick={logIn}>Sign In</button>
                                 <p class="social-text">Or Sign in with social platforms</p>
                                 
                             </div>
-                            {/* <form action="#" class="sign-up-form">
-                                <h2 class="title">Sign up</h2>
-                                <div class="input-field">
-                                <i class="fas fa-user"></i>
-                                <input type="text" placeholder="Username" />
-                                </div>
-                                <div class="input-field">
-                                <i class="fas fa-envelope"></i>
-                                <input type="email" placeholder="Email" />
-                                </div>
-                                <div class="input-field">
-                                <i class="fas fa-lock"></i>
-                                <input type="password" placeholder="Password" />
-                                </div>
-                                <input type="submit" class="btn" value="Sign up"/>
-                                <p class="social-text">Or Sign up with social platforms</p>
-                            </form> */}
                             </div>
                         </div>
                     </div>
@@ -172,19 +153,6 @@ function SignIn(props){
                         </div>
                         <img src={image3} class="image" alt="" />
                         </div>
-                        {/* <div class="panel right-panel">
-                        <div class="content">
-                            <h3>One of us ?</h3>
-                            <p>
-                            Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum
-                            laboriosam ad deleniti.
-                            </p>
-                            <button class="btn transparent" id="sign-in-btn" onClick={clickSignIn} >
-                            Sign in
-                            </button>
-                        </div>
-                            <img src={image1} class="image" alt="" />
-                        </div> */}
                     </div>
                 </div>
         </div>

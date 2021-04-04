@@ -37,6 +37,9 @@ function ListNews(props){
                 return "Đã phê duyệt";
                 break;
             case "4":
+                return "Đăng tin";
+                break;
+            case "4":
                 return "Từ chối";
                 break;
             default:
@@ -45,17 +48,25 @@ function ListNews(props){
     }
 
 
-    let show_item_after_delete=()=>{
+    const show_item_after_delete=()=>{
         setTimeout(()=>{
           axios.get(`/api-news`).then(res=>{
-            console.log(res.data)
+            // history.push(`${props.path}/news`)
+            setNews(res.data.page);
+            setImages(res.data.images)
         })
         },100)
       }
 
-    let Remove = async (id) =>{
-        const res = await axios.delete(`/api-news/remove/${id}`)
-        show_item_after_delete();
+    let Remove = (id) =>{
+        axios.delete(`/api-news/remove/${id}`)
+        .then(
+            res => {
+                console.log("ahhsjhjbhjs")
+                show_item_after_delete()
+            }
+        )
+        
     }
 
 	return (
@@ -105,7 +116,7 @@ function ListNews(props){
                                         <Link to={`${props.path}/news/${item._id}`}><BsPencil/></Link>
                                     </td>
                                     <td>
-                                        <button onClick={() => Remove(item._id) }><BsTrashFill/></button>
+                                        <span onClick={() => Remove(item._id) }><BsTrashFill/></span>
                                     </td>
                                     <td></td>
                                 </tr>

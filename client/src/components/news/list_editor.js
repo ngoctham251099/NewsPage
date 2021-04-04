@@ -70,7 +70,7 @@ export default function ListEditor(props){
         if(res.data.message == "Đã duyệt tin"){
             console.log(res.data.message)
             setSuccess(res.data.message);
-            history.push(`${props.path}`)   
+            show_item_after_delete();
         }else{
             setError(res.data.message);
         }
@@ -84,7 +84,7 @@ export default function ListEditor(props){
         if(res.data.message == "Đã từ chối duyệt tin"){
             setSuccess(res.data.message);
             console.log("shygfjdsj")
-            history.push(`${props.path}/`)
+            show_item_after_delete();
         }else{
             setError(res.data.message);
         }
@@ -92,12 +92,19 @@ export default function ListEditor(props){
 
 
 
-    // let show_item_after_delete=()=>{
-    //     setTimeout(()=>{
-    //         console.log(success);                                           
-    //     },100)
-        
-    //   }
+    const show_item_after_delete=()=>{
+        setTimeout(()=>{
+            const id = localStorage.getItem('idUser');
+            axios.get(`/api-news/views-editor?id=${id}`, {
+                id: localStorage.getItem('idUSer')
+            })
+            .then(
+                res => {
+                    setNews(res.data.listNews)
+                }
+            )
+        },100)
+      }
 
     const onChangeKind = e => {
       console.log(e.target.value)

@@ -5,6 +5,8 @@ import {useHistory} from "react-router-dom";
 import Input from '../UI/Input'
 import Select from '../UI/select';
 
+import Button from '../UI/button-add';
+
 export default function UpdateUser(props){
     let history = useHistory();
     const [departments, setDepartments] = useState([]);
@@ -138,7 +140,7 @@ export default function UpdateUser(props){
 
             <Select onChange={onChangePower} value={user.power} listPower={power}></Select>
                 {/* <input type="text" onChange={onChangePower} value={user.power} ref={React.createRef()}></input> */}
-            <button onClick={onSubmit}>Submit</button>
+            <Button onClick={onSubmit} title = "Cập nhật">Submit</Button>
             </form>
         </div>
     )

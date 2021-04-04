@@ -10,7 +10,6 @@ import Editor from "./components/header/editor";
 import ChiefEditor from "./components/header/ chief-editor";
 import NewsWriter from "./components/header/news-writer";
 import Secretary from "./components/header/secretary";
-import CreateNew from './components/news/create';
 
 function App( ) {
   const getComponent = () => {

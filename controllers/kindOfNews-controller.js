@@ -14,9 +14,12 @@ module.exports.showsKindOfNews = (req, res, next) => {
 
 //create kind
 module.exports.createKindOfNews = async (req, res, next) => {
-    const {name} = req.body;
-
+    const {name, price} = req.body;
     if(!name){
+        return res.json({message: "Tên loại không được để trống"});
+    }
+
+    if(!price){
         return res.json({message: "Tên loại không được để trống"});
     }
 
@@ -25,7 +28,9 @@ module.exports.createKindOfNews = async (req, res, next) => {
         return res.json({message: "Loại tin đã tồn tại"})
     }
 
-    let addKind = new Kinds({name});
+    let addKind = new Kinds();
+    addKind.name = name;
+    addKind.unitPrice = price;
     const newKind = await addKind.save();
     if(newKind){
         res.status(200).json({message: `${newKind.name} đã được thêm`})
@@ -45,10 +50,8 @@ module.exports.deleteKindOfNews = async (req, res, next) => {
     if(find){
         const news = await News.findOne({kindNews: find.name})    
         if(news) {
-            console.log(news)
             return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xóa loại tin này.`})
         }else{
-            console.log(id);
             await Kinds.deleteOne({_id: id})
             return res.json({message: `Đã xóa thành công`})
         }
@@ -69,11 +72,10 @@ module.exports.editKindOfNews = (req, res, next) => {
 }
 
 //update kind
-module.exports.updateKindOfNews = async (req, res, next) => {
+module.exports.updateKindOfNews =  (req, res, next) => {
     const {id} = req.params;
     console.log(id)
-    let {nameChange} = req.body;
-    console.log(nameChange)
+    let {nameChange, price} = req.body;
 
     Kinds.findOne({_id:id})
     .then(
@@ -85,15 +87,15 @@ module.exports.updateKindOfNews = async (req, res, next) => {
                         if(response){
                             return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xoa loại tin này.`})
                         }else{
-                            console.log(nameChange)
                             kind.name = nameChange;
+                            kind.unitPrice = price;
                             kind.save()
                             res.json({message:'Exercise update'})
                         }
                     }
                 )
             }else{
-                console.log('ashdj')
+                console.log('Error')
             }
         }
     )

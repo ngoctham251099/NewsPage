@@ -8,6 +8,7 @@ import Input from "../UI/Input";
 export default function UpdateDepartment(props){
 
    const [department, setDepartment] = useState([]);
+   const [message, setMessage] = useState();
     const history = useHistory();
 
     useEffect(() => {
@@ -33,8 +34,12 @@ export default function UpdateDepartment(props){
         })
         .then(
             res => {
-                console.log(props.path)
-                history.push(`${props.path}/departments`);
+                if(res.data.message == "Exercise update"){
+                    console.log(props.path)
+                    history.push(`${props.path}/departments`);
+                }else{
+                    setMessage(res.data.message)
+                }
             }
         ).catch(
             err => {
@@ -45,11 +50,9 @@ export default function UpdateDepartment(props){
 
     return(
         <div>
-            <h1>update</h1>
+            <h1>Cập nhật</h1>
             <Input ref={React.createRef()} onChange={onChange} value={department.name}></Input>
-            <button onClick={onSubmit} title="Cập nhật">Submit</button>
-            
-            
+            <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
         </div>  
     )
 }

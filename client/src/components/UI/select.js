@@ -44,7 +44,7 @@ const BootstrapInput = withStyles((theme) => ({
 const useStyles = makeStyles((theme) => ({
   margin: {
     margin: theme.spacing(1),
-    width: "80%"
+    width: "99%"
   },
 }));
 

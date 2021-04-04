@@ -318,3 +318,15 @@ module.exports.updateUser = (req, res, next) => {
 		}
 	)
 }
+
+module.exports.findById = (req, res) => {
+	const {id} = req.params;
+
+	Users.findOne({_id: id})
+	.then(
+		item => {
+			res.json({News: item})
+		}
+	)
+
+}

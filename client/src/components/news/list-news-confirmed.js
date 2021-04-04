@@ -34,6 +34,28 @@ function ListNews(){
         )
     }
 
+    const getStatus = (power) => {
+        switch (power) {
+            case "1":
+                return "Chờ phê duyệt";
+                break;
+            case "2":
+                return "Đã xác nhận";
+                break;
+            case "3":
+                return "Đã phê duyệt";
+                break;
+            case "4":
+                return "Đăng tin";
+                break;
+            case "4":
+                return "Từ chối";
+                break;
+            default:
+                break;
+        }
+    }
+
     useEffect(()=>{
         const countNews = () =>{
             news.forEach( item => {
@@ -88,9 +110,10 @@ function ListNews(){
                                     {/* <td>{item.images.map(element => (
                                         <img width={400} src={`/api-news/viewFile/${element}`}></img>
                                     ))}</td>					     */}
-                                    <td>{item.status === "1" ? "Cho phe duyet": "Da Phe duyet"}</td>
+                                    <td>{getStatus(item.status)}</td>
                                     <td>{item.department}</td>
-                                    <td><button onClick={() => ViewsId(item._id)}>View</button></td>
+                                    <td><Link to={`${props.path}/news/views/${item._id}`}>Views</Link></td>
+                                    <td></td>
                                 </tr>
                             ))}
                         </tbody>

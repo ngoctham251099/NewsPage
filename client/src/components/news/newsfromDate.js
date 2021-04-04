@@ -77,14 +77,15 @@ export default function ListNewsFromDate(){
         default:
             break;
     }
-}
+  }
 
-const onChangeFromDate = (date) => {
-  setSelectedFromDate (date);
-}
-const onChangeToDate = (date) => {
-  setSelectedtoDate(date)
-}
+
+  const onChangeFromDate = (date) => {
+    setSelectedFromDate (date);
+  }
+  const onChangeToDate = (date) => {
+    setSelectedtoDate(date)
+  }
 
   const handleDateChange = (date) => {
     setSelectedDate(date);
@@ -93,12 +94,30 @@ const onChangeToDate = (date) => {
 
   return(
     <div>
-      <DateFrom handleDateChange={handleDateChange} selectedDate={selectedDate}></DateFrom>
-      <Button onClick={onSubmitDate} title="Thống kê"></Button>
+      <table width="100%">
+        <tr>
+          <td width="20%">
+            <DateFrom handleDateChange={handleDateChange} selectedDate={selectedDate}></DateFrom>
+          </td>
+          <td>
+            <Button onClick={onSubmitDate} title="Thống kê"></Button>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <DateFrom handleDateChange={onChangeFromDate} selectedDate={selectedFromDate} ></DateFrom>
+          </td>
+          <td>
+            <DateFrom handleDateChange={onChangeToDate} selectedDate={selectedtoDate}></DateFrom>
+          </td>
+          <td>
+          <Button onClick={onSubmitFromDatetoDate} title="Thống kê"></Button>
+          </td>
+        </tr>
+      </table>
+      
 
-      <DateFrom handleDateChange={onChangeFromDate} selectedDate={selectedFromDate}></DateFrom>
-      <DateFrom handleDateChange={onChangeToDate} selectedDate={selectedtoDate}></DateFrom>
-      <Button onClick={onSubmitFromDatetoDate} title="Thống kê"></Button>
+      
 
       <div className="card-body">
 				<div className="table-responsive">

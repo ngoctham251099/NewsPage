@@ -46,22 +46,16 @@ export default function Users(){
             })
         },100)
     }
-
-
     const Remove = async (id) => {
         await axios.delete(`/api-user/delete/${id}`)
         showItemAfterDelete();
        
     }
-
-    
     return(
-        <div>
-
-            //------------sua lại-------------
-            {message ? (<div>{message}</div>): null}
-            <div className="card-header">
-				<h3>Recent Projects</h3>
+      <div>
+      {message ? (<div>{message}</div>): null}
+      <div className="card-header">
+				<h3>Danh sách người dùng</h3>
 				<button onClick={()=>{
                 history.push('/admin/users/add')
             }}>Thêm</button>
@@ -91,7 +85,8 @@ export default function Users(){
                                     <td>
                                         <Link to={`/admin/users/edit/${item._id}`}><BsPencil/></Link>
                                     </td>
-                                    <td><button onClick={() => Remove(item._id)}><BsTrashFill/></button></td>
+                                    <td><span onClick={() => Remove(item._id)}><BsTrashFill/></span></td>
+                                    <td></td>
                                 </tr>
                             ))}
                         </tbody>

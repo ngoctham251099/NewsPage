@@ -31,7 +31,7 @@ const  newsController = require('../controllers/news-controller');
 // router.post('/upload', newsController.uploadImages )
 router.get('/', newsController.showNews);
 router.post('/create', cpUpload,newsController.create);
-router.delete('/remove/:id', newsController.delete);
+router.delete('/remove/:id', newsController.deleteNews);
 
 router.post('/view/:id', newsController.viewsId);
 
@@ -45,6 +45,9 @@ router.get('/viewFile/:name', newsController.viewsImages)
 router.post('/views-news/:id', newsController.viewsIdNews)
 
 router.get('/viewsPower', newsController.statistical)
+
+//thu ky
+router.post('/update-secretary/:id/:idNews', newsController.updateStatusSecretary)
 
 //view theo tung thang viet bai
 router.get('/view-writer', newsController.viewsWriter)

@@ -10,7 +10,7 @@ function Create(props){
 	let history = useHistory();
 
 	const add = () => {
-			axios.post('/api-kind/create', {
+			axios.post('/api-images/create', {
 					name: name,
 					price: price
 			})
@@ -33,11 +33,11 @@ function Create(props){
 	return(
 			<div>
 					<h3>Thêm loại tin</h3>
-					<label>Tên loại tin</label>
+					<label>Đuôi tin</label>
 					<Input
 							onChange={onChange}
 					></Input>
-					<label>Mệnh gía</label>
+					<label>Mệnh giá</label>
 					<Input
 							onChange={onChangePrice}
 					></Input>

@@ -62,7 +62,7 @@ export default function Admin(props){
 	}
 
 	const clickNewsApproved = () => {
-		history.push(`${path}/news-approved`)
+		history.push(`${path}`)
 	}
 
   return (
@@ -76,8 +76,8 @@ export default function Admin(props){
 					<div className="sidebar-menu">
 							<ul>
 									<li>
-											<div  className="nav__link"><span className="las la-igloo"></span>
-													<span>Dashboard</span></div>
+											<div onClick={clickNewsApproved} className="nav__link"><span className="las la-igloo"></span>
+													<span>Danh sách tin chờ đăng</span></div>
 									</li>
 
 									<li>
@@ -93,11 +93,6 @@ export default function Admin(props){
 									<li>
 											<div onClick={clickStatiscal} className="nav__link"><span className="las la-clipboard-list"></span>
 													<span>Thống kê</span></div>
-									</li>
-			
-									<li>
-											<div onClick={clickNewsApproved} className="nav__link"><span className="las la-receipt"></span>
-													<span>Danh sách tin đã duyệt</span></div>
 									</li>
 			
 									<li>
@@ -170,18 +165,18 @@ export default function Admin(props){
 									<Route path = {`${path}/categories`}>
 										<ListCategories path={path}/>
 									</Route>
+									
+									<Route path = {`${path}/news/add`}>
+										<CreateNews path = {path}></CreateNews>
+									</Route>
 
 									<Route path={`${path}/news/views/:id`}
 												key={props.location.key} 
 												render={({ 
 														match 
 												}) => (
-														<ViewNews key={props.location.key} match={match} />
+												<ViewNews key={props.location.key} match={match} path={path} />
 									)} >
-									</Route>
-									
-									<Route path = {`${path}/news/add`}>
-										<CreateNews path = {path}></CreateNews>
 									</Route>
 
 									<Route path={`${path}/news/:id`}
@@ -211,7 +206,9 @@ export default function Admin(props){
 											<ListKinds path={path}></ListKinds>
 									</Route>
 									
-									<Route path= {`${path}/news-approved`} component={ListNewsApproved}></Route>
+									<Route path= {`${path}`} component={ListNewsApproved}>
+										<ListNewsApproved path={path}/>
+									</Route>
 									<Route path= {`${path}/news-waiting-for-approval`} component={ListNewsWaitingForApproval}/>
 									<Route path = {`${path}/statistical/date`} >
 										<NewsFromDate path={path}></NewsFromDate>
