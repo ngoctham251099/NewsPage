@@ -90,7 +90,7 @@ function ListNews(props){
                                 <th>Trạng thái</th>
                                 <th>Phòng ban</th>
                                 <th>Loại tin</th>
-                                <th>Views</th>
+                                <th>Xem</th>
                                 <th>Edit</th>
                                 <th>Remove</th>
                                 <th></th>
@@ -111,7 +111,7 @@ function ListNews(props){
                                     {/* <td>{item.status}</td> */}
                                     <td>{item.department}</td>
                                     <td>{item.kindNews}</td>
-                                    <td><Link to={`${props.path}/news/views/${item._id}`}>Views</Link></td>
+                                    <td><Link to={`${props.path}/news/views/${item._id}`}>Xem thử</Link></td>
                                     <td>
                                         <Link to={`${props.path}/news/${item._id}`}><BsPencil/></Link>
                                     </td>

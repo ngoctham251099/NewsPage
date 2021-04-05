@@ -41,42 +41,30 @@ function CreateNews(props) {
     formData.append("avatar", avatar);
     formData.append("idUser", idUser);
     formData.append("summary", summary);
-    //formData.append("date_submitted",date_submitted)
-    for (const key of Object.keys(images)) {
-      formData.append("images", images[key]);
-    }
-    // if(!avatar){
-    //     setMessage("Bạn chưa chọn file")
-    // }
-
-    // const config = {
-    //     headers: {"content-type": "multipart/form-data"}
-    // }
     axios.post("/api-news/create", formData).then((res) => {
-      console.log(res.data);
       history.push(`${props.path}/news`);
     });
   };
 
   const onChangeTitle = (event) => {
-    console.log(event.target.value);
+    
     setTitle(event.target.value);
   };
 
   const onChangeAuthor = (event) => {
-    console.log(event.target.value);
+    
     setAuthor(event.target.value);
   };
 
   const onChangeSummary = (event) => {
-    console.log(event.target.value);
+    
     setSummary(event.target.value);
   };
 
   const onChangeContent = (event, editor) => {
     const data = editor.getData();
     setContent(data);
-    console.log({ data });
+    console.log({ content: data });
   };
 
   const onChangeAvarta = (e) => {
@@ -120,16 +108,6 @@ function CreateNews(props) {
           {/* <input type="file" name="avatar" placeholder="author" onChange={onChangeAvarta}></input> */}
         </div>
 
-        <div className="item">
-          <label>Các hình ảnh có trong bài viết</label>
-          <div style={{ paddingTop: 15 }}>
-            <Button
-              onChange={onChangeImages}
-              title="Ảnh trong bản tin trên"
-            ></Button>
-          </div>
-          {/* <input type="file" name="images" placeholder="images" onChange={onChangeImages} multiple></input> */}
-        </div>
         <div className="item" style={{marginTop: 16}}>
           <CKEditor
             editor={ClassicEditor}
@@ -139,8 +117,6 @@ function CreateNews(props) {
                 // The URL that the images are uploaded to.
                 uploadUrl: "/api-news/upload",
               },
-              height: "300px",
-              width: "1200px",
             }}
           />
         </div>

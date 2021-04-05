@@ -48,6 +48,10 @@
 	align-items: center;
 }
 
+.ck-editor__editable {
+	min-height: 400px;
+}
+
 .sidebar-menu div {
 	padding-left: 1rem;
 	display: block;

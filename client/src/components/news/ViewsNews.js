@@ -38,7 +38,7 @@ export default function Views(props){
     //     )
     // }
     return (
-        <div>
+        <div className="create-user-wrapper">
             {news.content ?  parse(news.content) : null}
         </div>
     )

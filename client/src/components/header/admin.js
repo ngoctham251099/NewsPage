@@ -142,6 +142,15 @@ export default function Admin(props) {
             </li>
 
             <li>
+              <div onClick={clickNews} className={`nav__link a ${props.location.pathname === '/admin/news' && 'active'}`}>
+                <span>
+                  <AiOutlineOrderedList />
+                </span>
+                <span>Danh sách bài viết</span>
+              </div>
+            </li>
+            
+            <li>
               <div onClick={clickUsers} className={`nav__link a ${props.location.pathname === '/admin/users' && 'active'}`}>
                 <span>
                   <AiOutlineTeam />
@@ -186,14 +195,7 @@ export default function Admin(props) {
               </div>
             </li>
 
-            <li>
-              <div onClick={clickNews} className={`nav__link a ${props.location.pathname === '/admin/news' && 'active'}`}>
-                <span>
-                  <AiOutlineOrderedList />
-                </span>
-                <span>Danh sách bài viết</span>
-              </div>
-            </li>
+           
 
             <li>
               <div onClick={clickStatiscal} className={`nav__link a ${props.location.pathname === '/admin/statistical' && 'active'}`}>

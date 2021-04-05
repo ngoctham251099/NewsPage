@@ -4,6 +4,14 @@ const fs = require('fs');
 const Users = require('../data/models/Users')
 const moment = require('moment');
 
+const getAttrFromString = (str, node, attr) => {
+	let regex = new RegExp('<' + node + ' .*?' + attr + '="(.*?)"', "gi"), result, res = [];
+	while ((result = regex.exec(str))) {
+			res.push(result[1]);
+	}
+	return res;
+}
+
 module.exports.showNews = (req, res, next) => {
 	News.find().sort([])
 		.then(
@@ -15,43 +23,31 @@ module.exports.showNews = (req, res, next) => {
 }
 
 module.exports.create = async (req, res, next) => {
-	const reqFiles = [];
 	const { title, content, author, idUser , summary} = req.body;
-	const { avatar, images } = req.files;
-	const urlAvatar = avatar[0].filename;
-
-	console.log(images[0].filename)
-	console.log(idUser)
-	for (var i = 0; i < images.length; i++) {
-		reqFiles.push(images[i].filename)
-	}
-
-	let user = await Users.findOne({ _id: idUser });
-	console.log(user.department)
-
-	const addnews = new News();
-	//user
-	console.log(idUser)
-
+	const { avatar} = req.files;
 	let date = Date.now();
 	let dateMoment = moment(date).format('YYYY-MM-DD')
-	console.log(dateMoment)
+
+	const listImagesOnContent = getAttrFromString(content, "img", "src");
+	const urlAvatar = avatar[0].filename;
+	let user = await Users.findOne({ _id: idUser });	
+	const addnews = new News();
+
 	let date_test = date.Date;
 	addnews.title = title;
 	addnews.content = content;
 	addnews.author = author;
-	addnews.date_submitted = "2021-03-22";
+	addnews.date_submitted = new Date();
 	addnews.status = 1;
 	addnews.IdUser = idUser;
 	addnews.department = user.department;
 	addnews.avatar = urlAvatar;
-	addnews.images = reqFiles;
+	addnews.images = listImagesOnContent;
 	addnews.kindNews = null;
 	addnews.categories = null;
 	addnews.note = null;
 	addnews.summary = summary;
-	//1 = cho phe duyet, 2 = phe duyet cua truong phong, 3 = phe duyet cua giam doc, 4 = da phe duyet
-	//fs
+	
 	await addnews.save()
 	return res.json({ message: 'Add news successfully' })
 
@@ -88,22 +84,14 @@ module.exports.editNews = (req, res, next) => {
 }
 
 module.exports.updateNews = async (req, res) => {
-	const reqFiles = [];
+
 	const { id } = req.params;
 	const { title, content, author, status, kindNews, note, categories} = req.body;
-	const { avatar, images } = req.files;
-
-	console.log(note)
-	const urlAvatar = avatar[0].filename;
-	console.log(status)
-	for (var i = 0; i < images.length; i++) {
-		reqFiles.push(images[i].filename)
-	}
-
+	const { avatar = '' } = req.files;
+	const listImagesOnContent = getAttrFromString(content, "img", "src");
+	
+	const urlAvatar = avatar ? avatar[0].filename : null;
 	if (avatar == null)
-		return res.json({ message: "Chọn hình" })
-		
-	if (images == null) 
 		return res.json({ message: "Chọn hình" })
 
 	const news = await News.findById(id);
@@ -111,8 +99,10 @@ module.exports.updateNews = async (req, res) => {
 		news.title = title;
 		news.author = author;
 		news.content = content;
-		news.avatar = urlAvatar;
-		news.images = reqFiles;
+		if(urlAvatar){
+			news.avatar = urlAvatar;
+		}
+		news.images = listImagesOnContent;
 		news.status = status;
 		news.kindNews = kindNews;
 		news.categories = categories;
