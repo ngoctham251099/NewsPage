@@ -31,13 +31,13 @@ function Create(props){
 	}
 
 	return(
-			<div>
-					<h3>Thêm loại tin</h3>
+			<div className="create-user-wrapper">
+					<h3 style={{ marginBottom: 20 }}>Thêm loại tin</h3>
 					<label>Tên loại tin</label>
 					<Input
 							onChange={onChange}
 					></Input>
-					<label>Mệnh gía</label>
+					<label>Mệnh giá</label>
 					<Input
 							onChange={onChangePrice}
 					></Input>

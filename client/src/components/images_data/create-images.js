@@ -31,9 +31,9 @@ function Create(props){
 	}
 
 	return(
-			<div>
-					<h3>Thêm loại tin</h3>
-					<label>Đuôi tin</label>
+			<div className="create-user-wrapper">
+					<h3 style={{ marginBottom: 20 }}>Thêm loại hình ảnh</h3>
+					<label>Đuôi hình ảnh (.jpg, .png, ...)</label>
 					<Input
 							onChange={onChange}
 					></Input>

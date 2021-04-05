@@ -31,8 +31,8 @@ function Create(props){
 	}
 
 	return(
-			<div>
-					<h3>Thêm mới</h3>
+			<div className="create-user-wrapper">
+					<h3 style={{ marginBottom: 20 }}>Thêm mới</h3>
 					<label>Chuyên mục</label>
 					<Input
 							onChange={onChange}

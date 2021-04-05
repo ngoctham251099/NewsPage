@@ -53,8 +53,8 @@ export default function ListKinds(props){
   return  (
     <div>
       <div className="card-header">
-        <h3>Danh sách phòng ban</h3>
-        <button onClick={add}>Thêm <span class="las la-arrow-right"></span></button>
+        <h3>Danh sách loại tin</h3>
+        <button onClick={add}>Thêm</button>
       </div>
       
       <div className="card-body">
@@ -83,9 +83,7 @@ export default function ListKinds(props){
                       <Link to={`${props.path}/kinds/edit/${item._id}`}><BsPencil/></Link>
                   </td>
                   <td>
-                      <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
-                  </td>
-                  <td>
+                      <a onClick={() => Remove(item._id)}><BsTrashFill color="red"/></a>
                   </td>
                 </tr>
               ))}

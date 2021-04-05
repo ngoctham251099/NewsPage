@@ -9,7 +9,7 @@ import InputBase from '@material-ui/core/InputBase';
 const BootstrapInput = withStyles((theme) => ({
   root: {
     'label + &': {
-      marginTop: theme.spacing(5),
+      margin: '8px 0px',
     },
   },
   input: {
@@ -43,7 +43,7 @@ const BootstrapInput = withStyles((theme) => ({
 
 const useStyles = makeStyles((theme) => ({
   margin: {
-    margin: theme.spacing(1),
+    margin: '8px 0px',
     width: "99%"
   },
 }));
@@ -53,7 +53,7 @@ export default function CustomizedSelects(props) {
   return (
     <div>
       <FormControl className={classes.margin}>
-        <InputLabel id="demo-customized-select-label">{props.value}</InputLabel>
+        {/* <InputLabel id="demo-customized-select-label">{props.value}</InputLabel> */}
         <Select
           id="demo-customized-select"
           value={props.value}

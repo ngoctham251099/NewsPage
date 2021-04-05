@@ -94,15 +94,15 @@ module.exports.postLogIn = async (req, res, next) => {
 		console.log(password, email)
 		const user = await Users.findOne({email: email});
 		if(!user){
-				return res.json({auth: false, token: null, message: "Email khong ton tai"})
+				return res.json({auth: false, token: null, message: "Email không tồn tại !"})
 		}
 
 		if(!user.validPassword(password) || !password){
-				return res.json({auth: false, token: null, message: "Mat khau khong dung"});
+				return res.json({auth: false, token: null, message: "Mật khẩu không đúng"});
 		}
 
 		const token = getSignedToken(user);
-		res.status(200).json({auth: true, token: token, user: user, message: 'Login successfuly'});
+		res.status(200).json({auth: true, token: token, user: user, message: 'Đăng nhập thành công !'});
 }
 
 getSignedToken = user => {

@@ -63,7 +63,7 @@ export default function Users(){
             <div className="card-body">
                 <div className="table-responsive">
                     <table width="100%">
-                        <thead>
+                        <thead style={{padding:'10px 0px'}}>
                         <tr>
                             <th className="stt">STT</th>
                             <th className="username">Tên người dùng</th>
@@ -85,8 +85,7 @@ export default function Users(){
                                     <td>
                                         <Link to={`/admin/users/edit/${item._id}`}><BsPencil/></Link>
                                     </td>
-                                    <td><span onClick={() => Remove(item._id)}><BsTrashFill/></span></td>
-                                    <td></td>
+                                    <td><span onClick={() => Remove(item._id)}><BsTrashFill color="red"/></span></td>
                                 </tr>
                             ))}
                         </tbody>

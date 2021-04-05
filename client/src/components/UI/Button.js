@@ -28,7 +28,7 @@ export default function UploadButtons(props) {
       />
       <label htmlFor="contained-button-file">
         <Button variant="contained" color="primary" component="span">
-          Upload
+          Chọn hình ảnh
         </Button>
       </label>
     </div>

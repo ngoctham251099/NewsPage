@@ -50,7 +50,7 @@ export default function ListCategories(props){
     <div>
       <div className="card-header">
         <h3>Danh sách chuyên mục</h3>
-        <button onClick={add}>See all <span class="las la-arrow-right"></span></button>
+        <button onClick={add}>Thêm</button>
       </div>
       
       <div className="card-body">
@@ -60,8 +60,8 @@ export default function ListCategories(props){
               <tr>
                 <th>STT</th>
                 <th>Chuyên mục đăng</th>
-                <th>Edit</th>
-                <th>Remove</th>
+                <th>Sửa</th>
+                <th>Xoá</th>
               </tr>
             </thead>
             <tbody>
@@ -75,9 +75,7 @@ export default function ListCategories(props){
                       <Link to={`${props.path}/categories/edit/${item._id}`}><BsPencil/></Link>
                   </td>
                   <td>
-                      <button onClick={() => Remove(item._id)}><BsTrashFill/></button>
-                  </td>
-                  <td>
+                      <a onClick={() => Remove(item._id)}><BsTrashFill color="red"/></a>
                   </td>
                 </tr>
               ))}

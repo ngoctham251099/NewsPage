@@ -53,7 +53,7 @@ export default function ListKinds(props){
   return  (
     <div>
       <div className="card-header">
-        <h3>Danh sách phòng ban</h3>
+        <h3>Danh sách các loại hình ảnh</h3>
         <button onClick={add}>Thêm <span class="las la-arrow-right"></span></button>
       </div>
       
@@ -63,7 +63,7 @@ export default function ListKinds(props){
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Đuôi hình ảnh</th>
+                <th>Loại hình ảnh</th>
                 <th>Đơn giá</th>
                 <th>Edit</th>
                 <th>Remove</th>

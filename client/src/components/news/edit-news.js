@@ -157,8 +157,8 @@ export default function EditNews(props) {
     const classes = useStyles();
 
     return (
-        <div>
-            <h1 className="title">Cập nhật tin</h1>
+        <div className="create-user-wrapper">
+            	<h3 style={{ marginBottom: 20 }}>Cập nhật tin</h3>
             <form className={classes.root} noValidate autoComplete="off">
                 {/* <div className="item">
                     <label className="title-news">Title</label>

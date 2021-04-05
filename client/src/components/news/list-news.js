@@ -72,10 +72,10 @@ function ListNews(props){
 	return (
 		<div>
 			<div className="card-header">
-				<h3>Recent Projects</h3>
+				<h3>Danh sách bài viết</h3>
 				<button onClick={()=>{
                     history.push(`${props.path}/news/add`)
-                }}>Thêm <span class="las la-arrow-right"></span></button>
+                }}>Thêm</button>
 			</div>
 			<div className="card-body">
 				<div className="table-responsive">
@@ -84,7 +84,7 @@ function ListNews(props){
                             <tr>
                                 <th>STT</th>
                                 <th>Tiêu đề</th>
-                                <th>Avatar</th>
+                                <th>Thumbnail</th>
                                 <th>Tác giả</th>
                                 <th>Ngày viết</th>
                                 <th>Trạng thái</th>

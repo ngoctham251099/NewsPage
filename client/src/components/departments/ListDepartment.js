@@ -50,7 +50,7 @@ function ListDepatment(props){
     <div>
       <div className="card-header">
         <h3>Danh sách phòng ban</h3>
-        <button onClick={add}>See all <span class="las la-arrow-right"></span></button>
+        <button onClick={add}>Thêm</button>
       </div>
       
       <div className="card-body">
@@ -59,9 +59,9 @@ function ListDepatment(props){
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Department</th>
-                <th>Edit</th>
-                <th>Remove</th>
+                <th>Tên Phòng Ban</th>
+                <th>Sửa</th>
+                <th>Xoá</th>
               </tr>
             </thead>
             <tbody>
@@ -76,8 +76,6 @@ function ListDepatment(props){
                   </td>
                   <td>
                       <span onClick={() => Remove(item._id)}><BsTrashFill/></span >
-                  </td>
-                  <td>
                   </td>
                 </tr>
               ))}

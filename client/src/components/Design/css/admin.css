@@ -18,7 +18,7 @@
 }
 
 .sidebar{
-	width: 345px;
+	width: auto;
 	position: fixed;
 	left: 0;
 	top: 0;
@@ -43,11 +43,16 @@
 	margin-bottom: 1rem;
 }
 
+.sidebar-menu li .nav__link {
+	display: flex;
+	align-items: center;
+}
+
 .sidebar-menu div {
 	padding-left: 1rem;
 	display: block;
 	color: #fff;
-	font-size: 1.2rem;
+	font-size: 13px;
 }
 
 .sidebar-menu div.active {
@@ -97,7 +102,7 @@
 
 .main-content{
 	transition: margin-left 300ms;
-	margin-left: 345px;
+	margin-left: 225px;
 }
 
 header{
@@ -107,9 +112,9 @@ header{
 	padding: 1rem;
 	box-shadow: 2px 2px 5xp rgba(0,0,0,0.2);
 	position: fixed;
-	left: 345px;
-	width: calc(100% - 345px);
-	top:0;
+	left: 229px;
+	width: calc(100% - 229px);
+	top: 0;
 	z-index: 100;
 	transition: left 300ms;
 }
@@ -167,7 +172,6 @@ header label span{
 }
 
 main{
-	margin-top: 85px;
 	padding: 2rem 1.5rem;
 	background: #f1f5f9;
 	min-height: calc(100vh - 90px);
@@ -244,7 +248,7 @@ table{
 }
 
 thead tr{
-	border-top: 1px solid #f0f0f0;
+	/* border-top: 1px solid #f0f0f0; */
 	border-bottom: 1px solid #f0f0f0;
 }
 
@@ -270,6 +274,7 @@ td .status{
 tr td:last-child{
 	display: flex;
 	align-items: center;
+	justify-content: center;
 }
 
 .status.purple{
@@ -287,6 +292,18 @@ tr td:last-child{
 .table-reponsive{
 	width: 100%;
 	overflow-x: auto;
+}
+
+.table-custom, thead, tr, th {
+	padding: 10px;
+}
+.create-user-wrapper {
+	padding: 20px
+}
+
+label {
+	font-size: 13px;
+	font-weight: 600;
 }
 
 @media only screen and (max-width: 1200px){
