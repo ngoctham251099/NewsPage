@@ -51,8 +51,8 @@ export default function UpdateKind(props){
     }
 
     return(
-        <div>
-            <h1>Cập nhật loại tin</h1>
+        <div className="create-user-wrapper">
+        <h3 style={{ marginBottom: 20 }}>Cập nhật tin</h3>
             <label>Tên loại tin</label>
             <Input ref={React.createRef()} onChange={onChange} value={kind.name}></Input>
             <label>Mệnh giá</label>

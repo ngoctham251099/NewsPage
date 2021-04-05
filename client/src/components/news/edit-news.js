@@ -10,6 +10,14 @@ import Select from "../UI/select";
 import { useEffect } from "react/cjs/react.development";
 import ButtonUpload from "../UI/Button";
 import { useHistory } from "react-router-dom";
+import {
+  CTV_ROLE,
+  ADMIN_ROLE,
+  TRUONG_BAN_BT_ROLE,
+  BAN_BT_ROLE,
+  THU_KY_ROLE,
+} from "../../config/roles";
+import { toast } from "react-toastify";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +29,8 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 export default function EditNews(props) {
+  const { role } = props;
+
   let history = useHistory();
   const [news, setNews] = useState({
     title: "",
@@ -31,11 +41,20 @@ export default function EditNews(props) {
     kindNews: "",
     images: "",
     note: "",
+    categories: "",
+    summary: ""
   });
 
   const [listKind, setListKind] = useState([]);
   const [content, setContent] = useState("");
+  const [categoryList, setCategoryList] = useState([]);
   const [arrImages, setArrImages] = useState([]);
+
+  useEffect(() => {
+    axios.get("/api-categories").then((res) => {
+      setCategoryList(res.data.categories);
+    });
+  }, []);
 
   useEffect(async () => {
     const res = await axios.post(`/api-news/edit/${props.match.params.id}`, {
@@ -84,6 +103,22 @@ export default function EditNews(props) {
     }
   };
 
+  const setStatus = (role) => {
+    switch (role) {
+      case BAN_BT_ROLE:
+        return 2;
+      case TRUONG_BAN_BT_ROLE:
+        return 3;
+      case THU_KY_ROLE:
+      case ADMIN_ROLE: 
+        return 4;
+      default:
+        return 1;
+    }
+  };
+
+  console.log(role)
+
   const submit = () => {
     const formData = new FormData();
     // const date_submitted = moment().subtract(10, 'days').calendar();
@@ -93,23 +128,25 @@ export default function EditNews(props) {
     formData.append("avatar", news.avatar);
     formData.append("department", news.department);
     formData.append("kindNews", news.kindNews);
-    formData.append("status", news.status);
+    formData.append("summary", news.summary);
+    formData.append("status", setStatus(role));
     formData.append("note", news.note);
-
-    for (const key of Object.keys(news.images)) {
-      formData.append("images", news.images[key]);
+    
+    if(news.categories){ 
+      formData.append("categories", news.categories);
     }
 
     axios
       .post(`/api-news/update/${props.match.params.id}`, formData)
       .then((res) => {
-        history.push(`${props.path}/news`);
+        const redirect = props.match.url.split("/");
+        history.push(`/${redirect[1] + "/" + redirect[2]}`);
       });
   };
 
   const onChangeTitle = (event) => {
     console.log(event.target.value);
-    setNews({ ...news, tilte: event.target.value });
+    setNews({ ...news, title: event.target.value });
   };
 
   const onChangeAuthor = (event) => {
@@ -144,9 +181,28 @@ export default function EditNews(props) {
     //  console.log(res.data.fileNameInServer)
   };
 
+  const onChangeSummary = (event) => {
+    setNews({ ...news, summary: event.target.value });
+  };
+  
+
   const onChangeImages = (e) => {
     console.log(e.target.files);
     setNews({ ...news, images: e.target.files });
+  };
+
+  const updateRefuse = async () => {
+    const id = localStorage.getItem("idUser");
+    const res = await axios.post(
+      `/api-news/update-refuse/${id}/${props.match.params.id}`
+    );
+    if (res.data.message == "Đã từ chối duyệt tin") {
+      toast.success(res.data.message);
+      const redirect = props.match.url.split("/");
+      history.push(`/${redirect[1] + "/" + redirect[2]}`);
+    } else {
+      toast.error(res.data.message);
+    }
   };
 
   const classes = useStyles();
@@ -176,33 +232,44 @@ export default function EditNews(props) {
           {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
         </div>
 
-        <div>
-          <label>Trạng thái</label>
-          <Select
-            value={news.status}
-            listPower={power}
-            onChange={onChangeStatus}
-          ></Select>
-          {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
-        </div>
+        {role !== CTV_ROLE && (
+          <div className="item">
+            <label className="title-news">Loại tin</label>
+            <Select
+              value={news.kindNews}
+              list={listKind}
+              onChange={onChangeKind}
+            ></Select>
+          </div>
+        )}
+
+
+      {role !== THU_KY_ROLE && (
+          <div className="item">
+            <label className="title-news">Chủ đề tin</label>
+            <Select
+              value={news.categories}
+              list={categoryList}
+              onChange={(e) => setNews({...news, categories: e.target.value})}
+            ></Select>
+          </div>
+        )}
+
+
 
         <div className="item">
-          <label className="title-news">Loại tin</label>
-          <Select
-            value={news.kindNews}
-            list={listKind}
-            onChange={onChangeKind}
-          ></Select>
-          {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
-        </div>
-
-        <div className="item">
-          <label>Avatar</label>
+          <label>Thumbnail</label>
           <div>
             <img width="100px" src={`/api-news/viewFile/${news.avatar}`}></img>
           </div>
           <Input onChange={onChangeAvarta} type="file"></Input>
           {/* <input type="file" name="avatar" placeholder="author" onChange={onChangeAvarta}></input> */}
+        </div>
+
+        <div className="item">
+          <label>Tóm tắt</label>
+          <Input value={news.summary} onChange={onChangeSummary}></Input>
+          {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
         </div>
 
         <div>
@@ -240,15 +307,45 @@ export default function EditNews(props) {
           {/* <ButtonUpload onChange={onChangeImages}></ButtonUpload> */}
         </div>
 
-        <div className="item">
-          <label className="title-news">Ghi chú</label>
-          <Input value={news.note} onChange={onChangeNote}></Input>
-          {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
-        </div>
+        {role === TRUONG_BAN_BT_ROLE && (
+          <div className="item">
+            <label className="title-news">Ghi chú</label>
+            <Input value={news.note} onChange={onChangeNote}></Input>
+            {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
+          </div>
+        )}
 
-        <div className="item">
-          <Button onClick={submit} title="Cập nhật"></Button>
-          {/* <input type="file" name="images" placeholder="images" onChange={onChangeImages} multiple></input> */}
+        {role === ADMIN_ROLE && (
+          <div className="item">
+            <label className="title-news">Ghi chú</label>
+            <Input value={news.note} onChange={onChangeNote}></Input>
+            {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
+          </div>
+        )}
+
+        <div
+          className="item"
+          style={{
+            display: "flex",
+            justifyContent: "center",
+          }}
+        >
+          <span style={{ padding: 5 }}>
+            <Button
+              onClick={submit}
+              title={role !== CTV_ROLE ? `Cập nhật và phê duyệt` : `Cập nhật`}
+            ></Button>
+          </span>
+
+          {role !== CTV_ROLE && (
+            <span style={{ padding: 5 }}>
+              <Button
+                onClick={updateRefuse}
+                title="Từ chối phê duyệt"
+                color="error"
+              ></Button>
+            </span>
+          )}
         </div>
       </form>
     </div>

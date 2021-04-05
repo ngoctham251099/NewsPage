@@ -49,6 +49,13 @@ import UpdateCategories from "../categories/update-categories";
 import ListImages from "../images_data/list-images";
 import CreateImages from "../images_data/create-images";
 import UpdateImages from "../images_data/update-images";
+import {
+  CTV_ROLE,
+  ADMIN_ROLE,
+  TRUONG_BAN_BT_ROLE,
+  BAN_BT_ROLE,
+  THU_KY_ROLE,
+} from "../../config/roles";
 
 export default function Admin(props) {
   let history = useHistory();
@@ -325,7 +332,7 @@ export default function Admin(props) {
                   ></Route>
 
                   <Route path={`${path}/news/add`}>
-                    <CreateNews path={path}></CreateNews>
+                    <CreateNews path={path} role={ADMIN_ROLE}></CreateNews>
                   </Route>
 
                   <Route
@@ -336,6 +343,7 @@ export default function Admin(props) {
                         key={props.location.key}
                         match={match}
                         path={path}
+                        role={ADMIN_ROLE}
                       />
                     )}
                   ></Route>

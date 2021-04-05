@@ -49,8 +49,8 @@ export default function UpdateDepartment(props){
     }
 
     return(
-        <div>
-            <h1>Cập nhật</h1>
+        <div className="create-user-wrapper">
+      <h3 style={{ marginBottom: 20 }}>Cập nhật</h3>
             <Input ref={React.createRef()} onChange={onChange} value={department.name}></Input>
             <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
         </div>  
