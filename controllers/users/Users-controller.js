@@ -91,6 +91,7 @@ module.exports.createUser = async (req, res, next) => {
 module.exports.postLogIn = async (req, res, next) => {
 		const {email, password} = req.body;
 
+		console.log(password, email)
 		const user = await Users.findOne({email: email});
 		if(!user){
 				return res.json({auth: false, token: null, message: "Email khong ton tai"})
