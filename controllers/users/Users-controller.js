@@ -328,5 +328,4 @@ module.exports.findById = (req, res) => {
 			res.json({News: item})
 		}
 	)
-
 }

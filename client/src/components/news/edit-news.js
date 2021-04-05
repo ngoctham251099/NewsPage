@@ -61,6 +61,7 @@ export default function EditNews(props) {
         }
       )
     },[])
+    
 
     const [power, setPower] = useState([
       {id: 1 , value: "Chờ phê duyệt"},
@@ -195,6 +196,12 @@ export default function EditNews(props) {
 
                 <div className="item">
                     <label className="title-news">Loại tin</label>
+                    <Select value={news.kind} list={listKind} onChange={onChangeKind}></Select>
+                    {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
+                </div>
+
+                <div className="item">
+                    <label className="title-news">Chuyên mục</label>
                     <Select value={news.kind} list={listKind} onChange={onChangeKind}></Select>
                     {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
                 </div>

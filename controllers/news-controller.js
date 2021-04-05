@@ -16,7 +16,7 @@ module.exports.showNews = (req, res, next) => {
 
 module.exports.create = async (req, res, next) => {
 	const reqFiles = [];
-	const { title, content, author, idUser , summary} = req.body;
+	const { title, content, author, idUser , summary, kind, categoried} = req.body;
 	const { avatar, images } = req.files;
 	const urlAvatar = avatar[0].filename;
 
@@ -46,8 +46,8 @@ module.exports.create = async (req, res, next) => {
 	addnews.department = user.department;
 	addnews.avatar = urlAvatar;
 	addnews.images = reqFiles;
-	addnews.kindNews = null;
-	addnews.categories = null;
+	addnews.kindNews = kind;
+	addnews.categories = categoried;
 	addnews.note = null;
 	addnews.summary = summary;
 	//1 = cho phe duyet, 2 = phe duyet cua truong phong, 3 = phe duyet cua giam doc, 4 = da phe duyet
@@ -236,7 +236,7 @@ module.exports.statistical = (req, res) => {
 		)
 }
 //update status của người sơ duyệt	
-module.exports.updateStatusManager = async (req, res) => {
+module.exports.updateStatusBBT = async (req, res) => {
 	const id = req.params.id;
 	const { kind } = req.body;
 	console.log(kind)
@@ -261,7 +261,7 @@ module.exports.updateStatusManager = async (req, res) => {
 }
 
 //update status của giám đốc khi tin bài đã được sơ duyệt
-module.exports.updateStatusPresident = async (req, res) => {
+module.exports.updateStatusTBBT = async (req, res) => {
 	const id = req.params.id;
 	const { note } = req.body;
 	console.log(id)
@@ -467,5 +467,12 @@ module.exports.listNewsWaitingForApproval = async (req, res) => {
 	}
 }
 
+
+//sanh sach theo chu de
+module.exports.listNewsToKind = async(req, res) =>{
+	const {kind} = req.params;
+	const listNews = await News.find({kindNews: kind})
+	return res.json({listNews: listNews})
+}
 
 

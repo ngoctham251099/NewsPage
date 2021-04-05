@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import parse from 'html-react-parser';
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
@@ -9,6 +8,7 @@ import Input from '../UI/Input'
 import Button from '../UI/Button';
 import ButtonAdd from '../UI/button-add'
 import { useHistory } from 'react-router-dom';
+import Select from '../UI/select'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -31,8 +31,11 @@ function CreateNews(props) {
     const [images , setImages] = useState();
     const [summary, setSummary] = useState();
     const idUser = localStorage.getItem('idUser');
+    const [listcategories, setListCategories] = useState();
+    const [categoried, setCategories] = useState()
+    const [listKind, setListKind] = useState([]);
+    const [kind, setKind] = useState();
     
-
     const addNews = () => {
         const formData =  new FormData();
         // const date_submitted = moment().subtract(10, 'days').calendar();
@@ -42,17 +45,12 @@ function CreateNews(props) {
         formData.append("avatar", avatar)
         formData.append('idUser', idUser)
         formData.append('summary', summary)
+        formData.append('kind', kind)
+        formData.append('categoried', categoried);
         //formData.append("date_submitted",date_submitted)
         for(const key of Object.keys(images)){
             formData.append('images', images[key])
         }
-        // if(!avatar){
-        //     setMessage("Bạn chưa chọn file")
-        // }
-
-        // const config = {
-        //     headers: {"content-type": "multipart/form-data"}
-        // }
         axios.post('/api-news/create',formData)
         .then(
             res => {
@@ -61,6 +59,25 @@ function CreateNews(props) {
             }
         )
     }
+
+    useEffect(() => {
+        axios.get('/api-kind')
+        .then(
+          res => {
+            console.log(res.data.kind)
+            setListKind(res.data.kind)
+          }
+        )
+      },[])
+
+      useEffect(() => {
+        axios.get('/api-categories')
+        .then(
+            res => {
+                setListCategories(res.data.categories);
+            }
+        )
+    },[])
 
     const onChangeTitle = (event) => {
         console.log(event.target.value)
@@ -75,6 +92,16 @@ function CreateNews(props) {
     const onChangeSummary = (event) => {
         console.log(event.target.value)
         setSummary(event.target.value);
+    }
+
+    const onChangeKind = (event) => {
+        console.log(event.target.value)
+        setKind(event.target.value);
+    }
+
+    const onChangeCategories = (event) => {
+        console.log(event.target.value)
+        setCategories(event.target.value);
     }
 
     const onChangeContent = (event, editor) =>{
@@ -135,6 +162,18 @@ function CreateNews(props) {
                         type = 'file'
                     ></Input>
                     {/* <input type="file" name="avatar" placeholder="author" onChange={onChangeAvarta}></input> */}
+                </div>
+
+                <div className="item">
+                    <label className="title-news">Loại tin</label>
+                    <Select list={listKind} onChange={onChangeKind}></Select>
+                    {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
+                </div>
+
+                <div className="item">
+                    <label className="title-news">Chuyên mục</label>
+                    <Select list={listcategories} onChange={onChangeCategories}></Select>
+                    {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
                 </div>
 
                 <div className="item">
