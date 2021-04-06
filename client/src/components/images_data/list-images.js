@@ -10,7 +10,7 @@ export default function ListKinds(props){
     const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('/api-images/')
+        axios.get('http://localhost:5000/api-images/')
         .then(
             res => {    
                 console.log(res.data.images);
@@ -22,7 +22,7 @@ export default function ListKinds(props){
     
     let show_item_after_delete = ()=>{
         setTimeout(()=>{
-          axios.get(`/api-images`).then(res=>{
+          axios.get(`http://localhost:5000/api-images`).then(res=>{
             setImages(res.data.images)
 
         })
@@ -30,7 +30,7 @@ export default function ListKinds(props){
       }
 
     let Remove = (id) =>{
-        axios.delete(`/api-images/delete/${id}`)
+        axios.delete(`http://localhost:5000/api-images/delete/${id}`)
         .then(
             res => {
                 console.log(res.data.message)

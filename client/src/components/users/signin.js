@@ -63,7 +63,7 @@ function SignIn(props) {
   };
 
   // const userAuthenticated = () => {
-  //     axios.get('/api/example',{
+  //     axios.get('http://localhost:5000/api/example',{
   //         headers: {"x-access-token": localStorage.getItem('token')}
   //     })
   //     .then(

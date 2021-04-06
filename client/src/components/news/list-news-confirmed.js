@@ -13,7 +13,7 @@ function ListNews(){
     let stt=1;
     let d=0;
     useEffect(() => {
-        axios.get('/api-news/list-news-approved')
+        axios.get('http://localhost:5000/api-news/list-news-approved')
         .then(
             res => {
                 setNews(res.data.listNewsApproved);
@@ -23,7 +23,7 @@ function ListNews(){
     },[])
 
     const ViewsId = (id) => {
-        axios.post(`/api-news/view/${id}`)
+        axios.post(`http://localhost:5000/api-news/view/${id}`)
         .then(
             res => {
                 if(res.data){

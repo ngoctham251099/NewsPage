@@ -20,7 +20,7 @@ export default function ListEditor(props) {
   const [message, setMessage] = useState();
   useEffect(async () => {
     const id = localStorage.getItem("idUser");
-    const res = await axios.get(`/api-news/views-president?id=${id}`, {
+    const res = await axios.get(`http://localhost:5000/api-news/views-president?id=${id}`, {
       id: localStorage.getItem("idUSer"),
     });
     if (res.data.listNews) {
@@ -59,7 +59,7 @@ export default function ListEditor(props) {
   const show_item_after_delete = () => {
     setTimeout(async () => {
       const id = localStorage.getItem("idUser");
-      const res = await axios.get(`/api-news/views-president?id=${id}`, {
+      const res = await axios.get(`http://localhost:5000/api-news/views-president?id=${id}`, {
         id: localStorage.getItem("idUSer"),
       });
       if (res.data.listNews) {
@@ -86,7 +86,7 @@ export default function ListEditor(props) {
 
   const updateRefuse = async (idNews) => {
     const id = localStorage.getItem("idUser");
-    const res = await axios.post(`/api-news/update-refuse/${id}/${idNews}`, {
+    const res = await axios.post(`http://localhost:5000/api-news/update-refuse/${id}/${idNews}`, {
       note: note,
     });
     if (res.data.message == "Đã từ chối duyệt tin") {

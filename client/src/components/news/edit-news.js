@@ -57,7 +57,7 @@ export default function EditNews(props) {
   }, []);
 
   useEffect(async () => {
-    const res = await axios.post(`/api-news/edit/${props.match.params.id}`, {
+    const res = await axios.post(`http://localhost:5000/api-news/edit/${props.match.params.id}`, {
       id: props.match.params.id,
     });
 

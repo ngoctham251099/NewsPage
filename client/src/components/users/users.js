@@ -13,7 +13,7 @@ export default function Users(){
 
     useEffect(()=>{
         const getUser = async () => {
-            const getUser = await axios.get('/api-user');
+            const getUser = await axios.get('http://localhost:5000/api-user');
             setUsers(getUser.data);
         }
         getUser();
@@ -47,7 +47,7 @@ export default function Users(){
         },100)
     }
     const Remove = async (id) => {
-        await axios.delete(`/api-user/delete/${id}`)
+        await axios.delete(`http://localhost:5000/api-user/delete/${id}`)
         showItemAfterDelete();
        
     }

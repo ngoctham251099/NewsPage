@@ -76,7 +76,7 @@ function ListNews(props) {
 
   const show_item_after_delete = () => {
     setTimeout(() => {
-      axios.get(`/api-news`).then((res) => {
+      axios.get(`http://localhost:5000/api-news`).then((res) => {
         // history.push(`${props.path}/news`)
         setNews(res.data.page);
         setImages(res.data.images);
@@ -85,7 +85,7 @@ function ListNews(props) {
   };
 
   let Remove = (id) => {
-    axios.delete(`/api-news/remove/${id}`).then((res) => {
+    axios.delete(`http://localhost:5000/api-news/remove/${id}`).then((res) => {
       toast.success(res.data.message);
       show_item_after_delete();
     });

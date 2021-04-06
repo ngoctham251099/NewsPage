@@ -10,7 +10,7 @@ export default function ListKinds(props){
     const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('/api-kind/')
+        axios.get('http://localhost:5000/api-kind/')
         .then(
             res => {    
                 console.log(res.data.kind);
@@ -22,7 +22,7 @@ export default function ListKinds(props){
     
     let show_item_after_delete = ()=>{
         setTimeout(()=>{
-          axios.get(`/api-kind`).then(res=>{
+          axios.get(`http://localhost:5000/api-kind`).then(res=>{
             setKinds(res.data.kind)
 
         })
@@ -30,7 +30,7 @@ export default function ListKinds(props){
       }
 
     let Remove = (id) =>{
-        axios.delete(`/api-kind/delete/${id}`)
+        axios.delete(`http://localhost:5000/api-kind/delete/${id}`)
         .then(
             res => {
                 console.log(res.data.message)

@@ -12,7 +12,7 @@ function ListNews(){
     let d=0;
     useEffect(() => {
 
-        axios.get(`/api-news/views-department?id=${localStorage.getItem('idUser')}`,{id: localStorage.getItem('idUser')})
+        axios.get(`http://localhost:5000/api-news/views-department?id=${localStorage.getItem('idUser')}`,{id: localStorage.getItem('idUser')})
         .then(
             res => {
                setNews(res.data.listNews);
@@ -22,7 +22,7 @@ function ListNews(){
     },[])
 
     const ViewsId = (id) => {
-        axios.post(`/api-news/view/${id}`)
+        axios.post(`http://localhost:5000/api-news/view/${id}`)
         .then(
             res => {
                 if(res.data){
