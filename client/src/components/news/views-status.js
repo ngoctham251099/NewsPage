@@ -9,7 +9,7 @@ export default function ViewsStatus(){
   const [message, setMessage] = useState();
 
   useEffect( async () => {
-    const listNews = await axios.get('http://127.0.0.1/api/api-news/viewsPower')
+    const listNews = await axios.get('http://localhost:5000/api-news/viewsPower')
     console.log(listNews.data)
     setMessage(listNews.data.message);
     setNews(listNews.data.news)

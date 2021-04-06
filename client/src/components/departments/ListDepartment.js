@@ -11,7 +11,7 @@ function ListDepatment(props){
     const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('http://127.0.0.1/api/api-department')
+        axios.get('http://localhost:5000/api-department')
         .then(
             res => {    
                 console.log(res.data.department);
@@ -23,7 +23,7 @@ function ListDepatment(props){
     
     let show_item_after_delete=()=>{
         setTimeout(()=>{
-          axios.get(`http://127.0.0.1/api/api-department`).then(res=>{
+          axios.get(`http://localhost:5000/api-department`).then(res=>{
             console.log(res.data.department)
             setDepartments(res.data.department)
 
@@ -32,7 +32,7 @@ function ListDepatment(props){
       }
 
     let Remove = async (id) =>{
-        const res = await axios.delete(`http://127.0.0.1/api/api-department/delete/${id}`)
+        const res = await axios.delete(`http://localhost:5000/api-department/delete/${id}`)
         if(res.data.message == "Đã xóa thành công"){
           setMessage(res.data.message)
           show_item_after_delete();

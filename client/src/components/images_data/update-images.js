@@ -15,7 +15,7 @@ export default function UpdateImages(props){
 
     useEffect(() => {
        console.log(props.match.params.id)
-        axios.post(`http://127.0.0.1/api/api-images/edit/${props.match.params.id}`)
+        axios.post(`http://localhost:5000/api-images/edit/${props.match.params.id}`)
         .then(
             res => {
                 setImages(res.data.Images);
@@ -34,7 +34,7 @@ export default function UpdateImages(props){
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(props.match.params.id)
-        axios.post(`http://127.0.0.1/api/api-images/update/${props.match.params.id}`,{
+        axios.post(`http://localhost:5000/api-images/update/${props.match.params.id}`,{
             id: props.match.params.id,
             nameChange : images.name,
             price: images.price

@@ -24,7 +24,7 @@ export default function Admin(props) {
 
   useEffect(() => {
     const id = localStorage.getItem("idUser");
-    axios.post(`http://127.0.0.1/api/api-user/user-id/${id}`).then((res) => {
+    axios.post(`http://localhost:5000/api-user/user-id/${id}`).then((res) => {
       setUsername(res.data.News);
     });
   }, []);

@@ -15,7 +15,7 @@ function SignIn(props) {
 
   const logIn = () => {
     axios
-      .post("http://127.0.0.1/api/api-user/login", {
+      .post("http://localhost:5000/api-user/login", {
         email: email,
         password: password,
       })
@@ -63,7 +63,7 @@ function SignIn(props) {
   };
 
   // const userAuthenticated = () => {
-  //     axios.get('http://127.0.0.1/api/api/example',{
+  //     axios.get('http://localhost:5000/api/example',{
   //         headers: {"x-access-token": localStorage.getItem('token')}
   //     })
   //     .then(
