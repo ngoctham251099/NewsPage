@@ -4,9 +4,37 @@ import Moment from "react-moment";
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
 import { toast } from "react-toastify";
+import Select from "../UI/select";
 
 import { useHistory, Link } from "react-router-dom";
 
+const listStatus = [
+  {
+    id: "-1",
+    value: "tất cả bài viết",
+  },
+  {
+    id: "1",
+    value: "đang chờ phê duyệt",
+  },
+  {
+    id: "2",
+    value: "đã xác nhận từ ban biên tập",
+  },
+  {
+    id: "3",
+    value: "đã được phê duyệt từ trưởng ban biên tập",
+  },
+  {
+    id: "4",
+    value: "đã được đăng",
+  },
+  {
+    id: "0",
+    value: "đã bị từ chối",
+  },
+ 
+];
 function ListNews(props) {
   let history = useHistory();
   const [news, setNews] = useState([]);
@@ -22,6 +50,8 @@ function ListNews(props) {
       setImages(res.data.images);
     });
   }, []);
+
+  const [currentFilter, setCurrentFilter] = useState("-1");
 
   const getStatus = (power) => {
     switch (power) {
@@ -64,7 +94,21 @@ function ListNews(props) {
   return (
     <div>
       <div className="card-header">
-        <h3>Danh sách bài viết</h3>
+        <h3>
+          Danh sách bài viết
+          <select
+            style={{
+              marginLeft: "12px",
+              height: "30px",
+              borderRadius: "12px",
+            }}
+            onChange={(e) => setCurrentFilter(e.target.value)}
+          >
+            {listStatus.map((status) => (
+              <option value={status.id}>{status.value}</option>
+            ))}
+          </select>
+        </h3>
         <button
           onClick={() => {
             history.push(`${props.path}/news/add`);
@@ -81,7 +125,7 @@ function ListNews(props) {
                 <th>STT</th>
                 <th>Tiêu đề</th>
                 <th>Thumbnail</th>
-                <th>Tác giả</th>
+                <th>Bút danh</th>
                 <th>Ngày viết</th>
                 <th>Trạng thái</th>
                 <th>Phòng ban</th>
@@ -94,53 +138,58 @@ function ListNews(props) {
               </tr>
             </thead>
             <tbody>
-              {news.map((item) => (
-                <tr key={item._id}>
-                  <td>{stt++}</td>
-                  <td
-                    style={{
-                      maxWidth: "180px",
-                      overflowWrap: "break-word",
-                    }}
-                  >
-                    {item.title}
-                  </td>
-                  <td>
-                    <img
-                      width={150}
-                      src={`/api-news/viewFile/${item.avatar}`}
-                    ></img>
-                  </td>
-                  <td>{item.author}</td>
-                  <td>
-                    <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
-                  </td>
-                  {/* <td>{item.images.map(element => (
+              {news
+                .filter((item) => {
+                  if (currentFilter === "-1") return item;
+                  return item.status === currentFilter;
+                })
+                .map((item) => (
+                  <tr key={item._id}>
+                    <td>{stt++}</td>
+                    <td
+                      style={{
+                        maxWidth: "180px",
+                        overflowWrap: "break-word",
+                      }}
+                    >
+                      {item.title}
+                    </td>
+                    <td>
+                      <img
+                        width={150}
+                        src={`/api-news/viewFile/${item.avatar}`}
+                      ></img>
+                    </td>
+                    <td>{item.author}</td>
+                    <td>
+                      <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
+                    </td>
+                    {/* <td>{item.images.map(element => (
                                         <img width={400} src={`/api-news/viewFile/${element}`}></img>
                                     ))}</td>					     */}
-                  <td>{getStatus(item.status)}</td>
-                  {/* <td>{item.status}</td> */}
-                  <td>{item.department}</td>
-                  <td>{item.kindNews}</td>
-                  <td>{item.categories}</td>
-                  <td>
-                    <Link to={`${props.path}/news/views/${item._id}`}>
-                      Xem thử
-                    </Link>
-                  </td>
-                  <td>
-                    <Link to={`${props.path}/news/${item._id}`}>
-                      <BsPencil />
-                    </Link>
-                  </td>
-                  <td>
-                    <span onClick={() => Remove(item._id)}>
-                      <BsTrashFill />
-                    </span>
-                  </td>
-                  <td>{item.note}</td>
-                </tr>
-              ))}
+                    <td>{getStatus(item.status)}</td>
+                    {/* <td>{item.status}</td> */}
+                    <td>{item.department}</td>
+                    <td>{item.kindNews}</td>
+                    <td>{item.categories}</td>
+                    <td>
+                      <Link to={`${props.path}/news/views/${item._id}`}>
+                        Xem thử
+                      </Link>
+                    </td>
+                    <td>
+                      <Link to={`${props.path}/news/${item._id}`}>
+                        <BsPencil />
+                      </Link>
+                    </td>
+                    <td>
+                      <span onClick={() => Remove(item._id)}>
+                        <BsTrashFill />
+                      </span>
+                    </td>
+                    <td>{item.note}</td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

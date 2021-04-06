@@ -153,7 +153,7 @@ export default function Admin(props) {
                 <span>
                   <AiOutlineOrderedList />
                 </span>
-                <span>Danh sách bài viết</span>
+                <span>Quản lý bài viết</span>
               </div>
             </li>
             
@@ -162,7 +162,7 @@ export default function Admin(props) {
                 <span>
                   <AiOutlineTeam />
                 </span>
-                <span>Người dùng</span>
+                <span>Quản lý người dùng</span>
               </div>
             </li>
 
@@ -171,7 +171,7 @@ export default function Admin(props) {
                 <span>
                   <AiOutlineUnorderedList />
                 </span>
-                <span>Phòng ban</span>
+                <span>Quản lý phòng ban</span>
               </div>
             </li>
 
@@ -189,18 +189,18 @@ export default function Admin(props) {
                 <span>
                   <GoChecklist />
                 </span>
-                <span>Loại tin</span>
+                <span>Quản lý loại tin</span>
               </div>
             </li>
 
-            <li>
+            {/* <li>
               <div onClick={clickImages} className={`nav__link a ${props.location.pathname === '/admin/list-images' && 'active'}`}>
                 <span>
                   <AiFillFileImage />
                 </span>
                 <span>Loại hình ảnh</span>
               </div>
-            </li>
+            </li> */}
 
            
 
@@ -218,16 +218,16 @@ export default function Admin(props) {
 													<span>Thống kê</span></div>
 									</li> */}
 
-            <li>
+            {/* <li>
               <div onClick={clickNewsApproved} className={`nav__link a ${props.location.pathname === '/admin/news-approved' && 'active'}`}>
                 <span>
                   <BsCardChecklist />
                 </span>
                 <span>Danh sách tin đã duyệt</span>
               </div>
-            </li>
+            </li> */}
 
-            <li>
+            {/* <li>
               <div
                 onClick={clickNewsWaitingForApproval}
                 className={`nav__link a ${props.location.pathname === '/admin/news-waiting-for-approval' && 'active'}`}
@@ -237,7 +237,7 @@ export default function Admin(props) {
                 </span>
                 <span>Danh sách tin chờ phê duyệt</span>
               </div>
-            </li>
+            </li> */}
 
             <li>
               <div onClick={logout} className={`nav__link a`}>

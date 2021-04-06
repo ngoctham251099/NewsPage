@@ -92,7 +92,7 @@ function ListNews(){
                                 <th>STT</th>
                                 <th>Tiêu đề</th>
                                 <th>Avatar</th>
-                                <th>Tác giả</th>
+                                <th>Bút danh</th>
                                 <th>Ngày viết</th>
                                 <th>Trạng thái</th>
                                 <th>Phòng ban</th>

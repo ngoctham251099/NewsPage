@@ -42,18 +42,14 @@ export default function ListEditor(props) {
     switch (power) {
       case "1":
         return "Chờ phê duyệt";
-      // break;
       case "2":
         return "Đã xác nhận";
-      // break;
       case "3":
         return "Đã phê duyệt";
-      // break;
       case "4":
-        return "Từ chối";
-      // break;
+        return "Đã được đăng";
       default:
-        break;
+        return "Đã từ chối";
     }
   };
 
@@ -119,7 +115,7 @@ export default function ListEditor(props) {
                 <th>STT</th>
                 <th>Tiêu đề</th>
                 <th>Avatar</th>
-                <th>Tác giả</th>
+                <th>Bút danh</th>
                 <th>Ngày viết</th>
                 <th>Phòng ban</th>
                 <th>Trạng thái</th>
@@ -150,7 +146,7 @@ export default function ListEditor(props) {
                     </Link>
                   </td>
                   <td>
-                    {item.status === '1' ? (
+                    {item.status === "1" ? (
                       <Link to={`${props.path}/news/${item._id}`}>
                         <BsPencil />
                       </Link>

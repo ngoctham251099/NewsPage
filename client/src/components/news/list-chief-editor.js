@@ -131,7 +131,7 @@ export default function ListEditor(props) {
                 <th>STT</th>
                 <th>Tiêu đề</th>
                 <th>Avatar</th>
-                <th>Tác giả</th>
+                <th>Bút danh</th>
                 <th>Ngày viết</th>
                 <th>Phòng ban</th>
                 <th>Loại tin</th>

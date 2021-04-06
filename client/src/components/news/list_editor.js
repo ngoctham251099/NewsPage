@@ -122,10 +122,9 @@ export default function ListEditor(props) {
                 <th>STT</th>
                 <th>Tiêu đề</th>
                 <th>Thumbnail</th>
-                <th>Tác giả</th>
+                <th>Bút danh</th>
                 <th>Ngày viết</th>
                 <th>Phòng ban</th>
-                <th>Loại tin</th>
                 <th>Xem bài</th>
                 <th>Hành động</th>
               </tr>
@@ -148,9 +147,9 @@ export default function ListEditor(props) {
                   {/* <td>{getStatus(item.status)}</td> */}
                   {/* <td>{item.status}</td> */}
                   <td>{item.department}</td>
-                  <td>
+                  {/* <td>
                     <Select list={listKind} onChange={onChangeKind}></Select>
-                  </td>
+                  </td> */}
                   <td>
                     <Link to={`${props.path}/news/views/${item._id}`}>
                       Views
@@ -160,10 +159,10 @@ export default function ListEditor(props) {
                   <td style={{ width: 120 }}>
                     <span style={{ padding: "5px" }}>
                       <Link to={`${props.path}/news/${item._id}`}>
-                        <BsPencil />
+                          Chỉnh sửa và phê duyệt
                       </Link>
                     </span>
-                    <span style={{ padding: "5px" }}>
+                    {/* <span style={{ padding: "5px" }}>
                       <FaCheckCircle
                         color="#6DD400"
                         onClick={() => updateStatus(item._id)}
@@ -173,8 +172,8 @@ export default function ListEditor(props) {
                       <FaExclamationTriangle
                         color="#FF302F"
                         onClick={() => updateRefuse(item._id)}
-                      />
                     </span>
+                      /> */}
                   </td>
                 </tr>
               ))}

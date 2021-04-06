@@ -21,7 +21,7 @@ export default function Admin(props) {
     localStorage.removeItem("power");
     history.push("/");
   };
-  
+
   useEffect(() => {
     const id = localStorage.getItem("idUser");
     axios.post(`/api-user/user-id/${id}`).then((res) => {
@@ -85,7 +85,7 @@ export default function Admin(props) {
             </li>
 
             <li>
-            <div onClick={logout} className={`nav__link a`}>
+              <div onClick={logout} className={`nav__link a`}>
                 <span class="las la-igloo"></span>
                 <span>Đăng xuất</span>
               </div>
@@ -120,21 +120,20 @@ export default function Admin(props) {
                     path={`${path}/news/views/:id`}
                     key={props.location.key}
                     render={({ match }) => (
-                      <ViewNews key={props.location.key} match={match} />
+                      <ViewNews key={props.location.key} match={match} role={BAN_BT_ROLE} />
                     )}
                   ></Route>
+                  <Route path={`${path}/news/add`}>
+                    <CreateNews path={path} role={BAN_BT_ROLE} />
+                  </Route>
 
                   <Route
                     path={`${path}/news/:id`}
                     key={props.location.key}
                     render={({ match }) => (
-                      <UpdateNews key={props.location.key} match={match} />
+                      <UpdateNews key={props.location.key} match={match} role={BAN_BT_ROLE}/>
                     )}
                   ></Route>
-
-                  <Route path={`${path}/news/add`}>
-                    <CreateNews path={path} role={BAN_BT_ROLE}/>
-                  </Route>
 
                   <Route path={`${path}`}>
                     <ListEditor path={path} />

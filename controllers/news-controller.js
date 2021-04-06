@@ -409,7 +409,7 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
   });
 };
 
-//Thống kê theo tên tác giả
+//Thống kê theo tên Bút danh
 // module.exports.statisticalAuthor = async (req, res) => {
 // 	const {nameOfUser} = req.body;
 // 	console.log(nameOfUser)

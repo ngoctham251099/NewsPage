@@ -42,7 +42,7 @@ export default function EditNews(props) {
     images: "",
     note: "",
     categories: "",
-    summary: ""
+    summary: "",
   });
 
   const [listKind, setListKind] = useState([]);
@@ -110,14 +110,14 @@ export default function EditNews(props) {
       case TRUONG_BAN_BT_ROLE:
         return 3;
       case THU_KY_ROLE:
-      case ADMIN_ROLE: 
+      case ADMIN_ROLE:
         return 4;
       default:
         return 1;
     }
   };
 
-  console.log(role)
+  console.log(role);
 
   const submit = () => {
     const formData = new FormData();
@@ -131,8 +131,8 @@ export default function EditNews(props) {
     formData.append("summary", news.summary);
     formData.append("status", setStatus(role));
     formData.append("note", news.note);
-    
-    if(news.categories){ 
+
+    if (news.categories) {
       formData.append("categories", news.categories);
     }
 
@@ -184,7 +184,6 @@ export default function EditNews(props) {
   const onChangeSummary = (event) => {
     setNews({ ...news, summary: event.target.value });
   };
-  
 
   const onChangeImages = (e) => {
     console.log(e.target.files);
@@ -227,7 +226,7 @@ export default function EditNews(props) {
         </div>
 
         <div className="item">
-          <label className="title-news">Tác giả</label>
+          <label className="title-news">Bút danh</label>
           <Input value={news.author} onChange={onChangeAuthor}></Input>
           {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
         </div>
@@ -243,19 +242,16 @@ export default function EditNews(props) {
           </div>
         )}
 
-
-      {role !== THU_KY_ROLE && (
+        {role !== THU_KY_ROLE && (
           <div className="item">
             <label className="title-news">Chủ đề tin</label>
             <Select
               value={news.categories}
               list={categoryList}
-              onChange={(e) => setNews({...news, categories: e.target.value})}
+              onChange={(e) => setNews({ ...news, categories: e.target.value })}
             ></Select>
           </div>
         )}
-
-
 
         <div className="item">
           <label>Thumbnail</label>
@@ -316,6 +312,14 @@ export default function EditNews(props) {
         )}
 
         {role === ADMIN_ROLE && (
+          <div className="item">
+            <label className="title-news">Ghi chú</label>
+            <Input value={news.note} onChange={onChangeNote}></Input>
+            {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
+          </div>
+        )}
+
+        {role === THU_KY_ROLE && (
           <div className="item">
             <label className="title-news">Ghi chú</label>
             <Input value={news.note} onChange={onChangeNote}></Input>

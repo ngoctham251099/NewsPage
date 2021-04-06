@@ -131,13 +131,13 @@ function CreateNews(props) {
       <h3 style={{ marginBottom: 20 }}>Thêm bài viết</h3>
       <form className={classes.root} noValidate autoComplete="off">
         <div className="item">
-          <label className="title-news">Title</label>
+          <label className="title-news">Tiêu đề</label>
           <Input onChange={onChangeTitle}></Input>
           {/* <input type="text" placeholder="title" onChange={onChangeTitle} ></input> */}
         </div>
 
         <div className="item">
-          <label>Tác giả</label>
+          <label>Bút danh</label>
           <Input onChange={onChangeAuthor}></Input>
           {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
         </div>

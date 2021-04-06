@@ -70,7 +70,7 @@ router.post('/statisticalFromDateToDate', newsController.statisticalFromDateToDa
 router.post('/statisticalFromMonthtoMonth', newsController.statisticalFromMonthtoMonth)
 //Thống kê theo năm
 router.post('/statisticalFromYear', newsController.statisticalFromYear)
-//Thống kê theo tên tác giả
+//Thống kê theo tên Bút danh
 router.post('/statisticalAuthor', newsController.statisticalAuthor)
 
 //----------------------------------
