@@ -25,7 +25,7 @@ export default function UpdateUser(props) {
     { id: 5, value: "Thư ký" },
   ]);
   useEffect(() => {
-    axios.get("http://localhost:5000/api-department/").then((res) => {
+    axios.get("http://3.130.135.8/api/api-department/").then((res) => {
       //console.log(res.data.department);
       setDepartments(res.data.department);
     });

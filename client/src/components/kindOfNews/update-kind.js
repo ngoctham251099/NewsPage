@@ -15,7 +15,7 @@ export default function UpdateKind(props){
 
     useEffect(() => {
        console.log(props.match.params.id)
-        axios.post(`http://localhost:5000/api-kind/edit/${props.match.params.id}`)
+        axios.post(`http://3.130.135.8/api/api-kind/edit/${props.match.params.id}`)
         .then(
             res => {
                 setKind(res.data.kindId);
@@ -34,7 +34,7 @@ export default function UpdateKind(props){
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(props.match.params.id)
-        axios.post(`http://localhost:5000/api-kind/update/${props.match.params.id}`,{
+        axios.post(`http://3.130.135.8/api/api-kind/update/${props.match.params.id}`,{
             id: props.match.params.id,
             nameChange : kind.name,
             price: kind.unitPrice

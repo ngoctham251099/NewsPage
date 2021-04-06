@@ -7,7 +7,7 @@ export default function Views(props){
     const [error, setError] = useState();
     useEffect(()=>{
         console.log(props.match.params.id)
-        // const res =  await axios.get(`http://localhost:5000/api-news/views-news/${props.match.params.id}`,
+        // const res =  await axios.get(`http://3.130.135.8/api/api-news/views-news/${props.match.params.id}`,
         // {
         //     id: props.match.params.id
         // })
@@ -18,7 +18,7 @@ export default function Views(props){
         //     setError("Không tìm thấy")
         // }
 
-        axios.post(`http://localhost:5000/api-news/views-news/${props.match.params.id}`,
+        axios.post(`http://3.130.135.8/api/api-news/views-news/${props.match.params.id}`,
         {
             id: props.match.params.id
         })

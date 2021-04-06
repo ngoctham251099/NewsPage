@@ -13,7 +13,7 @@ export default function UpdateDepartment(props){
 
     useEffect(() => {
        // console.log(props.match.params.id)
-        axios.post(`http://localhost:5000/api-department/edit/${props.match.params.id}`)
+        axios.post(`http://3.130.135.8/api/api-department/edit/${props.match.params.id}`)
         .then(
             res => {
                 setDepartment(res.data.departmentId);
@@ -29,7 +29,7 @@ export default function UpdateDepartment(props){
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(props.match.params.id)
-        axios.post(`http://localhost:5000/api-department/update/${props.match.params.id}`,{
+        axios.post(`http://3.130.135.8/api/api-department/update/${props.match.params.id}`,{
             nameChange : department
         })
         .then(

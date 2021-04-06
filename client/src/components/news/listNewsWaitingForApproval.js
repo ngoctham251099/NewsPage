@@ -11,7 +11,7 @@ export default function ListNewsWaitingForApproval(){
     let stt=1;
     let d=0;
     useEffect(() => {
-        axios.get('http://localhost:5000/api-news/list-news-waiting-for-approval')
+        axios.get('http://3.130.135.8/api/api-news/list-news-waiting-for-approval')
         .then(
             res => {
               console.log(res.data)
@@ -22,7 +22,7 @@ export default function ListNewsWaitingForApproval(){
     },[])
 
     const ViewsId = (id) => {
-        axios.post(`http://localhost:5000/api-news/view/${id}`)
+        axios.post(`http://3.130.135.8/api/api-news/view/${id}`)
         .then(
             res => {
                 if(res.data){

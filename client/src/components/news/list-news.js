@@ -45,7 +45,7 @@ function ListNews(props) {
   let stt = 1;
   let d = 0;
   useEffect(() => {
-    axios.get("http://localhost:5000/api-news/").then((res) => {
+    axios.get("http://3.130.135.8/api/api-news/").then((res) => {
       setNews(res.data.page);
       setImages(res.data.images);
     });
@@ -76,7 +76,7 @@ function ListNews(props) {
 
   const show_item_after_delete = () => {
     setTimeout(() => {
-      axios.get(`http://localhost:5000/api-news`).then((res) => {
+      axios.get(`http://3.130.135.8/api/api-news`).then((res) => {
         // history.push(`${props.path}/news`)
         setNews(res.data.page);
         setImages(res.data.images);
@@ -85,7 +85,7 @@ function ListNews(props) {
   };
 
   let Remove = (id) => {
-    axios.delete(`http://localhost:5000/api-news/remove/${id}`).then((res) => {
+    axios.delete(`http://3.130.135.8/api/api-news/remove/${id}`).then((res) => {
       toast.success(res.data.message);
       show_item_after_delete();
     });

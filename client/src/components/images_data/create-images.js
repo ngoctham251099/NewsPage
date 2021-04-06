@@ -10,7 +10,7 @@ function Create(props){
 	let history = useHistory();
 
 	const add = () => {
-			axios.post('http://localhost:5000/api-images/create', {
+			axios.post('http://3.130.135.8/api/api-images/create', {
 					name: name,
 					price: price
 			})

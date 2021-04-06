@@ -9,7 +9,7 @@ class RenderReportByDepartment extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.month !== this.state.month) {
       const fetchData = async () => {
-        const res = await axios.post("http://localhost:5000/api-news/statisticalByAuthor2", {
+        const res = await axios.post("http://3.130.135.8/api/api-news/statisticalByAuthor2", {
           month: this.state.month || moment(),
         });
         this.setState({ ...this.state, news: res.data.News });
@@ -21,7 +21,7 @@ class RenderReportByDepartment extends React.Component {
 
   componentDidMount() {
     const fetchData = async () => {
-      const res = await axios.post("http://localhost:5000/api-news/statisticalByAuthor2", {
+      const res = await axios.post("http://3.130.135.8/api/api-news/statisticalByAuthor2", {
         month: this.state.month || moment(),
       });
       this.setState({ ...this.state, news: res.data.News });
