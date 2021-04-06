@@ -2,7 +2,7 @@ const News = require("../data/models/News");
 const path = require("path");
 const fs = require("fs");
 const Users = require("../data/models/Users");
-const Kinds = require('../data/models/KindOfNews');
+const Kinds = require("../data/models/KindOfNews");
 
 const moment = require("moment");
 
@@ -26,7 +26,17 @@ module.exports.showNews = (req, res, next) => {
 };
 
 module.exports.create = async (req, res, next) => {
-  const { title, content, author, idUser, summary, status = 1, kindNews, categories, note } = req.body;
+  const {
+    title,
+    content,
+    author,
+    idUser,
+    summary,
+    status = 1,
+    kindNews,
+    categories,
+    note,
+  } = req.body;
   const { avatar } = req.files;
   let date = Date.now();
   let dateMoment = moment(date).format("YYYY-MM-DD");
@@ -411,19 +421,24 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
   });
 };
 
-
 const calculatePrice = (allKinds, kind) => {
-  const price = allKinds.find(e => e.name === kind).unitPrice;
+  const price = allKinds.find((e) => e.name === kind).unitPrice;
   return price;
-}
+};
 module.exports.statisticalByAuthor = async (req, res) => {
   const { month } = req.body;
-  
-  const startOfMonth = moment(month).clone().startOf('month').format('YYYY-MM-DD hh:mm');
-  const endOfMonth   = moment(month).clone().endOf('month').format('YYYY-MM-DD hh:mm');
+
+  const startOfMonth = moment(month)
+    .clone()
+    .startOf("month")
+    .format("YYYY-MM-DD hh:mm");
+  const endOfMonth = moment(month)
+    .clone()
+    .endOf("month")
+    .format("YYYY-MM-DD hh:mm");
 
   const getKindPrice = await Kinds.find({});
-
+  console.log(startOfMonth, endOfMonth);
 
   const allNews = await News.find({
     date_submitted: {
@@ -433,12 +448,63 @@ module.exports.statisticalByAuthor = async (req, res) => {
   });
 
   return res.json({
-    News: allNews.map(newsData => {
-      return {
-        ...newsData, price: calculatePrice( getKindPrice, newsData.kindNews)
-      }
-    }),
+    News: allNews
+      .filter((item) => item.status === "4")
+      .map((newsData) => {
+        return {
+          ...newsData,
+          price: calculatePrice(getKindPrice, newsData.kindNews),
+        };
+      }),
   });
+};
+
+module.exports.statisticalByAuthor2 = async (req, res) => {
+  const { month } = req.body;
+
+  const startOfMonth = moment(month)
+    .clone()
+    .startOf("month")
+    .format("YYYY-MM-DD hh:mm");
+  const endOfMonth = moment(month)
+    .clone()
+    .endOf("month")
+    .format("YYYY-MM-DD hh:mm");
+
+  const getKindPrice = await Kinds.find({});
+
+  console.log(startOfMonth, endOfMonth);
+
+
+  const getNewsByKind = Promise.all(
+    getKindPrice.map(async (item) => {
+      return await News.aggregate([
+        {
+          $match: {
+            kindNews: item,
+            date_submitted: {
+              $gte: new Date(startOfMonth),
+              $lt: new Date(endOfMonth),
+            },
+          },
+        },
+        { $group: { _id: "$IdUser", count: { $sum: 1 } } },
+      ]);
+    })
+  )
+
+  console.log(getNewsByKind());
+
+  // return res.json({
+  //   News: allNews
+  //     .filter((item) => item.status === "4")
+  //     .map((newsData) => {
+  //       return {
+  //         ...newsData,
+  //         price: calculatePrice(getKindPrice, newsData.kindNews),
+  //       };
+  //     }),
+  // });
 };
 
 //Thống kê theo tên Bút danh
