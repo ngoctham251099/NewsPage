@@ -9,7 +9,7 @@ function Create(props){
 	let history = useHistory();
 
 	const addDepartment = () => {
-			axios.post('http://localhost:5000/api-department/create', {
+			axios.post('/api-department/create', {
 					name: name,
 			})
 			.then(

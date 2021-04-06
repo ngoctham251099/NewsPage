@@ -52,13 +52,13 @@ function CreateNews(props) {
   const idUser = localStorage.getItem("idUser");
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api-categories").then((res) => {
+    axios.get("/api-categories").then((res) => {
       setCategoryList(res.data.categories);
     });
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api-kind").then((res) => {
+    axios.get("/api-kind").then((res) => {
       setListKind(res.data.kind);
     });
   }, []);
@@ -121,7 +121,7 @@ function CreateNews(props) {
     formData.append("categories", category);
     formData.append("note", note);
     formData.append("status", setStatus(role));
-    axios.post("http://localhost:5000/api-news/create", formData).then((res) => {
+    axios.post("/api-news/create", formData).then((res) => {
       history.push(`${props.path}/news`);
     });
   };

@@ -51,13 +51,13 @@ export default function EditNews(props) {
   const [arrImages, setArrImages] = useState([]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api-categories").then((res) => {
+    axios.get("/api-categories").then((res) => {
       setCategoryList(res.data.categories);
     });
   }, []);
 
   useEffect(async () => {
-    const res = await axios.post(`http://localhost:5000/api-news/edit/${props.match.params.id}`, {
+    const res = await axios.post(`/api-news/edit/${props.match.params.id}`, {
       id: props.match.params.id,
     });
 
@@ -71,7 +71,7 @@ export default function EditNews(props) {
   }, []);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api-kind").then((res) => {
+    axios.get("/api-kind").then((res) => {
       console.log(res.data.kind);
       setListKind(res.data.kind);
     });

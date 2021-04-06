@@ -19,7 +19,7 @@ function ListNews(props) {
   let stt = 1;
   let d = 0;
   useEffect(() => {
-    axios.get("http://localhost:5000/api-news/list-news-approved").then((res) => {
+    axios.get("/api-news/list-news-approved").then((res) => {
       setNews(res.data.listNewsApproved);
       setImages(res.data.images);
     });
@@ -41,7 +41,7 @@ function ListNews(props) {
   const updateStatus = async (idNews) => {
     const id = localStorage.getItem("idUser");
     console.log(id);
-    const res = await axios.post(`http://localhost:5000/api-news/update-secretary/${id}/${idNews}`, {
+    const res = await axios.post(`/api-news/update-secretary/${id}/${idNews}`, {
       categories: categoried,
     });
     if (res.data.message == "Đã duyệt tin") {
@@ -55,7 +55,7 @@ function ListNews(props) {
   };
 
   const ViewsId = (id) => {
-    axios.post(`http://localhost:5000/api-news/view/${id}`).then((res) => {
+    axios.post(`/api-news/view/${id}`).then((res) => {
       if (res.data) {
         setView(true);
       } else {

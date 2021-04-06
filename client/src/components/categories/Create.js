@@ -10,7 +10,7 @@ function Create(props){
 	let history = useHistory();
 
 	const addDepartment = () => {
-			axios.post('http://localhost:5000/api-categories/create', {
+			axios.post('/api-categories/create', {
 					name: name,
 			})
 			.then(

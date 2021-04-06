@@ -23,7 +23,7 @@ export default function ListNewsFromDate(){
   let obj = {}
 
   const onSubmit = async (props) => {
-    const res = await axios.post('http://localhost:5000/api-news/statisticalFromMonth',{
+    const res = await axios.post('/api-news/statisticalFromMonth',{
       fromMonth: selectedDate
     });
     // console.log(res.data.NewMonth)

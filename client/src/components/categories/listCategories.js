@@ -11,7 +11,7 @@ export default function ListCategories(props){
     const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('http://localhost:5000/api-categories')
+        axios.get('/api-categories')
         .then(
             res => {    
                 console.log(res.data.categories);
@@ -23,7 +23,7 @@ export default function ListCategories(props){
     
     let show_item_after_delete=()=>{
         setTimeout(()=>{
-          axios.get(`http://localhost:5000/api-categories`).then(res=>{
+          axios.get(`/api-categories`).then(res=>{
             console.log(res.data.categories)
             setCategories(res.data.categories)
 
@@ -32,7 +32,7 @@ export default function ListCategories(props){
       }
 
     let Remove = async (id) =>{
-        const res = await axios.delete(`http://localhost:5000/api-categories/delete/${id}`)
+        const res = await axios.delete(`/api-categories/delete/${id}`)
         if(res.data.message == "Đã xóa thành công"){
           setMessage(res.data.message)
           show_item_after_delete();

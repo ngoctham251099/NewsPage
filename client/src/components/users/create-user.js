@@ -28,7 +28,7 @@ function CreateUSer(props) {
   ]);
 
   useEffect(() => {
-    axios.get("http://localhost:5000/api-department").then((res) => {
+    axios.get("/api-department").then((res) => {
       console.log(res.data.department);
       setDepartments(res.data.department);
     });
@@ -36,7 +36,7 @@ function CreateUSer(props) {
 
   const register = () => {
     axios
-      .post("http://localhost:5000/api-user/create", {
+      .post("/api-user/create", {
         username: username,
         email: email,
         department: department,

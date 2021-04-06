@@ -9,7 +9,7 @@ export default function ListNewsFromDateToDate(){
   const [toDate, setToDate] = useState();
 
   const onSubmit = async () => {
-    const res = await axios.post('http://localhost:5000/api-news/statisticalFromDateToDate',{
+    const res = await axios.post('/api-news/statisticalFromDateToDate',{
       fromDate: fromDate,
       toDate: toDate
     });
