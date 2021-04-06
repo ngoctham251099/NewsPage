@@ -13,7 +13,7 @@ export default function Users(){
 
     useEffect(()=>{
         const getUser = async () => {
-            const getUser = await axios.get('http://3.130.135.8/api/api-user');
+            const getUser = await axios.get('http://127.0.0.1/api/api-user');
             setUsers(getUser.data);
         }
         getUser();
@@ -39,7 +39,7 @@ export default function Users(){
     const showItemAfterDelete = () => {
 
         setTimeout(()=>{
-            axios.get("http://3.130.135.8/api/api-user")
+            axios.get("http://127.0.0.1/api/api-user")
             .then( res => {
                 setUsers(res.data);
                 setMessage("Xóa thành công")
@@ -47,7 +47,7 @@ export default function Users(){
         },100)
     }
     const Remove = async (id) => {
-        await axios.delete(`http://3.130.135.8/api/api-user/delete/${id}`)
+        await axios.delete(`http://127.0.0.1/api/api-user/delete/${id}`)
         showItemAfterDelete();
        
     }

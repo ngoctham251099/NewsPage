@@ -35,7 +35,7 @@ export default function ChiefEditor(props) {
 
   useEffect(() => {
     const id = localStorage.getItem("idUser");
-    axios.post(`http://3.130.135.8/api/api-user/user-id/${id}`).then((res) => {
+    axios.post(`http://127.0.0.1/api/api-user/user-id/${id}`).then((res) => {
       setUsername(res.data.News);
     });
   }, []);
@@ -54,7 +54,7 @@ export default function ChiefEditor(props) {
   //list danh sach cho phe duyet
 
   useEffect(async () => {
-    const res = await axios.get("http://3.130.135.8/api/api-news/list-news-comfirmed");
+    const res = await axios.get("http://127.0.0.1/api/api-news/list-news-comfirmed");
     if (res) {
       console.log(res.data.listNewsConfirmed);
       setNewsConfirm(res.data.listNewsConfirmed);

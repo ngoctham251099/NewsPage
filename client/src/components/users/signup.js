@@ -24,7 +24,7 @@ function SingUp() {
 
   
   useEffect(() => {
-    axios.get("http://3.130.135.8/api/api-department").then((res) => {
+    axios.get("http://127.0.0.1/api/api-department").then((res) => {
       console.log(res.data.department);
       setDepartments(res.data.department);
     });
@@ -33,7 +33,7 @@ function SingUp() {
   const register = (event) => {
     event.preventDefault();
     axios
-      .post("http://3.130.135.8/api/api-user/signup", {
+      .post("http://127.0.0.1/api/api-user/signup", {
         username: username,
         email: email,
         department: department,

@@ -15,7 +15,7 @@ function SignIn(props) {
 
   const logIn = () => {
     axios
-      .post("http://3.130.135.8/api/api-user/login", {
+      .post("http://127.0.0.1/api/api-user/login", {
         email: email,
         password: password,
       })
@@ -63,7 +63,7 @@ function SignIn(props) {
   };
 
   // const userAuthenticated = () => {
-  //     axios.get('http://3.130.135.8/api/api/example',{
+  //     axios.get('http://127.0.0.1/api/api/example',{
   //         headers: {"x-access-token": localStorage.getItem('token')}
   //     })
   //     .then(

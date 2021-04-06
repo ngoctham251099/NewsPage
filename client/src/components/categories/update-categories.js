@@ -12,7 +12,7 @@ export default function UpdateDepartment(props){
 
     useEffect(() => {
        // console.log(props.match.params.id)
-        axios.post(`http://3.130.135.8/api/api-categories/edit/${props.match.params.id}`)
+        axios.post(`http://127.0.0.1/api/api-categories/edit/${props.match.params.id}`)
         .then(
             res => {
                 setCategories(res.data.categoriesId);
@@ -28,7 +28,7 @@ export default function UpdateDepartment(props){
     const onSubmit = (e) => {
         e.preventDefault();
         console.log(props.match.params.id)
-        axios.post(`http://3.130.135.8/api/api-categories/update/${props.match.params.id}`,{
+        axios.post(`http://127.0.0.1/api/api-categories/update/${props.match.params.id}`,{
             nameChange : categories
         })
         .then(

@@ -28,7 +28,7 @@ function CreateUSer(props) {
   ]);
 
   useEffect(() => {
-    axios.get("http://3.130.135.8/api/api-department").then((res) => {
+    axios.get("http://127.0.0.1/api/api-department").then((res) => {
       console.log(res.data.department);
       setDepartments(res.data.department);
     });
@@ -36,7 +36,7 @@ function CreateUSer(props) {
 
   const register = () => {
     axios
-      .post("http://3.130.135.8/api/api-user/create", {
+      .post("http://127.0.0.1/api/api-user/create", {
         username: username,
         email: email,
         department: department,

@@ -20,7 +20,7 @@ export default function ListEditor(props) {
   const [message, setMessage] = useState();
   useEffect(async () => {
     const id = localStorage.getItem("idUser");
-    const res = await axios.get(`http://3.130.135.8/api/api-news/views-president?id=${id}`, {
+    const res = await axios.get(`http://127.0.0.1/api/api-news/views-president?id=${id}`, {
       id: localStorage.getItem("idUSer"),
     });
     if (res.data.listNews) {
@@ -31,7 +31,7 @@ export default function ListEditor(props) {
   }, []);
 
   useEffect(() => {
-    axios.get("http://3.130.135.8/api/api-kind").then((res) => {
+    axios.get("http://127.0.0.1/api/api-kind").then((res) => {
       console.log(res.data.kind);
       setListKind(res.data.kind);
     });
@@ -59,7 +59,7 @@ export default function ListEditor(props) {
   const show_item_after_delete = () => {
     setTimeout(async () => {
       const id = localStorage.getItem("idUser");
-      const res = await axios.get(`http://3.130.135.8/api/api-news/views-president?id=${id}`, {
+      const res = await axios.get(`http://127.0.0.1/api/api-news/views-president?id=${id}`, {
         id: localStorage.getItem("idUSer"),
       });
       if (res.data.listNews) {
@@ -86,7 +86,7 @@ export default function ListEditor(props) {
 
   const updateRefuse = async (idNews) => {
     const id = localStorage.getItem("idUser");
-    const res = await axios.post(`http://3.130.135.8/api/api-news/update-refuse/${id}/${idNews}`, {
+    const res = await axios.post(`http://127.0.0.1/api/api-news/update-refuse/${id}/${idNews}`, {
       note: note,
     });
     if (res.data.message == "Đã từ chối duyệt tin") {

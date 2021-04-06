@@ -14,12 +14,12 @@ export default function ForgotPassword(){
 
     const sendMail = () => {
         // console.log('ashdkasuhk')
-        // let res = await axios.post('http://3.130.135.8/api/api-user/forgotPassword', {
+        // let res = await axios.post('http://127.0.0.1/api/api-user/forgotPassword', {
         //     email: userForgot.email
         // })
         // console.log(res.data);
         
-            axios.post('http://3.130.135.8/api/api-user/forgotPassword', {
+            axios.post('http://127.0.0.1/api/api-user/forgotPassword', {
                 email: userForgot.email
             })
             .then(

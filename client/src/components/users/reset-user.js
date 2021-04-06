@@ -16,7 +16,7 @@ export default function Reset(props){
 
     useEffect( () => {
         console.log(props.match.params.token);
-        axios.get(`http://3.130.135.8/api/api-user/reset/${props.match.params.token}`,{
+        axios.get(`http://127.0.0.1/api/api-user/reset/${props.match.params.token}`,{
             token: props.match.params.token
         })
         .then(
@@ -44,7 +44,7 @@ export default function Reset(props){
 
     const updatePassword = e => {
         e.preventDefault();
-        axios.put(`http://3.130.135.8/api/api-user/updatePasswordViaEmail/${props.match.params.token}`, {
+        axios.put(`http://127.0.0.1/api/api-user/updatePasswordViaEmail/${props.match.params.token}`, {
             confirmPassword: confirmPassword,
             newPassword: newPassword
         })
