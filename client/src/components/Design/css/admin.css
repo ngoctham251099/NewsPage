@@ -187,6 +187,12 @@ main{
 	margin-top: 1rem;
 }
 
+.table-bordered th {
+	border: 1px solid #ddd;
+}
+.table-bordered td {
+	border: 1px solid #ddd;
+}
 .card-single{
 	display: flex;
 	justify-content: space-between;
@@ -194,8 +200,17 @@ main{
 	padding: 2rem;
 	border-radius: 2px;
 }
+.card-single span{
+	font-size: 3rem;
+}
 
-.card-single div:first-child span{
+.card-active {
+	background-color: #4481eb;
+	color: #fff
+}
+
+
+/* .card-single div:first-child span{
 	color: var(--text-grey);
 }
 
@@ -212,7 +227,7 @@ main{
 .card-single:last-child div:last-child span,
 .card-single:last-child div:first-child span{
 	color: #fff;
-}
+} */
 
 .recent-grid{
 	margin-top: 3.5rem;

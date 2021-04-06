@@ -2,6 +2,8 @@ const News = require("../data/models/News");
 const path = require("path");
 const fs = require("fs");
 const Users = require("../data/models/Users");
+const Kinds = require('../data/models/KindOfNews');
+
 const moment = require("moment");
 
 const getAttrFromString = (str, node, attr) => {
@@ -406,6 +408,36 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
   });
   return res.json({
     News: allNews,
+  });
+};
+
+
+const calculatePrice = (allKinds, kind) => {
+  const price = allKinds.find(e => e.name === kind).unitPrice;
+  return price;
+}
+module.exports.statisticalByAuthor = async (req, res) => {
+  const { month } = req.body;
+  
+  const startOfMonth = moment(month).clone().startOf('month').format('YYYY-MM-DD hh:mm');
+  const endOfMonth   = moment(month).clone().endOf('month').format('YYYY-MM-DD hh:mm');
+
+  const getKindPrice = await Kinds.find({});
+
+
+  const allNews = await News.find({
+    date_submitted: {
+      $gte: new Date(startOfMonth),
+      $lt: new Date(endOfMonth),
+    },
+  });
+
+  return res.json({
+    News: allNews.map(newsData => {
+      return {
+        ...newsData, price: calculatePrice( getKindPrice, newsData.kindNews)
+      }
+    }),
   });
 };
 

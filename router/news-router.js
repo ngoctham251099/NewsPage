@@ -66,6 +66,9 @@ router.post('/statisticalFromDate',newsController.statisticalFromDate)
 router.post('/statisticalFromMonth', newsController.statisticalFromMonth )
 //Thống kee từ ngày này đến ngày kia
 router.post('/statisticalFromDateToDate', newsController.statisticalFromDateToDate )
+
+router.post('/statisticalByAuthor', newsController.statisticalByAuthor )
+
 //Thống kê từ tháng này đến tháng kia
 router.post('/statisticalFromMonthtoMonth', newsController.statisticalFromMonthtoMonth)
 //Thống kê theo năm

@@ -272,7 +272,7 @@ export default function Admin(props) {
         <main>
           <Switch>
             <Route path={`${path}/statistical`}>
-              <StatiscalTemplace path={path}></StatiscalTemplace>
+              <StatiscalTemplace path={path} currentPath={props.location.pathname}></StatiscalTemplace>
             </Route>
           </Switch>
           <div className="recent-grid">
@@ -398,15 +398,15 @@ export default function Admin(props) {
                     path={`${path}/news-waiting-for-approval`}
                     component={ListNewsWaitingForApproval}
                   />
-                  <Route path={`${path}/statistical/date`}>
-                    <NewsFromDate path={path}></NewsFromDate>
+                  <Route path={`${path}/statistical/author`}>
+                    <NewsFromDate path={`${path}/statistical/author`}></NewsFromDate>
                   </Route>
 
-                  <Route path={`${path}/statistical/month`}>
-                    <NewsFromMonth></NewsFromMonth>
+                  <Route path={`${path}/statistical/kind`}>
+                    <NewsFromMonth path={`${path}/statistical/kind`}/>
                   </Route>
-                  <Route path={`${path}/statistical/year`}>
-                    <NewsFromYear />
+                  <Route path={`${path}/statistical/department`}>
+                    <NewsFromYear path={`${path}/statistical/department`}/>
                   </Route>
                 </Switch>
               </div>

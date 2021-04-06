@@ -1,56 +1,50 @@
-import React from 'react';
-import {Link, useHistory, useLocation} from "react-router-dom";
+import React from "react";
+import { Link, useHistory, useLocation } from "react-router-dom";
 
-export default function Statiscal(props){
+export default function Statiscal(props) {
+  console.log(props);
   let history = useHistory();
-  
+
   const LinkDate = () => {
-    history.push(`${props.path}/statistical/date`)
-  }
+    history.push(`${props.path}/statistical/author`);
+  };
 
   const LinkMonth = () => {
-    history.push(`${props.path}/statistical/month`)
-  }
+    history.push(`${props.path}/statistical/kind`);
+  };
 
   const LinkYear = () => {
-    history.push(`${props.path}/statistical/year`)
-  }
+    history.push(`${props.path}/statistical/department`);
+  };
 
-  return(
-    <div className="cards">
-      <div class="card-single">
+  return (
+    <div className="recent-grid">
+      <div className="cards">
+        <div className={`card-single ${props.currentPath === '/admin/statistical/author' && 'card-active'}`}>
           <div onClick={LinkDate}>
-              <h1>Ngày</h1>
+            <h4>Thống kê theo tác giả</h4>
           </div>
           <div>
-              <span class="las la-users"></span>
+            <span className="las la-users"></span>
           </div>
-      </div>
-      <div onClick={LinkMonth} class="card-single">
+        </div>
+        <div onClick={LinkMonth} className={`card-single ${props.currentPath === '/admin/statistical/kind' && 'card-active'}`}>
           <div>
-              <h1>Tháng</h1>
-          </div>
-          <div>
-              <span class="las la-clipboard"></span>
-          </div>
-      </div>
-      <div onClick={LinkYear} class="card-single">
-          <div>
-              <h1>Năm</h1>
+            <h4>Thống kê theo loại tin</h4>
           </div>
           <div>
-              <span class="las la-clipboard-list"></span>
+            <span className="las la-clipboard"></span>
           </div>
-      </div>
-      <div class="card-single">
+        </div>
+        <div onClick={LinkYear} className={`card-single ${props.currentPath === '/admin/statistical/department' && 'card-active'}`}>
           <div>
-              <h1>$6k</h1>
-              <span>Income</span>
+            <h4>Thống kê theo phòng ban</h4>
           </div>
           <div>
-              <span class="las la-google-wallet"></span>
+            <span className="las la-clipboard-list"></span>
           </div>
+        </div>
       </div>
     </div>
-  )
+  );
 }
