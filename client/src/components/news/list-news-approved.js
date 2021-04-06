@@ -19,7 +19,7 @@ function ListNews(props) {
   let stt = 1;
   let d = 0;
   useEffect(() => {
-    axios.get("/api-news/list-news-approved").then((res) => {
+    axios.get("http://localhost:5000/api-news/list-news-approved").then((res) => {
       setNews(res.data.listNewsApproved);
       setImages(res.data.images);
     });

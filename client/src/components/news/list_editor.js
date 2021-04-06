@@ -33,7 +33,7 @@ export default function ListEditor(props) {
   }, []);
 
   useEffect(() => {
-    axios.get("/api-kind").then((res) => {
+    axios.get("http://localhost:5000/api-kind").then((res) => {
       setListKind(res.data.kind);
     });
   }, []);

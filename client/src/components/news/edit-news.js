@@ -51,7 +51,7 @@ export default function EditNews(props) {
   const [arrImages, setArrImages] = useState([]);
 
   useEffect(() => {
-    axios.get("/api-categories").then((res) => {
+    axios.get("http://localhost:5000/api-categories").then((res) => {
       setCategoryList(res.data.categories);
     });
   }, []);
@@ -71,7 +71,7 @@ export default function EditNews(props) {
   }, []);
 
   useEffect(() => {
-    axios.get("/api-kind").then((res) => {
+    axios.get("http://localhost:5000/api-kind").then((res) => {
       console.log(res.data.kind);
       setListKind(res.data.kind);
     });

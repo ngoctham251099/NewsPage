@@ -22,7 +22,7 @@ function SingUp() {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   useEffect(() => {
-    axios.get("/api-department").then((res) => {
+    axios.get("http://localhost:5000/api-department").then((res) => {
       console.log(res.data.department);
       setDepartments(res.data.department);
     });
@@ -31,7 +31,7 @@ function SingUp() {
   const register = (event) => {
     event.preventDefault();
     axios
-      .post("/api-user/signup", {
+      .post("http://localhost:5000/api-user/signup", {
         username: username,
         email: email,
         department: department,

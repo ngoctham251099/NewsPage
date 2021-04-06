@@ -15,7 +15,7 @@ function SignIn(props) {
 
   const logIn = () => {
     axios
-      .post("/api-user/login", {
+      .post("http://localhost:5000/api-user/login", {
         email: email,
         password: password,
       })

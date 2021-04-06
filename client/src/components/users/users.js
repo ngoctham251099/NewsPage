@@ -39,7 +39,7 @@ export default function Users(){
     const showItemAfterDelete = () => {
 
         setTimeout(()=>{
-            axios.get("/api-user")
+            axios.get("http://localhost:5000/api-user")
             .then( res => {
                 setUsers(res.data);
                 setMessage("Xóa thành công")

@@ -54,7 +54,7 @@ export default function ChiefEditor(props) {
   //list danh sach cho phe duyet
 
   useEffect(async () => {
-    const res = await axios.get("/api-news/list-news-comfirmed");
+    const res = await axios.get("http://localhost:5000/api-news/list-news-comfirmed");
     if (res) {
       console.log(res.data.listNewsConfirmed);
       setNewsConfirm(res.data.listNewsConfirmed);
