@@ -15,9 +15,9 @@ module.exports.getUsers = async (req, res, next) => {
 
 //sign in user
 module.exports.postRegister = async (req, res, next) => {
-  const { username, email, department, password, confirmPassword, phoneNumber } = req.body;
+  const { username, email, department, password, confirmPassword, phoneNumber, fullName } = req.body;
 
-  if (!username || !password || !department || !confirmPassword || !phoneNumber) {
+  if (!username || !password || !department || !confirmPassword || !phoneNumber || !fullName) {
     // console.log(username, password, department, configPassword)
     return res.json({ message: "Vui lòng điền đầy đủ thông tin!" });
   }
@@ -41,7 +41,8 @@ module.exports.postRegister = async (req, res, next) => {
     newUser.department = department;
     newUser.email = email;
     newUser.power = 4;
-		newUser.phoneNumber = phoneNumber
+		newUser.phoneNumber = phoneNumber;
+    newUser.fullName = fullName;
 
     await newUser.save();
     return res.json({ info: "Đăng kí tài khoản thành công !" });
@@ -57,10 +58,11 @@ module.exports.createUser = async (req, res, next) => {
     password,
     confirmPassword,
     power,
+    fullName
   } = req.body;
 
   console.log(power);
-  if (!username || !password || !department || !confirmPassword) {
+  if (!username || !password || !department || !confirmPassword || !fullName) {
     // console.log(username, password, department, configPassword)
     return res.json({ message: "Please fill in all fields" });
   }
@@ -84,6 +86,7 @@ module.exports.createUser = async (req, res, next) => {
     newUser.department = department;
     newUser.email = email;
     newUser.power = power;
+    newUser.fullName = fullName;
 
     await newUser.save();
     return res.json({ info: "Tao tai khoan thanh cong" });

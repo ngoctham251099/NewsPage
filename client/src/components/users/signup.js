@@ -20,7 +20,9 @@ function SingUp() {
   const [status, setStatus] = useState("");
   const [departments, setDepartments] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState("");
+  const [fullName, setFullName] = useState("");
 
+  
   useEffect(() => {
     axios.get("http://localhost:5000/api-department").then((res) => {
       console.log(res.data.department);
@@ -38,6 +40,7 @@ function SingUp() {
         password: password,
         confirmPassword: confirmPassword,
         phoneNumber: phoneNumber,
+        fullName: fullName,
       })
       .then((res) => {
         if (res.data.info) {
@@ -51,6 +54,10 @@ function SingUp() {
 
   const onChangeName = (event) => {
     setUsername(event.target.value);
+  };
+
+  const onChangeFullName = (event) => {
+    setFullName(event.target.value);
   };
 
   const onChangeEmail = (event) => {
@@ -101,6 +108,16 @@ function SingUp() {
                     type="email"
                     placeholder="Email"
                     onChange={onChangeEmail}
+                  />
+                </div>
+                <div class="input-field">
+                  <i class="fas fa-user">
+                    <AiOutlineUser className="icon" />
+                  </i>
+                  <input
+                    type="text"
+                    placeholder="Bút danh"
+                    onChange={onChangeFullName}
                   />
                 </div>
                 <div class="input-field">

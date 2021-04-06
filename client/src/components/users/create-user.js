@@ -16,6 +16,8 @@ function CreateUSer(props) {
   const [status, setStatus] = useState("");
   const [departments, setDepartments] = useState([]);
   const [powerUser, setPowerUser] = useState();
+  const [fullName, setFullName] = useState('');
+
 
   const [power, setPower] = useState([
     { id: 1, value: "Admin" },
@@ -41,6 +43,7 @@ function CreateUSer(props) {
         password: password,
         confirmPassword: config,
         power: powerUser,
+        fullName: fullName,
       })
       .then((res) => {
         if (res.data.info) {
@@ -54,6 +57,10 @@ function CreateUSer(props) {
 
   const onChangeName = (event) => {
     setUsername(event.target.value);
+  };
+
+  const onChangeFullName = (event) => {
+    setFullName(event.target.value);
   };
 
   const onChangeEmail = (event) => {
@@ -94,6 +101,13 @@ function CreateUSer(props) {
         placeholder="Email"
         onChange={onChangeEmail}
         value={email}
+      ></Input>
+      <label>Bút danh</label>
+      <Input
+        type="text"
+        placeholder="Tên đầy đủ"
+        onChange={onChangeFullName}
+        value={fullName}
       ></Input>
       <label>Phòng ban</label>
       {/* <select onChange={onChangeDepartment} value={department}>

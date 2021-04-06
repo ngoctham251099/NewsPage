@@ -67,6 +67,7 @@ export default function Users(){
                         <tr>
                             <th className="stt">STT</th>
                             <th className="username">Tên người dùng</th>
+                            <th className="username">Bút danh</th>
                             <th className="email">Email</th>
                             <th className="department">Phòng ban</th>
                             <th className="power">Quyền hạn</th>
@@ -79,6 +80,7 @@ export default function Users(){
                                 <tr key={item._id}>
                                     <td>{stt++}</td>
                                     <td>{item.username}</td>
+                                    <td>{item.fullName}</td>
                                     <td>{item.email}</td>
                                     <td>{item.department}</td>
                                     <td>{getPower(item.power)}</td> 

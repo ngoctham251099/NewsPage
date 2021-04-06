@@ -49,7 +49,7 @@ module.exports.create = async (req, res, next) => {
   let date_test = date.Date;
   addnews.title = title;
   addnews.content = content;
-  addnews.author = author;
+  addnews.author = user.fullName;
   addnews.date_submitted = new Date();
   addnews.status = status;
   addnews.IdUser = idUser;

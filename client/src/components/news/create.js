@@ -136,11 +136,10 @@ function CreateNews(props) {
           {/* <input type="text" placeholder="title" onChange={onChangeTitle} ></input> */}
         </div>
 
-        <div className="item">
+        {/* <div className="item">
           <label>Bút danh</label>
           <Input onChange={onChangeAuthor}></Input>
-          {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
-        </div>
+        </div> */}
 
         {role !== CTV_ROLE && (
           <div className="item">
