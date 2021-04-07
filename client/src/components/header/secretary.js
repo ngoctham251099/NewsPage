@@ -148,13 +148,28 @@ export default function Admin(props) {
         <main>
           <Switch>
             <Route path={`${path}/statistical`}>
-              <StatiscalTemplace path={path}></StatiscalTemplace>
+              <StatiscalTemplace path={path} currentPath={props.location.pathname}></StatiscalTemplace>
             </Route>
           </Switch>
           <div className="recent-grid">
             <div className="projects">
               <div className="card">
                 <Switch>
+                <Route
+                    path={`${path}/news-waiting-for-approval`}
+                    component={ListNewsWaitingForApproval}
+                  />
+                  <Route path={`${path}/statistical/author`}>
+                    <NewsFromDate path={`${path}/statistical/author`}></NewsFromDate>
+                  </Route>
+
+                  <Route path={`${path}/statistical/kind`}>
+                    <NewsFromMonth path={`${path}/statistical/kind`}></NewsFromMonth>
+                  </Route>
+                  <Route path={`${path}/statistical/department`}>
+                    <NewsFromYear path={`${path}/statistical/department`} />
+                  </Route>
+
                   <Route path={`${path}/users/add`} component={CreateUser} />
                   <Route
                     path={`${path}/users/edit/:id`}
@@ -252,20 +267,7 @@ export default function Admin(props) {
                   <Route path={`${path}`} component={ListNewsApproved}>
                     <ListNewsApproved path={path} />
                   </Route>
-                  <Route
-                    path={`${path}/news-waiting-for-approval`}
-                    component={ListNewsWaitingForApproval}
-                  />
-                  <Route path={`${path}/statistical/date`}>
-                    <NewsFromDate path={path}></NewsFromDate>
-                  </Route>
-
-                  <Route path={`${path}/statistical/month`}>
-                    <NewsFromMonth></NewsFromMonth>
-                  </Route>
-                  <Route path={`${path}/statistical/year`}>
-                    <NewsFromYear />
-                  </Route>
+                  
                 </Switch>
               </div>
             </div>
