@@ -3,7 +3,7 @@ const path = require("path");
 const fs = require("fs");
 const Users = require("../data/models/Users");
 const Kinds = require("../data/models/KindOfNews");
-const PriceOfKind = require("../data/models/PriceOfKind");
+const PriceOfKind = require("../data/models/priceOfKind");
 
 
 
