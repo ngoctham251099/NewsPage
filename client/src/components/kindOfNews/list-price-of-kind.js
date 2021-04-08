@@ -3,17 +3,17 @@ import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
+import { toast } from "react-toastify";
 
-export default function ListKinds(props){
+export default function ListPriceOfKinds(props){
     let history = useHistory();
     const [kinds, setKinds] = useState([]);
     const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
-        axios.get('/api-kind/')
+        axios.get('/api-price-of-kind')
         .then(
             res => {    
-                console.log(res.data.kind);
                 setKinds(res.data.kind);
             }
         )
@@ -21,24 +21,24 @@ export default function ListKinds(props){
 
     
     let show_item_after_delete = ()=>{
-        setTimeout(()=>{
-          axios.get(`/api-kind`).then(res=>{
-            setKinds(res.data.kind)
-
-        })
-        },100)
-      }
+      setTimeout(()=>{
+        axios.get(`/api-price-of-kind`).then(res=>{
+          setKinds(res.data.kind)
+      })
+      },100)
+    }
 
     let Remove = (id) =>{
-        axios.delete(`/api-kind/delete/${id}`)
+        axios.delete(`/api-price-of-kind/delete/${id}`)
         .then(
             res => {
-                console.log(res.data.message)
                 if(res.data.message == 'Đã xóa thành công'){
-                    setMessage(res.data.message)
-                    show_item_after_delete();
+        toast.success(res.data.message);
+                   show_item_after_delete();
+        
                 }else{
-                    setMessage(res.data.message)
+        toast.success(res.data.message);
+                    
                 }
             }
         )
@@ -47,13 +47,13 @@ export default function ListKinds(props){
     }
 
     const add = () => {
-      history.push(`${props.path}/kinds/add`)
+      history.push(`${props.path}/price-of-kinds/add`)
     }
 
   return  (
     <div>
       <div className="card-header">
-        <h3>Danh sách thể loại</h3>
+        <h3>Danh sách loại tin và đơn giá</h3>
         <button onClick={add}>Thêm</button>
       </div>
       
@@ -63,7 +63,8 @@ export default function ListKinds(props){
             <thead>
               <tr>
                 <th>STT</th>
-                <th>Tên thể loại</th>
+                <th>Tên loai</th>
+                <th>đơn giá</th>
                 <th>Edit</th>
                 <th>Remove</th>
               </tr>
@@ -75,9 +76,12 @@ export default function ListKinds(props){
                   <td>
                       {item.name}
                   </td>
+                  <td>
+                      {item.price}
+                  </td>
                  
                   <td>
-                      <Link to={`${props.path}/kinds/edit/${item._id}`}><BsPencil/></Link>
+                      <Link to={`${props.path}/price-of-kinds/edit/${item._id}`}><BsPencil/></Link>
                   </td>
                   <td>
                       <a onClick={() => Remove(item._id)}><BsTrashFill color="red"/></a>

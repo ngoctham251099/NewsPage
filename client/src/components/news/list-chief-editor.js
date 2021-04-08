@@ -134,7 +134,7 @@ export default function ListEditor(props) {
                 <th>Bút danh</th>
                 <th>Ngày viết</th>
                 <th>Phòng ban</th>
-                <th>Loại tin</th>
+                <th>Thể loại</th>
                 <th>Xem thử</th>
                 <th>Hành Động</th>
                 {/* <th>Chấp nhận</th>

@@ -2,8 +2,7 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 const kindSchema = new Schema({
-    name: String,
-    unitPrice: Number
+    name: String
 },{
     collection: 'KindsOfNews'
 })

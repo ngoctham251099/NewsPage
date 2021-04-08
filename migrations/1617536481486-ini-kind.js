@@ -4,22 +4,18 @@ const Kinds = require("../data/models/KindOfNews");
 
 const kind1 = {
   name: "Tin Sưu Tầm",
-  unitPrice: 1000,
 };
 
 const kind2 = {
   name: "Tin/Bài Viết",
-  unitPrice: 10000,
 };
 
 const kind3 = {
   name: "Tin/Bài Viết, Ảnh",
-  unitPrice: 20000,
 };
 
 const kind4 = {
   name: "Ảnh Thiết Kế",
-  unitPrice: 5000,
 };
 
 const insertKind1 = () => new Kinds(kind1).save();

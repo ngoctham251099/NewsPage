@@ -139,16 +139,7 @@ function SignIn(props) {
           <div class="panel left-panel">
             <div class="content">
               <h3>Chào mừng bạn !</h3>
-              <p>Tạo tài khoản để có thể truy cập hệ thống</p>
-              <button
-                class="btn transparent"
-                id="sign-up-btn"
-                onClick={() => {
-                  history.push("/signup");
-                }}
-              >
-                ĐĂNG KÝ
-              </button>
+              
             </div>
             <img src={image3} class="image" alt="" />
           </div>

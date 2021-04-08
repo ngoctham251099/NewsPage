@@ -10,6 +10,8 @@ import Button from "../UI/Button";
 import ButtonAdd from "../UI/button-add";
 import { useHistory } from "react-router-dom";
 import Select from "../UI/select";
+import Select2 from "../UI/select2";
+
 import {
   CTV_ROLE,
   ADMIN_ROLE,
@@ -46,9 +48,8 @@ function CreateNews(props) {
 
   const [categoryList, setCategoryList] = useState([]);
   const [listKind, setListKind] = useState([]);
-
-  console.log(categoryList)
-  console.log(listKind)
+  const [priceOfKind, setPriceOfKind] = useState([]);
+  const [idPriceOfKind, setIdPriceOfKind] = useState();
   const idUser = localStorage.getItem("idUser");
 
   useEffect(() => {
@@ -61,6 +62,12 @@ function CreateNews(props) {
     axios.get("/api-kind").then((res) => {
       setListKind(res.data.kind);
     });
+  }, []);
+
+  useEffect(() => {
+    axios.get("/api-price-of-kind").then((res) =>
+      setPriceOfKind(res.data.kind)
+    );
   }, []);
 
   const onChangeTitle = (event) => {
@@ -121,6 +128,8 @@ function CreateNews(props) {
     formData.append("categories", category);
     formData.append("note", note);
     formData.append("status", setStatus(role));
+    formData.append("idPriceOfKind", idPriceOfKind);
+
     axios.post("/api-news/create", formData).then((res) => {
       history.push(`${props.path}/news`);
     });
@@ -143,7 +152,7 @@ function CreateNews(props) {
 
         {role !== CTV_ROLE && (
           <div className="item">
-            <label className="title-news">Loại tin</label>
+            <label className="title-news">Thể loại</label>
             <Select
               value={kind}
               list={listKind}
@@ -154,12 +163,25 @@ function CreateNews(props) {
 
         {role !== CTV_ROLE && (
           <div className="item">
+            <label className="title-news">Loại tin</label>
+            <Select2
+              value={idPriceOfKind}
+              list={priceOfKind}
+              onChange={(e) => 
+                setIdPriceOfKind(e.target.value)
+              }
+            ></Select2>
+          </div>
+        )}
+
+
+        {role !== CTV_ROLE && (
+          <div className="item">
             <label className="title-news">Chủ đề tin</label>
             <Select
               value={category}
               list={categoryList}
               onChange={(e) => {
-                console.log(e)
                 setCategory(e.target.value)
               }}
             ></Select>

@@ -3,8 +3,16 @@ const path = require("path");
 const fs = require("fs");
 const Users = require("../data/models/Users");
 const Kinds = require("../data/models/KindOfNews");
+const PriceOfKind = require("../data/models/PriceOfKind");
+
+
 
 const moment = require("moment");
+
+const calculatePrice = async (idPrice) => {
+  const data =  await PriceOfKind.findOne({_id: idPrice});
+  return data.price;
+}
 
 const getAttrFromString = (str, node, attr) => {
   let regex = new RegExp("<" + node + " .*?" + attr + '="(.*?)"', "gi"),
@@ -16,12 +24,15 @@ const getAttrFromString = (str, node, attr) => {
   return res;
 };
 
+
+
+
 module.exports.showNews = (req, res, next) => {
+
   News.find()
     .sort([])
     .then((newsPage) => {
-      console.log(newsPage.images);
-      res.json({ page: newsPage, images: newsPage.images });
+      res.json({ page: newsPage.map(item => {return {...item, price: calculatePrice(item.idPriceOfKind)}}) });
     });
 };
 
@@ -36,6 +47,7 @@ module.exports.create = async (req, res, next) => {
     kindNews,
     categories,
     note,
+    idPriceOfKind
   } = req.body;
   const { avatar } = req.files;
   let date = Date.now();
@@ -60,6 +72,7 @@ module.exports.create = async (req, res, next) => {
   addnews.categories = categories;
   addnews.note = note;
   addnews.summary = summary;
+  addnews.idPriceOfKind = idPriceOfKind;
 
   await addnews.save();
   return res.json({ message: "Add news successfully" });
@@ -98,6 +111,7 @@ module.exports.updateNews = async (req, res) => {
     kindNews,
     note,
     categories,
+    idPriceOfKind
   } = req.body;
   const { avatar = "" } = req.files;
   const listImagesOnContent = getAttrFromString(content, "img", "src");
@@ -122,6 +136,7 @@ module.exports.updateNews = async (req, res) => {
       news.categories = categories;
     }
     news.note = note;
+    news.idPriceOfKind = idPriceOfKind;
 
     await news.save();
     return res.json({ message: "Cập nhật thành công" });
@@ -421,13 +436,9 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
   });
 };
 
-const calculatePrice = (allKinds, kind) => {
-  const price = allKinds.find((e) => e.name === kind).unitPrice;
-  return price;
-};
 module.exports.statisticalByAuthor = async (req, res) => {
   const { month } = req.body;
-
+  const dataPrice =  await PriceOfKind.find();
   const startOfMonth = moment(month)
     .clone()
     .startOf("month")
@@ -437,8 +448,6 @@ module.exports.statisticalByAuthor = async (req, res) => {
     .endOf("month")
     .format("YYYY-MM-DD hh:mm");
 
-  const getKindPrice = await Kinds.find({});
-  console.log(startOfMonth, endOfMonth);
 
   const allNews = await News.find({
     date_submitted: {
@@ -446,16 +455,19 @@ module.exports.statisticalByAuthor = async (req, res) => {
       $lt: new Date(endOfMonth),
     },
   });
-
-  return res.json({
-    News: allNews
+  
+  const data = 
+    allNews
       .filter((item) => item.status === "4")
       .map((newsData) => {
         return {
           ...newsData,
-          price: calculatePrice(getKindPrice, newsData.kindNews),
+          price: dataPrice.find(item => String(item._id) === newsData.idPriceOfKind).price,
         };
-      }),
+      })
+
+  return res.json({
+    News: data
   });
 };
 

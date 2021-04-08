@@ -19,10 +19,6 @@ module.exports.createKindOfNews = async (req, res, next) => {
         return res.json({message: "Tên loại không được để trống"});
     }
 
-    if(!price){
-        return res.json({message: "Tên loại không được để trống"});
-    }
-
     const findKind = await Kinds.findOne({name: name})
     if(findKind){
         return res.json({message: "Loại tin đã tồn tại"})
@@ -30,7 +26,7 @@ module.exports.createKindOfNews = async (req, res, next) => {
 
     let addKind = new Kinds();
     addKind.name = name;
-    addKind.unitPrice = price;
+    
     const newKind = await addKind.save();
     if(newKind){
         res.status(200).json({message: `${newKind.name} đã được thêm`})

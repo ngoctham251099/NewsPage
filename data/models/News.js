@@ -16,7 +16,8 @@ const newsSchema = new Schema({
     },
     kindNews: String,
     categories: String,
-    note: String
+    note: String,
+    idPriceOfKind: String,
 }, {
     collection: 'News'
 });

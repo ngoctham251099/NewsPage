@@ -29,6 +29,7 @@ import ListNewsApproved from "../news/list-news-approved";
 import ListNewsWaitingForApproval from "../news/listNewsWaitingForApproval";
 import ListDepartment from "../departments/ListDepartment";
 import ListKinds from "../kindOfNews/list-kind";
+import ListPriceOfKind from "../kindOfNews/list-price-of-kind";
 import CreateUser from "../users/create-user";
 import UpdateUser from "../users/update-user";
 import NewsFromDate from "../news/newsfromDate";
@@ -38,6 +39,9 @@ import ViewNews from "../news/ViewsNews";
 import UpdateDepartment from "../departments/update-department";
 import CreateDepartment from "../departments/Create";
 import CreateKind from "../kindOfNews/create-kind";
+import CreatePriceOfKindComponent from "../kindOfNews/CreatePriceOfKindComponent";
+import UpdatePriceOfKindComponent from "../kindOfNews/UpdatePriceOfKindComponent";
+
 import UpdateKind from "../kindOfNews/update-kind";
 import UpdateNews from "../news/edit-news";
 import CreateNews from "../news/create";
@@ -186,6 +190,15 @@ export default function Admin(props) {
 
             <li>
               <div onClick={clickKinds} className={`nav__link a ${props.location.pathname === '/admin/kinds' && 'active'}`}>
+                <span>
+                  <GoChecklist />
+                </span>
+                <span>Quản lý thể loại</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={() => history.push("/admin/price-of-kinds")} className={`nav__link a ${props.location.pathname === '/admin/price-of-kinds' && 'active'}`}>
                 <span>
                   <GoChecklist />
                 </span>
@@ -386,9 +399,38 @@ export default function Admin(props) {
                     <CreateKind></CreateKind>
                   </Route>
 
+                  
+                  
+
                   <Route path={`${path}/kinds`}>
                     <ListKinds path={path}></ListKinds>
                   </Route>
+
+
+                  <Route
+                    path={`${path}/price-of-kinds/edit/:id`}
+                    key={props.location.key}
+                    render={({ match }) => (
+                      <UpdatePriceOfKindComponent
+                        key={props.location.key}
+                        match={match}
+                        path={path}
+                      />
+                    )}
+                  ></Route>
+
+                  <Route path={`${path}/price-of-kinds/add`}>
+                    <CreatePriceOfKindComponent />
+                  </Route>
+                  
+
+
+                  <Route path={`${path}/price-of-kinds`}>
+                    <ListPriceOfKind path={path}></ListPriceOfKind>
+                  </Route>
+                  
+                  
+                 
 
                   <Route
                     path={`${path}/news-approved`}

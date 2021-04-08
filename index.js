@@ -15,8 +15,8 @@ const kindRouter = require('./router/kindOfNews-router');
 const newsRouter = require('./router/news-router');
 const controllerNews = require('./controllers/news-controller')
 const imagesRouter = require('./router/images-router');
-
 const middleware = require('./middleware/auth');
+const priceOfKindRouter = require('./router/priceOfKind-router');
 
 
 dotenv.config();
@@ -47,7 +47,9 @@ app.use('/api-department', departmentRouter)
 
 app.use('/api-categories', categoriesRouter)
 
-app.use('/api-kind', kindRouter)
+app.use('/api-kind', kindRouter);
+
+app.use('/api-price-of-kind', priceOfKindRouter)
 
 app.use('/api-news' ,newsRouter); 
 
@@ -55,9 +57,6 @@ app.use('/api-images' ,imagesRouter);
 
 app.post("/api-news/upload", multipartMiddleware, controllerNews.uploadImages)
 
-app.get('/api/example', middleware.auth , (req, res) => {
-    console.log('ttttt  ');
-})
 
 
 const port = 5000;

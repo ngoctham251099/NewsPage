@@ -15,6 +15,7 @@ export default function UpdateUser(props) {
     department: "",
     email: "",
     power: "",
+    fullName: "",
   });
 
   const [power, setPower] = useState([
@@ -74,6 +75,10 @@ export default function UpdateUser(props) {
     setUser({ ...user, email: event.target.value });
   };
 
+  const onChangeFullName = (event) => {
+    setUser({ ...user, fullName: event.target.value });
+  };
+
   const onChangeDepartment = (event) => {
     console.log(event.target.value);
     setUser({ ...user, department: event.target.value });
@@ -89,6 +94,7 @@ export default function UpdateUser(props) {
     const department = user.department;
     const email = user.email;
     const power = user.power;
+    const fullName = user.fullName;
     e.preventDefault();
     axios
       .post(`/api-user/update/${props.match.params.id}`, {
@@ -96,6 +102,7 @@ export default function UpdateUser(props) {
         email: email,
         department: department,
         power: power,
+        fullName,
       })
       .then((res) => {
         history.push("/admin/users");
@@ -105,7 +112,7 @@ export default function UpdateUser(props) {
       });
   };
   return (
-<div className="create-user-wrapper">
+    <div className="create-user-wrapper">
       <h3 style={{ marginBottom: 20 }}>Cập nhật tài khoản</h3>
       <form>
         <label>Tên người dùng</label>
@@ -121,6 +128,15 @@ export default function UpdateUser(props) {
           onChange={onChangeEmail}
           value={user.email}
         ></Input>
+
+        <label>Bút danh</label>
+        <Input
+          type="text"
+          placeholder="Bút danh"
+          onChange={onChangeFullName}
+          value={user.fullName}
+        ></Input>
+
         <label>Phòng ban</label>
 
         {/* <select onChange={onChangeDepartment} value={user.department} ref={React.createRef()}>

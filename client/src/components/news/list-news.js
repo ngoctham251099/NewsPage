@@ -129,7 +129,7 @@ function ListNews(props) {
                 <th>Ngày viết</th>
                 <th>Trạng thái</th>
                 <th>Phòng ban</th>
-                <th>Loại tin</th>
+                <th>Thể loại</th>
                 <th>Chuyên mục</th>
                 <th>Xem</th>
                 <th>Edit</th>
@@ -141,10 +141,10 @@ function ListNews(props) {
               {news
                 .filter((item) => {
                   if (currentFilter === "-1") return item;
-                  return item.status === currentFilter;
+                  return item._doc.status === currentFilter;
                 })
                 .map((item) => (
-                  <tr key={item._id}>
+                  <tr key={item._doc._id}>
                     <td>{stt++}</td>
                     <td
                       style={{
@@ -152,38 +152,38 @@ function ListNews(props) {
                         overflowWrap: "break-word",
                       }}
                     >
-                      {item.title}
+                      {item._doc.title}
                     </td>
                     <td>
                       <img
                         width={150}
-                        src={`/api-news/viewFile/${item.avatar}`}
+                        src={`/api-news/viewFile/${item._doc.avatar}`}
                       ></img>
                     </td>
-                    <td>{item.author}</td>
+                    <td>{item._doc.author}</td>
                     <td>
-                      <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
+                      <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                     </td>
-                    {/* <td>{item.images.map(element => (
+                    {/* <td>{item._doc.images.map(element => (
                                         <img width={400} src={`/api-news/viewFile/${element}`}></img>
                                     ))}</td>					     */}
-                    <td>{getStatus(item.status)}</td>
-                    {/* <td>{item.status}</td> */}
-                    <td>{item.department}</td>
-                    <td>{item.kindNews}</td>
-                    <td>{item.categories}</td>
+                    <td>{getStatus(item._doc.status)}</td>
+                    {/* <td>{item._doc.status}</td> */}
+                    <td>{item._doc.department}</td>
+                    <td>{item._doc.kindNews}</td>
+                    <td>{item._doc.categories}</td>
                     <td>
-                      <Link to={`${props.path}/news/views/${item._id}`}>
+                      <Link to={`${props.path}/news/views/${item._doc._id}`}>
                         Xem thử
                       </Link>
                     </td>
                     <td>
-                      <Link to={`${props.path}/news/${item._id}`}>
+                      <Link to={`${props.path}/news/${item._doc._id}`}>
                         <BsPencil />
                       </Link>
                     </td>
                     <td>
-                      <span onClick={() => Remove(item._id)}>
+                      <span onClick={() => Remove(item._doc._id)}>
                         <BsTrashFill />
                       </span>
                     </td>

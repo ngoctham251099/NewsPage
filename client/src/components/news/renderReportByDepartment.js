@@ -72,7 +72,7 @@ class RenderReportByDepartment extends React.Component {
                 <th>Tiêu đề</th>
                 <th>Ngày viết</th>
                 <th>Bút danh</th>
-                <th>Loại tin</th>
+                <th>Thể loại</th>
                 <th>Chuyên mục</th>
                 <th>Tiền tin</th>
                 <th>Ghi chú</th>

@@ -347,11 +347,13 @@ module.exports.updateUser = (req, res, next) => {
   const email = req.body.email;
   const department = req.body.department;
   const power = req.body.power;
+  const fullName = req.body.fullName;
   Users.findById(req.params.id).then((user) => {
     user.username = username;
     user.email = email;
     user.department = department;
     user.power = power;
+    user.fullName = fullName;
 
     user
       .save()
