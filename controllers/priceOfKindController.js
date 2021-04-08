@@ -1,4 +1,4 @@
-const PriceOfKind = require("../data/models/PriceOfKind");
+const PriceOfKind = require("../data/models/priceOfKind");
 const News = require("../data/models/News");
 
 //show list kind
