@@ -47,7 +47,8 @@ module.exports.create = async (req, res, next) => {
     kindNews,
     categories,
     note,
-    idPriceOfKind
+    idPriceOfKind,
+    isPostedFanpage = false
   } = req.body;
   const { avatar } = req.files;
   let date = Date.now();
@@ -73,7 +74,7 @@ module.exports.create = async (req, res, next) => {
   addnews.note = note;
   addnews.summary = summary;
   addnews.idPriceOfKind = idPriceOfKind;
-
+  addnews.isPostedFanpage = isPostedFanpage;
   await addnews.save();
   return res.json({ message: "Add news successfully" });
 };
@@ -111,7 +112,8 @@ module.exports.updateNews = async (req, res) => {
     kindNews,
     note,
     categories,
-    idPriceOfKind
+    idPriceOfKind, 
+    isPostedFanpage = false
   } = req.body;
   const { avatar = "" } = req.files;
   const listImagesOnContent = getAttrFromString(content, "img", "src");
@@ -137,7 +139,7 @@ module.exports.updateNews = async (req, res) => {
     }
     news.note = note;
     news.idPriceOfKind = idPriceOfKind;
-
+    news.isPostedFanpage = isPostedFanpage;
     await news.save();
     return res.json({ message: "Cập nhật thành công" });
   }

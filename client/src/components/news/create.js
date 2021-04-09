@@ -11,6 +11,7 @@ import ButtonAdd from "../UI/button-add";
 import { useHistory } from "react-router-dom";
 import Select from "../UI/select";
 import Select2 from "../UI/select2";
+import Switch from "react-switch";
 
 import {
   CTV_ROLE,
@@ -50,6 +51,8 @@ function CreateNews(props) {
   const [listKind, setListKind] = useState([]);
   const [priceOfKind, setPriceOfKind] = useState([]);
   const [idPriceOfKind, setIdPriceOfKind] = useState();
+  const [isPostedFanpage, setIsPostedFanpage] = useState(false);
+
   const idUser = localStorage.getItem("idUser");
 
   useEffect(() => {
@@ -129,7 +132,8 @@ function CreateNews(props) {
     formData.append("note", note);
     formData.append("status", setStatus(role));
     formData.append("idPriceOfKind", idPriceOfKind);
-
+    formData.append("isPostedFanpage", isPostedFanpage);
+    
     axios.post("/api-news/create", formData).then((res) => {
       history.push(`${props.path}/news`);
     });
@@ -218,6 +222,65 @@ function CreateNews(props) {
           <div className="item">
             <label className="title-news">Ghi chú</label>
             <Input value={note} onChange={(event) => setNote(event.target.value)}></Input>
+          </div>
+        )}
+
+        {role !== CTV_ROLE && (
+          <div className="item">
+            <label
+              className="title-news"
+              style={{
+                marginRight: "12px",
+              }}
+            >
+              Đăng lên fanpage?
+            </label>
+            <Switch
+              disabled={role !== TRUONG_BAN_BT_ROLE}
+              className="statusToggle"
+              onChange={(checked) =>
+                setIsPostedFanpage(checked)
+              }
+              checked={isPostedFanpage}
+              width={83}
+              onColor="#f6f6f6"
+              offColor="#F9F1F1"
+              onHandleColor="#7cc353"
+              offHandleColor="#E05460"
+              border="1px solid"
+              checkedIcon={
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: "#565656",
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                    marginLeft: 10,
+                    fontWeight: 500,
+                  }}
+                >
+                  Có
+                </div>
+              }
+              uncheckedIcon={
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    fontSize: 11,
+                    fontWeight: 500,
+                    paddingRight: 20,
+                    color: "#CD5966",
+                  }}
+                >
+                  Không
+                </div>
+              }
+            />
           </div>
         )}
 

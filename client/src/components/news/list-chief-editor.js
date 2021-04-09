@@ -112,7 +112,7 @@ export default function ListEditor(props) {
       {/* <Prompt message="Are you sure you want to leave?" /> : null} */}
 
       <div className="card-header">
-        <h3>Recent Projects</h3>
+        <h3>Danh sách bài viết cần duyệt</h3>
         <button
           onClick={() => {
             history.push(`${props.path}/news/add`);
@@ -123,7 +123,6 @@ export default function ListEditor(props) {
       </div>
 
       <div className="card-body">
-        <label>Note</label>
         <div className="table-responsive">
           <table width="100%">
             <thead>
@@ -153,7 +152,7 @@ export default function ListEditor(props) {
                       src={`/api-news/viewFile/${item.avatar}`}
                     ></img>
                   </td>
-                  <td>{item.author}</td>
+                  <td>{item.fullName}</td>
                   <td>
                     <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
                   </td>

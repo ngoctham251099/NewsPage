@@ -18,6 +18,10 @@ const newsSchema = new Schema({
     categories: String,
     note: String,
     idPriceOfKind: String,
+    isPostedFanpage: {
+        type: Boolean,
+        default: false,
+    },
 }, {
     collection: 'News'
 });

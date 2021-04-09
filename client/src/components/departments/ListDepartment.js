@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 
 function ListDepatment(props){
@@ -34,10 +35,10 @@ function ListDepatment(props){
     let Remove = async (id) =>{
         const res = await axios.delete(`/api-department/delete/${id}`)
         if(res.data.message == "Đã xóa thành công"){
-          setMessage(res.data.message)
+          toast.success(res.data.message);
           show_item_after_delete();
         }else{
-          setMessage(res.data.message)
+          toast.error(res.data.message);
         }
         
     }

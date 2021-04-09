@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Moment from "react-moment";
 import { BsTrashFill } from "react-icons/bs";
-import { BsPencil } from "react-icons/bs";
+import { BsPencil, BsCheck, BsX} from "react-icons/bs";
 import { toast } from "react-toastify";
 import Select from "../UI/select";
 
@@ -131,6 +131,7 @@ function ListNews(props) {
                 <th>Phòng ban</th>
                 <th>Thể loại</th>
                 <th>Chuyên mục</th>
+                <th>Đăng Fanpage</th>
                 <th>Xem</th>
                 <th>Edit</th>
                 <th>Remove</th>
@@ -176,6 +177,9 @@ function ListNews(props) {
                       <Link to={`${props.path}/news/views/${item._doc._id}`}>
                         Xem thử
                       </Link>
+                    </td>
+                    <td>
+                    {item._doc.isPostedFanpage ? <BsCheck color="green" /> :<BsX color="red" />}
                     </td>
                     <td>
                       <Link to={`${props.path}/news/${item._doc._id}`}>

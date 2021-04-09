@@ -18,6 +18,7 @@ import {
   THU_KY_ROLE,
 } from "../../config/roles";
 import { toast } from "react-toastify";
+import Switch from "react-switch";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -43,6 +44,7 @@ export default function EditNews(props) {
     note: "",
     categories: "",
     summary: "",
+    isPostedFanpage: false
   });
 
   const [listKind, setListKind] = useState([]);
@@ -123,7 +125,7 @@ export default function EditNews(props) {
     const formData = new FormData();
     // const date_submitted = moment().subtract(10, 'days').calendar();
     formData.append("title", news.title);
-    formData.append("author", news.author);
+    // formData.append("author", news.author);
     formData.append("content", news.content);
     formData.append("avatar", news.avatar);
     formData.append("department", news.department);
@@ -131,6 +133,7 @@ export default function EditNews(props) {
     formData.append("summary", news.summary);
     formData.append("status", setStatus(role));
     formData.append("note", news.note);
+    formData.append("isPostedFanpage", news.isPostedFanpage);
 
     if (news.categories) {
       formData.append("categories", news.categories);
@@ -225,11 +228,10 @@ export default function EditNews(props) {
           {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
         </div>
 
-        <div className="item">
+        {/* <div className="item">
           <label className="title-news">Bút danh</label>
           <Input value={news.author} onChange={onChangeAuthor}></Input>
-          {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
-        </div>
+        </div> */}
 
         {role !== CTV_ROLE && (
           <div className="item">
@@ -287,7 +289,7 @@ export default function EditNews(props) {
             }}
           />
         </div>
-
+        {/* 
         <div className="item">
           <label>Ảnh trong bài viết</label>
           <div
@@ -300,14 +302,72 @@ export default function EditNews(props) {
                 <img width="100px" style={{ marginRight: 12 }} src={image} />
               ))}
           </div>
-          {/* <ButtonUpload onChange={onChangeImages}></ButtonUpload> */}
-        </div>
+        </div> */}
 
         {role === TRUONG_BAN_BT_ROLE && (
           <div className="item">
             <label className="title-news">Ghi chú</label>
             <Input value={news.note} onChange={onChangeNote}></Input>
             {/* <input type="text" placeholder="author" onChange={onChangeAuthor}></input> */}
+          </div>
+        )}
+
+        {role !== CTV_ROLE && (
+          <div className="item">
+            <label
+              className="title-news"
+              style={{
+                marginRight: "12px",
+              }}
+            >
+              Đăng lên fanpage?
+            </label>
+            <Switch
+              disabled={role !== ADMIN_ROLE && role !== TRUONG_BAN_BT_ROLE }
+              className="statusToggle"
+              onChange={(checked) =>
+                setNews({ ...news, isPostedFanpage: checked })
+              }
+              checked={news.isPostedFanpage}
+              width={83}
+              onColor="#f6f6f6"
+              offColor="#F9F1F1"
+              onHandleColor="#7cc353"
+              offHandleColor="#E05460"
+              border="1px solid"
+              checkedIcon={
+                <div
+                  style={{
+                    fontSize: 11,
+                    color: "#565656",
+                    height: "100%",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    display: "flex",
+                    marginLeft: 10,
+                    fontWeight: 500,
+                  }}
+                >
+                  Có
+                </div>
+              }
+              uncheckedIcon={
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    height: "100%",
+                    fontSize: 11,
+                    fontWeight: 500,
+                    paddingRight: 20,
+                    color: "#CD5966",
+                  }}
+                >
+                  Không
+                </div>
+              }
+            />
           </div>
         )}
 
