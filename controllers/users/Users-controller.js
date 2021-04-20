@@ -1,79 +1,114 @@
-const express = require("express");
 require("dotenv").config();
 const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt-nodejs");
 const SECRET_KEY = process.env.SECRET_KEY;
 const Async = require("async");
 const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const Users = require("../../data/models/Users");
+const Departments = require("../../data/models/Department");
+
+const getBTV = async (idBTV) => {
+  if(!idBTV){
+    const data  = await Users.findOne({_id: idBTV})
+    return data;
+  }
+  return 0;
+}
 
 module.exports.getUsers = async (req, res, next) => {
-  let user = await Users.find();
-  return res.status(200).send(user);
+  const getDepartment = await Departments.find();
+  const getBTV = await Users.find();
+  let user = await Users.find().sort({power: 1});
+  const data = user.map( item => {
+    if(item.idBTV){
+    return {
+      ...item,
+      nameDepartment: getDepartment.find( val => String(val._id) === item.department).name,
+      nameBTV: item.idBTV ? getBTV.find( val => String(val._id )== item.idBTV).username : '',
+    }}else{
+      return {
+        ...item,
+        nameDepartment: getDepartment.find( val => String(val._id) === item.department).name,
+      }
+    }
+  })
+  return res.status(200).json({
+    user: data
+  });
 };
 
 //sign in user
 module.exports.postRegister = async (req, res, next) => {
-  const { username, email, department, password, confirmPassword, phoneNumber, fullName } = req.body;
+  // const { username, email, department, password, confirmPassword, phoneNumber, fullName , IdBTV} = req.body;
+  // const BTV = await Users.find({$and: [{power: "3"}, {department: department}]})
+  // console.log(BTV)
 
-  if (!username || !password || !department || !confirmPassword || !phoneNumber || !fullName) {
-    // console.log(username, password, department, configPassword)
-    return res.json({ message: "Vui lòng điền đầy đủ thông tin!" });
-  }
+  // if (!username || !password || !department || !confirmPassword || !phoneNumber || !fullName ) {
+  //   // console.log(username, password, department, configPassword)
+  //   return res.json({ message: "Vui lòng điền đầy đủ thông tin!" });
+  // }
 
-  if (password.length < 6) {
-    // console.log(username, password, department, configPassword)
-    return res.json({ message: "Mật khẩu phải lớn hơn 6 ký tự" });
-  }
+  // if (password.length < 6) {
+  //   // console.log(username, password, department, configPassword)
+  //   return res.json({ message: "Mật khẩu phải lớn hơn 6 ký tự" });
+  // }
 
-  if (password !== confirmPassword) {
-    return res.json({ message: "Mật khẩu không trùng khớp" });
-  }
+  // if (password !== confirmPassword) {
+  //   return res.json({ message: "Mật khẩu không trùng khớp" });
+  // }
 
-  const searchUser = await Users.findOne({ email: email });
-  if (searchUser) {
-    return res.json({ message: "Tài khoản đã tồn tại" });
-  } else {
-    const newUser = new Users();
-    newUser.username = username;
-    newUser.password = newUser.generateHash(password);
-    newUser.department = department;
-    newUser.email = email;
-    newUser.power = 4;
-		newUser.phoneNumber = phoneNumber;
-    newUser.fullName = fullName;
+  // const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  // console.log(!emailRegexp.test(email))
+  // if(!emailRegexp.test(email)){
+  //   return res.json({message: "Vui lòng nhập lại email"})
+  // }
 
-    await newUser.save();
-    return res.json({ info: "Đăng kí tài khoản thành công !" });
-  }
+  // const searchUser = await Users.findOne({ email: email });
+  // if (searchUser) {
+  //   return res.json({ message: "Tài khoản đã tồn tại" });
+  // } else {
+  //   const newUser = new Users();
+  //   newUser.username = username;
+  //   newUser.password = newUser.generateHash(password);
+  //   newUser.department = department;
+  //   newUser.email = email;
+  //   newUser.power = 4;
+	// 	newUser.phoneNumber = phoneNumber;
+  //   newUser.fullName = fullName;
+  //   newUser.idBTV = IdBTV;
+
+  //   await newUser.save();
+  //   return res.json({ info: "Đăng kí tài khoản thành công !" });
+  // }
 };
 
 //create user
-module.exports.createUser = async (req, res, next) => {
-  const {
-    username,
-    email,
-    department,
-    password,
-    confirmPassword,
-    power,
-    fullName
-  } = req.body;
-
-  console.log(power);
-  if (!username || !password || !department || !confirmPassword || !fullName) {
-    // console.log(username, password, department, configPassword)
-    return res.json({ message: "Please fill in all fields" });
+module.exports.createUser = async (req, res) => {
+  const { username, email, department, password, confirmPassword, phoneNumber, fullName, power, idBTV} = req.body;
+  // const BTV = await Users.findOne()
+  //                         .where('power').equals("3")
+  //                         .where('department').equals(department);
+  console.log(idBTV)
+  if (!username || !password || !confirmPassword || !fullName) {
+    return res.json({ message: "Không được để trống" });
   }
-  console.log(password);
+
+  if(!department || !power){
+    return res.json({message: "Bạn chưa chọn phòng ban hoặc vai trò của người dùng!!"})
+  }
+  
   if (password.length < 6) {
-    // console.log(username, password, department, configPassword)
     return res.json({ message: "Mật khẩu phải lớn hơn 6 ký tự" });
   }
 
   if (password !== confirmPassword) {
     return res.json({ message: "Mật khẩu không trùng khớp" });
+  }
+
+  const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  if(!emailRegexp.test(email)){
+    return res.json({message: "Vui lòng nhập lại email"})
   }
 
   const searchUser = await Users.findOne({ email: email });
@@ -87,9 +122,13 @@ module.exports.createUser = async (req, res, next) => {
     newUser.email = email;
     newUser.power = power;
     newUser.fullName = fullName;
+    newUser.phoneNumber = phoneNumber;
+    if(power === 4){
+      newUser.idBTV = idBTV;
+    }
 
     await newUser.save();
-    return res.json({ info: "Tao tai khoan thanh cong" });
+    return res.json({ info: "Tạo tài khoản thành công" });
   }
 };
 
@@ -141,6 +180,44 @@ getSignedToken = (user) => {
 module.exports.logout = (req, res, next) => {
   res.json({ auth: false, token: null, message: "Logout sussecfuly" });
 };
+
+module.exports.editInfo = async (req, res, next) => {
+  const id = req.params;
+  const data = await Users.findById(id);
+
+  return res.json({users: data})
+}
+
+module.exports.updateInfoUser = async(req, res) => {
+  const {id} = req.params;
+  const {username, email, password, confirmPassword, phone} = req.body;
+
+  const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  console.log(!emailRegexp.test(email))
+  if(!emailRegexp.test(email)){
+    return res.json({message: "Vui lòng nhập lại email"})
+  }
+
+  if(password.length < 6){
+    return res.json({message: "Mật khẩu phải lớn hơn 6 kí tự"})
+  }
+
+  if(!password || !confirmPassword){
+    return res.json({message: "Mật khẩu không được bỏ trống"})
+  }
+  const user = await Users.findById(id);
+
+  user.username = username;
+  user.phoneNumber = phone;
+  user.email = email;
+  user.password = user.generateHash(password);
+  if(password === confirmPassword){
+    await user.save();
+    return res.json({message: "Cập nhật thành công"})
+  }else{
+    return res.json({message: "Mật khẩu không trùng khớp"})
+  }
+}
 
 module.exports.forgot = (req, res, next) => {
   const email = req.body.email;
@@ -304,17 +381,19 @@ module.exports.updatePasswordViaEmail = (req, res, next) => {
   );
 };
 
-module.exports.delete = (req, res, next) => {
-  Users.findByIdAndDelete(req.params.id)
-    .then((user) => {
-      res.json(user);
-    })
-    .catch((err) => res.status(400).json("Err: " + err));
+module.exports.delete = async (req, res, next) => {
+  const userBTV = await Users.findOne({idBTV: req.params.id});
+  if(userBTV){
+    return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
+  }
+  const data = await Users.findByIdAndDelete(req.params.id)
+  if(data) {
+      res.json({user: data, message: "Xóa thành công"});
+  }
 };
 
 module.exports.editUser = (req, res, next) => {
   const { id } = req.params;
-  console.log(id);
   Users.findById(id)
     .then((user) => {
       res.json({ user: user });
@@ -322,44 +401,31 @@ module.exports.editUser = (req, res, next) => {
     .catch((err) => res.status(400).json({ err: err }));
 };
 
-// //update department
-// module.exports.updateUser = (req, res, next) => {
-//  // res.setHeader("Content-Type", "text/html");
-//   let {username, email, department, power} = req.body;
-//   // let email  = req.body.email;
-//   // let department = req.body.department;
-//   // let power = req.body.power;
-//   Users.findById(req.params.id)
-//   .then(user => {
-//       console.log(username, email, department, power)
-//       user.name = username;
-//       user.email = email;
-//       user.department = department;
-//       user.power = power;
-//       user.save()
-//       .then(() => res.json({message:'Exercise update'}))
-//       .catch( err => res.status(400).json('Err: ' + err));
-//   })
-// }
-
 module.exports.updateUser = (req, res, next) => {
-  const username = req.body.username;
-  const email = req.body.email;
-  const department = req.body.department;
-  const power = req.body.power;
-  const fullName = req.body.fullName;
-  Users.findById(req.params.id).then((user) => {
-    user.username = username;
-    user.email = email;
-    user.department = department;
-    user.power = power;
-    user.fullName = fullName;
+  const {id} = req.params.id;
+  const {username, email, department, fullName, idBTV, power} = req.body;
+  const getBTV = Users.findOne({idBTV: id});
+  console.log(idBTV)
+  if(power ==="4" && !idBTV) {
+    return res.json({message: "Chọn người sơ duyệt bài viết"})
+  }
 
-    user
-      .save()
-      .then(() => res.json({ message: "Exercise update" }))
-      .catch((err) => res.status(400).json("Err: " + err));
-    console.log(username, email, department, power);
+  if(getBTV){
+    return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
+  }
+  Users.findById(id).then((user) => {
+  user.username = username;
+  user.email = email;
+  user.department = department;
+  user.power = power;
+  user.fullName = fullName;
+  ser.idBTV = idBTV;
+
+  user
+    .save()
+    .then(() => res.json({ message: "Cập nhật thành công" }))
+    .catch((err) => res.status(400).json("Err: " + err));
+  console.log(username, email, department, power);
     // console.log(username, email)
   });
 };
@@ -371,3 +437,16 @@ module.exports.findById = (req, res) => {
     res.json({ News: item });
   });
 };
+
+
+//Danh sach cho duyet ban bien tap
+module.exports.findIdBTV = async (req, res) => {
+  const data = Users.find({power : 3});
+  return res.json({userBVT : data})
+}
+
+// //gửi mail từ chối
+// module.export.sendEmail = async (req, res) => {
+//   const {text} = req.body;
+  
+// }

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {  useHistory } from "react-router-dom";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 import Button from "../UI/button-add";
 import Input from "../UI/Input";
@@ -34,7 +35,12 @@ export default function UpdateDepartment(props){
         .then(
             res => {
                 console.log(props.path)
-                history.push(`${props.path}/categories`);
+                
+                if(res.data.message === 'Exercise update'){
+                    history.push(`${props.path}/categories`);
+                }else{
+                    toast.error(res.data.message);
+                }
             }
         ).catch(
             err => {

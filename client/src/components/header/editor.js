@@ -6,13 +6,20 @@ import ViewNews from "../news/ViewsNews";
 import ListEditor from "../news/list_editor";
 import CreateNews from "../news/create";
 import UpdateNews from "../news/edit-news";
+import ListWriter from "../news/list_writer";
+import ListBTVApproved from "../news/list-btv-approved";
+import ListBTVRefuse from "../news/list-btv-refuse";
+import ListBTVEditContent from "../news/list-news-edit-content";
 import axios from "axios";
 import { BAN_BT_ROLE } from "../../config/roles";
+import Page404 from "./page 404";
+import { AiOutlineOrderedList, AiFillInfoCircle, AiOutlineLogout } from "react-icons/ai";
+import user from "../images/user.png";
+import UpdateUser from "../users/update-info-user"
 
 export default function Admin(props) {
   let path = "/editor";
   let history = useHistory();
-  const [news, setNews] = useState([]);
   const [username, setUsername] = useState();
 
   const logout = () => {
@@ -45,16 +52,12 @@ export default function Admin(props) {
     switch (power) {
       case "1":
         return "Chờ phê duyệt";
-        break;
       case "2":
         return "Đã xác nhận";
-        break;
       case "3":
         return "Đã phê duyệt";
-        break;
       case "4":
         return "Từ chối";
-        break;
       default:
         break;
     }
@@ -64,7 +67,29 @@ export default function Admin(props) {
     history.push(`${path}`);
   };
 
+  const onClickListWriter = () => {
+    history.push(`${path}/list-writer`);
+  };
+
+  const onClickListBTVApproved = () => {
+    history.push(`${path}/list-btv-approved`);
+  };
+
+  const onClickInfoUser = () => {
+    const id = localStorage.getItem('idUser')
+    history.push(`${path}/info-user/${id}`);
+  };
+
+  const onClicklistRefuse = () => {
+    history.push(`${path}/list-new-refuse`);
+  };
+
+  const onClicklistRequestEdit = () => {
+    history.push(`${path}/list-news-request-edit`);
+  };
+
   return (
+    localStorage.getItem('power') === "3" ?
     <div>
       <input type="checkbox" id="nav-toggle" />
       <div class="sidebar">
@@ -80,13 +105,60 @@ export default function Admin(props) {
             <li>
               <div onClick={onClick} class="nav__link active">
                 <span class="las la-igloo"></span>
-                <span>Dashboard</span>
+                <span>Danh sách tin chờ duyệt</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={onClickListWriter} className={`nav__link a`}>
+                <span >
+                <AiOutlineOrderedList />
+                </span>
+                <span>Bài viết cá nhân</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={onClickListBTVApproved} className={`nav__link a`}>
+                <span >
+                <AiOutlineOrderedList />
+                </span>
+                <span>Bài viết đã duyệt</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={onClicklistRequestEdit} className={`nav__link a`}>
+                <span >
+                <AiOutlineOrderedList />
+                </span>
+                <span>Bài viết yêu cầu  chỉnh sửa</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={onClicklistRefuse} className={`nav__link a`}>
+                <span >
+                <AiOutlineOrderedList />
+                </span>
+                <span>Bài viết đã từ chối</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={onClickInfoUser} className={`nav__link a`}>
+                <span>
+                <AiFillInfoCircle />
+                </span>
+                <span>Thay đổi thông tin tài khoản</span>
               </div>
             </li>
 
             <li>
               <div onClick={logout} className={`nav__link a`}>
-                <span class="las la-igloo"></span>
+                <span >
+                <AiOutlineLogout />
+                </span>
                 <span>Đăng xuất</span>
               </div>
             </li>
@@ -103,6 +175,7 @@ export default function Admin(props) {
           </h2>
 
           <div class="user-wrapper">
+          <img src={user} width="40px" height="40px" alt="" />
             <div>
               <h4>{username ? username.username : null}</h4>
             </div>
@@ -135,6 +208,34 @@ export default function Admin(props) {
                     )}
                   ></Route>
 
+                  <Route
+                    path={`${path}/info-user/:id`}
+                    key={props.location.key}
+                    render={({ match }) => (
+                      <UpdateUser
+                        key={props.location.key}
+                        match={match}
+                        path={path}
+                      />
+                    )}
+                  ></Route>
+
+                  <Route path={`${path}/list-writer`}>
+                    <ListWriter  path={path} />
+                  </Route>
+                  
+                  <Route path={`${path}/list-news-request-edit`}>
+                    <ListBTVEditContent  path={path} />
+                  </Route>
+
+                  <Route path={`${path}/list-btv-approved`}>
+                    <ListBTVApproved  path={path} />
+                  </Route>
+
+                  <Route path={`${path}/list-new-refuse`}>
+                    <ListBTVRefuse  path={path} />
+                  </Route>
+
                   <Route path={`${path}`}>
                     <ListEditor path={path} />
                   </Route>
@@ -145,5 +246,6 @@ export default function Admin(props) {
         </main>
       </div>
     </div>
+    : <Page404/>
   );
 }

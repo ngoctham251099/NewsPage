@@ -1,6 +1,6 @@
 import Header from "./components/header/Header";
 import SignIn from "./components/users/signin";
-import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch, useHistory } from "react-router-dom";
 import SignUp from "./components/users/signup";
 import Admin from "./components/header/admin";
 import TemplaceUser from "./components/templace user/templace-user";
@@ -13,6 +13,7 @@ import Secretary from "./components/header/secretary";
 import { ToastContainer, toast } from "react-toastify";
 
 function App() {
+  let history = useHistory();
   const getComponent = () => {
     let token = localStorage.getItem("token");
     let power = localStorage.getItem("power");
@@ -54,7 +55,8 @@ function App() {
           //-----------------------5
           <Route path="/forgot-password" component={ForgetPassword}></Route>
           <Route path="/signup" component={SignUp}></Route>
-          <Route path="/" component={SignIn}></Route>
+          <Route exact path="/" component={SignIn}></Route>
+
           {getComponent()}
           <Route path="*" component={() => "404 Not Found"} />
         </Switch>

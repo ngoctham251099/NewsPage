@@ -17,7 +17,6 @@ function SingUp() {
   const [department, setDepartment] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [status, setStatus] = useState("");
   const [departments, setDepartments] = useState([]);
   const [phoneNumber, setPhoneNumber] = useState("");
   const [fullName, setFullName] = useState("");
@@ -87,7 +86,6 @@ function SingUp() {
         <div class="forms-container">
           <div class="forms-container">
             <div class="signin-signup">
-              <div>{status ? <p>{status}</p> : null}</div>
               <form class="sign-up-form">
                 <h2 class="title">Đăng kí</h2>
                 <div class="input-field">

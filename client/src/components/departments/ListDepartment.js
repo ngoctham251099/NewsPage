@@ -15,7 +15,6 @@ function ListDepatment(props){
         axios.get('/api-department')
         .then(
             res => {    
-                console.log(res.data.department);
                 setDepartments(res.data.department);
             }
         )
@@ -25,7 +24,6 @@ function ListDepatment(props){
     let show_item_after_delete=()=>{
         setTimeout(()=>{
           axios.get(`/api-department`).then(res=>{
-            console.log(res.data.department)
             setDepartments(res.data.department)
 
         })

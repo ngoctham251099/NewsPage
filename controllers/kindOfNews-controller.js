@@ -81,7 +81,7 @@ module.exports.updateKindOfNews =  (req, res, next) => {
                 .then(
                     response => {
                         if(response){
-                            return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xoa loại tin này.`})
+                            return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi sửa loại tin này.`})
                         }else{
                             kind.name = nameChange;
                             kind.unitPrice = price;

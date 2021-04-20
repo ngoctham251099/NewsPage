@@ -10,18 +10,39 @@ const newsSchema = new Schema({
     status: String,
     summary: String,
     IdUser: String,
-    department: String,
     images: {
         type: Array
     },
     kindNews: String,
     categories: String,
     note: String,
+    idBTV: String,
+    idTBBT: String,
     idPriceOfKind: String,
     isPostedFanpage: {
         type: Boolean,
         default: false,
     },
+    isCheckedBTV: {
+        type: Boolean,
+        default: false,
+    },
+    isCheckedTBBT: {
+        type: Boolean,
+        default: false,
+    },
+
+    isCheckedRefuseBTV: {
+        type: Boolean,
+        default: false,
+    },
+    
+    isCheckedRefuseTBBT: {
+        type: Boolean,
+        default: false,
+    },
+    date_BTV: Date,
+    date_TBBT: Date
 }, {
     collection: 'News'
 });

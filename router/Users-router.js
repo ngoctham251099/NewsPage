@@ -15,5 +15,8 @@ router.get('/reset/:token', userController.resetPassword)
 router.put('/updatePasswordViaEmail/:token', userController.updatePasswordViaEmail)
 router.post('/user-id/:id', userController.findById)
 
+router.post('/edit-info-user/:id', userController.editInfo);
+router.post('/update-info-user/:id', userController.updateInfoUser);
+
 
 module.exports = router;

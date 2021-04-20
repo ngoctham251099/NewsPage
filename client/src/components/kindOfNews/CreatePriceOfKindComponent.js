@@ -22,7 +22,7 @@ function CreatePriceOfKindComponent(props) {
       .post("/api-price-of-kind/create", {
         name: name,
         price: price,
-				idKind
+				idKind: idKind
       })
       .then((res) => {
         history.replace(`${props.path}`);

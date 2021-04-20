@@ -1,21 +1,13 @@
 import 'date-fns';
-import React, { useState, useEffect } from 'react';
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
 import axios from 'axios';
 import Button from '../UI/button-add';
-import Moment from 'react-moment';
 import DateFrom from '../UI/date';
-import Select from '../UI/select';
 //------------DATE-------------
 
 export default function ListNewsFromDate(){
   const [news, setNews] = useState([]);
   const [selectedDate, setSelectedDate] = React.useState(new Date());
-  const [countAll, setCountAll] = useState(0);
-  const [countWaitingApproval, setCountWaitingApproval] = useState(0);
-  const [countConfirmed, setCountConfirmed] = useState(0);
-  const [countApproval, setCountApproval] = useState(0);
-  const [refuse , setRefuse] = useState(0);
 
   let stt = 1;
   let counted = [];
@@ -29,7 +21,7 @@ export default function ListNewsFromDate(){
     // console.log(res.data.NewMonth)
     // await setNews(res.data.NewMonth)
     if(res.data.NewMonth) {
-      let arrStatus = res.data.NewMonth.filter(item => item.status == "3")
+      let arrStatus = res.data.NewMonth.filter(item => item.status === "3")
 
       let arrMap = arrStatus.map(item =>{
         obj = item.department;

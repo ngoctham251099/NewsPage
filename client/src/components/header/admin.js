@@ -11,14 +11,11 @@ import { AiOutlineTeam } from "react-icons/ai";
 import { AiOutlineUnorderedList } from "react-icons/ai";
 import { BiFoodMenu } from "react-icons/bi";
 import { GoChecklist } from "react-icons/go";
-import { AiFillFileImage } from "react-icons/ai";
 import { AiOutlineOrderedList } from "react-icons/ai";
 import { BsTable } from "react-icons/bs";
-import { BsCardChecklist } from "react-icons/bs";
-import { BsListTask } from "react-icons/bs";
-import { AiOutlineLogout } from "react-icons/ai";
-import { BsPeopleCircle } from "react-icons/bs";
+import { AiOutlineLogout, AiFillInfoCircle, AiOutlinePicture } from "react-icons/ai";
 import user from "../images/user.png";
+import UpdateUsers from "../users/update-info-user";
 
 import "../Design/css/admin.css";
 import "../Design/js/jsAdmin";
@@ -30,9 +27,9 @@ import ListNewsWaitingForApproval from "../news/listNewsWaitingForApproval";
 import ListDepartment from "../departments/ListDepartment";
 import ListKinds from "../kindOfNews/list-kind";
 import ListPriceOfKind from "../kindOfNews/list-price-of-kind";
+import ListNewAuthor from "../news/list-new-author";
 import CreateUser from "../users/create-user";
 import UpdateUser from "../users/update-user";
-import NewsFromDate from "../news/newsfromDate";
 import NewsFromMonth from "../news/newsFromMonth";
 import NewsFromYear from "../news/newsFromYear";
 import ViewNews from "../news/ViewsNews";
@@ -53,29 +50,15 @@ import UpdateCategories from "../categories/update-categories";
 import ListImages from "../images_data/list-images";
 import CreateImages from "../images_data/create-images";
 import UpdateImages from "../images_data/update-images";
+import Page404 from "./page 404";
 import {
-  CTV_ROLE,
   ADMIN_ROLE,
-  TRUONG_BAN_BT_ROLE,
-  BAN_BT_ROLE,
-  THU_KY_ROLE,
 } from "../../config/roles";
 
 export default function Admin(props) {
   let history = useHistory();
   const path = "/admin";
   const [username, setUsername] = useState();
-
-  // useEffect(() => {
-  //   const linkColor = document.querySelectorAll(".nav__link");
-  //   function colorLink() {
-  //     if (linkColor) {
-  //       linkColor.forEach((l) => l.classList.remove("active"));
-  //       this.classList.add("active");
-  //     }
-  //   }
-  //   linkColor.forEach((l) => l.addEventListener("click", colorLink));
-  // }, []);
 
   useEffect(() => {
     const id = localStorage.getItem("idUser");
@@ -131,8 +114,13 @@ export default function Admin(props) {
   const clickNewsWaitingForApproval = () => {
     history.push("/admin/news-waiting-for-approval");
   };
+  const onClickInfoUser = () => {
+    const id = localStorage.getItem('idUser')
+    history.push(`${path}/info-user/${id}`);
+  };
 
   return (
+    localStorage.getItem('power') === "1" ? 
     <div>
       <input type="checkbox" id="nav-toggle" />
       <div className="sidebar">
@@ -206,16 +194,14 @@ export default function Admin(props) {
               </div>
             </li>
 
-            {/* <li>
-              <div onClick={clickImages} className={`nav__link a ${props.location.pathname === '/admin/list-images' && 'active'}`}>
+            <li>
+              <div onClick={() => history.push("/admin/price-of-kinds")} className={`nav__link a ${props.location.pathname === '/admin/list-images' && 'active'}`}>
                 <span>
-                  <AiFillFileImage />
+                  <AiOutlinePicture />
                 </span>
-                <span>Loại hình ảnh</span>
+                <span>Quản lý hình ảnh</span>
               </div>
-            </li> */}
-
-           
+            </li>
 
             <li>
               <div onClick={clickStatiscal} className={`nav__link a ${props.location.pathname === '/admin/statistical' && 'active'}`}>
@@ -225,32 +211,14 @@ export default function Admin(props) {
                 <span>Thống kê</span>
               </div>
             </li>
-
-            {/* <li>
-											<div onClick={clickStatiscal} className="nav__link"><span><BsTable/></span>
-													<span>Thống kê</span></div>
-									</li> */}
-
-            {/* <li>
-              <div onClick={clickNewsApproved} className={`nav__link a ${props.location.pathname === '/admin/news-approved' && 'active'}`}>
+            <li>
+              <div onClick={onClickInfoUser} className={`nav__link a`}>
                 <span>
-                  <BsCardChecklist />
+                <AiFillInfoCircle />
                 </span>
-                <span>Danh sách tin đã duyệt</span>
+                <span>Thay đổi thông tin tài khoản</span>
               </div>
-            </li> */}
-
-            {/* <li>
-              <div
-                onClick={clickNewsWaitingForApproval}
-                className={`nav__link a ${props.location.pathname === '/admin/news-waiting-for-approval' && 'active'}`}
-              >
-                <span>
-                  <BsListTask />
-                </span>
-                <span>Danh sách tin chờ phê duyệt</span>
-              </div>
-            </li> */}
+            </li>
 
             <li>
               <div onClick={logout} className={`nav__link a`}>
@@ -296,6 +264,17 @@ export default function Admin(props) {
                     <CreateUser path={path}></CreateUser>
                   </Route>
                   <Route
+                    path={`${path}/info-user/:id`}
+                    key={props.location.key}
+                    render={({ match }) => (
+                      <UpdateUsers
+                        key={props.location.key}
+                        match={match}
+                        path={path}
+                      />
+                    )}
+                  ></Route>
+                  <Route
                     path={`${path}/users/edit/:id`}
                     component={UpdateUser}
                   />
@@ -311,6 +290,7 @@ export default function Admin(props) {
                       />
                     )}
                   ></Route>
+
                   <Route path={`${path}/departments/add`}>
                     <CreateDepartment></CreateDepartment>
                   </Route>
@@ -399,13 +379,9 @@ export default function Admin(props) {
                     <CreateKind></CreateKind>
                   </Route>
 
-                  
-                  
-
                   <Route path={`${path}/kinds`}>
                     <ListKinds path={path}></ListKinds>
                   </Route>
-
 
                   <Route
                     path={`${path}/price-of-kinds/edit/:id`}
@@ -422,26 +398,23 @@ export default function Admin(props) {
                   <Route path={`${path}/price-of-kinds/add`}>
                     <CreatePriceOfKindComponent />
                   </Route>
-                  
-
-
+                
                   <Route path={`${path}/price-of-kinds`}>
                     <ListPriceOfKind path={path}></ListPriceOfKind>
                   </Route>
                   
-                  
-                 
-
                   <Route
                     path={`${path}/news-approved`}
                     component={ListNewsApproved}
                   ></Route>
+
                   <Route
                     path={`${path}/news-waiting-for-approval`}
                     component={ListNewsWaitingForApproval}
-                  />
+                  />  
+
                   <Route path={`${path}/statistical/author`}>
-                    <NewsFromDate path={`${path}/statistical/author`}></NewsFromDate>
+                    <ListNewAuthor path={`${path}/statistical/author`}></ListNewAuthor>
                   </Route>
 
                   <Route path={`${path}/statistical/kind`}>
@@ -457,5 +430,6 @@ export default function Admin(props) {
         </main>
       </div>
     </div>
+    : <Page404/>
   );
 }

@@ -38,8 +38,12 @@ export default function UpdateKind(props) {
         price: kind.price,
       })
       .then((res) => {
-        history.push(`${props.path}/price-of-kinds`);
-        toast.success(res.data.message);
+        if(res.data.message == "Đã update thành công"){
+          history.push(`${props.path}/price-of-kinds`);
+          toast.success(res.data.message);
+        }else{
+          toast.error(res.data.message)
+        }
         
       })
       .catch((err) => {

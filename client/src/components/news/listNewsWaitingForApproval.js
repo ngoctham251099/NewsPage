@@ -5,7 +5,6 @@ import Moment from 'react-moment';
 export default function ListNewsWaitingForApproval(){
 
     const [news , setNews] = useState([]);
-    const [images, setImages] = useState();
     const[view, setView] = useState();
     const [count, setCount] = useState();
     let stt=1;
@@ -14,9 +13,7 @@ export default function ListNewsWaitingForApproval(){
         axios.get('/api-news/list-news-waiting-for-approval')
         .then(
             res => {
-              console.log(res.data)
-              setNews(res.data.listNewsApproved);
-              setImages(res.data.images)
+            setNews(res.data.listNewsApproved);
             }
         )
     },[])
@@ -77,9 +74,9 @@ export default function ListNewsWaitingForApproval(){
                     </tr>
                 </thead>
                 <tbody>
-                    {news.map(item => (
-                        <tr key = {item._id}>
-                            <td>{stt++}</td>
+                    {news.map((item, index) => (
+                        <tr key = {index}>
+                            <td>{index + 1}</td>
                             <td>{item.title}</td>
                             <td><img width={150} src={`/api-news/viewFile/${item.avatar}`}></img></td>
                             <td>{item.author}</td>

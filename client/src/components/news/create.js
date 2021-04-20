@@ -1,17 +1,20 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import parse from "html-react-parser";
 
 import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputBase from '@material-ui/core/InputBase';
+
 import Input from "../UI/Input";
-import Button from "../UI/Button";
 import ButtonAdd from "../UI/button-add";
 import { useHistory } from "react-router-dom";
-import Select from "../UI/select";
 import Select2 from "../UI/select2";
 import Switch from "react-switch";
+import { toast } from "react-toastify";
 
 import {
   CTV_ROLE,
@@ -21,7 +24,7 @@ import {
   THU_KY_ROLE,
 } from "../../config/roles";
 
-const useStyles = makeStyles((theme) => ({
+const useStyles1 = makeStyles((theme) => ({
   root: {
     "& > *": {
       margin: theme.spacing(1),
@@ -30,20 +33,58 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      margin: '8px 0px',
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: '8px 0px',
+    width: "99%"
+  },
+}));
+
 function CreateNews(props) {
   const { role } = props;
   let history = useHistory();
+  const classes = useStyles();
 
   const [title, setTitle] = useState();
-  const [author, setAuthor] = useState();
   const [content, setContent] = useState();
-  const [date, setDate] = useState();
   const [avatar, setAvatar] = useState();
-  const [message, setMessage] = useState();
-  const [images, setImages] = useState();
   const [summary, setSummary] = useState();
   const [note, setNote] = useState();
-
   const [kind, setKind] = useState();
   const [category, setCategory] = useState();
 
@@ -52,6 +93,7 @@ function CreateNews(props) {
   const [priceOfKind, setPriceOfKind] = useState([]);
   const [idPriceOfKind, setIdPriceOfKind] = useState();
   const [isPostedFanpage, setIsPostedFanpage] = useState(false);
+  const ckecked = false;
 
   const idUser = localStorage.getItem("idUser");
 
@@ -68,17 +110,14 @@ function CreateNews(props) {
   }, []);
 
   useEffect(() => {
-    axios.get("/api-price-of-kind").then((res) =>
-      setPriceOfKind(res.data.kind)
-    );
+    axios.get("/api-price-of-kind").then((res) =>{
+      console.log(res.data.priceOfNews)
+      setPriceOfKind(res.data.priceOfNews)
+    });
   }, []);
 
   const onChangeTitle = (event) => {
     setTitle(event.target.value);
-  };
-
-  const onChangeAuthor = (event) => {
-    setAuthor(event.target.value);
   };
 
   const onChangeSummary = (event) => {
@@ -90,6 +129,14 @@ function CreateNews(props) {
     setContent(data);
   };
 
+  const onChangePrice = (event) => {
+    setIdPriceOfKind(event.target.value);
+  };
+
+  const onChangeKind = (event) => {
+    setKind(event.target.value);
+  };
+
   const onChangeAvarta = (e) => {
     e.preventDefault();
     console.log(e.target.files[0]);
@@ -97,11 +144,7 @@ function CreateNews(props) {
     //  console.log(res.data.fileNameInServer)
   };
 
-  const onChangeImages = (e) => {
-    setImages(e.target.files);
-  };
-
-  const classes = useStyles();
+  const classes1 = useStyles1();
 
   const setStatus = (role) => {
     switch (role) {
@@ -122,7 +165,6 @@ function CreateNews(props) {
     const formData = new FormData();
     // const date_submitted = moment().subtract(10, 'days').calendar();
     formData.append("title", title);
-    formData.append("author", author);
     formData.append("content", content);
     formData.append("avatar", avatar);
     formData.append("idUser", idUser);
@@ -135,60 +177,88 @@ function CreateNews(props) {
     formData.append("isPostedFanpage", isPostedFanpage);
     
     axios.post("/api-news/create", formData).then((res) => {
-      history.push(`${props.path}/news`);
+      if(res.data.message == "Thêm thành công"){
+        toast.success(res.data.message);
+        history.push(`${props.path}/news`);
+      }else{
+        toast.error(res.data.message)
+      }
+      
     });
   };
 
   return (
+    
     <div className="create-user-wrapper">
       <h3 style={{ marginBottom: 20 }}>Thêm bài viết</h3>
-      <form className={classes.root} noValidate autoComplete="off">
+      <form className={classes1.root} noValidate autoComplete="off">
         <div className="item">
           <label className="title-news">Tiêu đề</label>
           <Input onChange={onChangeTitle}></Input>
           {/* <input type="text" placeholder="title" onChange={onChangeTitle} ></input> */}
         </div>
 
-        {/* <div className="item">
-          <label>Bút danh</label>
-          <Input onChange={onChangeAuthor}></Input>
-        </div> */}
-
         {role !== CTV_ROLE && (
           <div className="item">
             <label className="title-news">Thể loại</label>
-            <Select
+            <Select2
               value={kind}
               list={listKind}
-              onChange={(e) => setKind(e.target.value)}
-            ></Select>
+              onChange={onChangeKind}
+            ></Select2  >
           </div>
         )}
-
+      
         {role !== CTV_ROLE && (
+          <div>
+            <label>Chất lượng loại tin</label>
+            <FormControl className={classes.margin}>
+              <Select
+                id="demo-customized-select"
+                value={idPriceOfKind}
+                onChange={onChangePrice}
+                input={<BootstrapInput />}
+              >
+              {priceOfKind.filter(item => {
+              if(kind == -1){ 
+                return '';
+              }
+                return String(item.idKind) === kind;
+              }).map(item => {
+                return (<MenuItem value={item._id}>{item.name}</MenuItem>)
+              })}
+              </Select>
+            </FormControl>
+        </div>
+        )}
+
+        {/* {role !== CTV_ROLE && (
           <div className="item">
             <label className="title-news">Loại tin</label>
             <Select2
               value={idPriceOfKind}
-              list={priceOfKind}
+              list={priceOfKind._doc}
               onChange={(e) => 
                 setIdPriceOfKind(e.target.value)
               }
             ></Select2>
           </div>
-        )}
+        )} */}
 
+        {
+          
+        }
 
         {role !== CTV_ROLE && (
           <div className="item">
             <label className="title-news">Chủ đề tin</label>
-            <Select
+            <Select2
               value={category}
               list={categoryList}
               onChange={(e) => {
                 setCategory(e.target.value)
               }}
-            ></Select>
+            ></Select2>
           </div>
         )}
 
@@ -216,12 +286,10 @@ function CreateNews(props) {
             }}
           />
         </div>
-      </form>
-
-      {role === ADMIN_ROLE && (
+        {role === TRUONG_BAN_BT_ROLE && (
           <div className="item">
             <label className="title-news">Ghi chú</label>
-            <Input value={note} onChange={(event) => setNote(event.target.value)}></Input>
+            <Input onChange={(event) => setNote(event.target.value)}></Input>
           </div>
         )}
 
@@ -236,7 +304,7 @@ function CreateNews(props) {
               Đăng lên fanpage?
             </label>
             <Switch
-              disabled={role !== TRUONG_BAN_BT_ROLE}
+              disabled={role !== TRUONG_BAN_BT_ROLE && role !== ADMIN_ROLE}
               className="statusToggle"
               onChange={(checked) =>
                 setIsPostedFanpage(checked)
@@ -283,6 +351,9 @@ function CreateNews(props) {
             />
           </div>
         )}
+      </form>
+
+      
 
       <ButtonAdd onClick={addNews} title="Lưu"></ButtonAdd>
     </div>

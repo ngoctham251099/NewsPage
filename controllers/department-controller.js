@@ -1,5 +1,6 @@
 const Departments = require("../data/models/Department");
 const News = require("../data/models/News");
+const Users = require("../data/models/Users")
 
 //show list department
 module.exports.showsDepartments = (req, res, next) => {
@@ -31,12 +32,12 @@ module.exports.deleteDepartment = async (req, res, next) => {
   const { id } = req.params;
 
   const find = await Departments.findOne({ _id: id });
-  const news = await News.findOne({ department: find.name });
+  const news = await Users.findOne({ department: find.name });
   console.log("news", news);
   if (news) {
     console.log(news);
     return res.json({
-      message: `Đã có bài viết thuộc phòng ban này. Hãy xóa bài viết trước khi xóa phòng ban này.`,
+      message: `Đã có người dùng thuộc phòng ban này.`,
     });
   } else {
     console.log(id);

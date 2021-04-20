@@ -1,15 +1,20 @@
 const PriceOfKind = require("../data/models/priceOfKind");
 const News = require("../data/models/News");
-
+const Kinds = require("../data/models/KindOfNews")
 //show list kind
 
+module.exports.showsKindOfNews = async (req, res, next) => {
+  const getKind = await Kinds.find();
+  const price = await PriceOfKind.find().sort({idKind: 1});
 
-module.exports.showsKindOfNews = (req, res, next) => {
-  PriceOfKind.find()
-    .then((kind) => {
-      res.send({ kind: kind });
-    })
-    .catch((err) => console.log(err));
+  const data = price.map(item => {
+    return {
+      ...item,
+      nameKind: getKind.find(val => String(val._id) === item.idKind).name
+    }
+  })
+  
+  return res.json({kind: data, priceOfNews: price})
 };
 
 module.exports.getPriceOfKind = async (req, res, next) => {
@@ -68,13 +73,25 @@ module.exports.deletePriceKind = async (req, res, next) => {
 //update kind
 module.exports.updateKindOfNews = (req, res, next) => {
   const { id } = req.params;
-  let { name, price, idKind } = req.body;
+  let { name, price } = req.body;
 
-  PriceOfKind.findOne({ _id: id }).then((kind) => {
-    kind.name = name;
-    kind.price = price;
-    kind.idKind = idKind;
-    kind.save();
-    return res.json({ message: "Đã update thành công " });
-  });
+  News.findOne({ idPriceOfKind: id })
+  .then(
+    item => {
+      console.log('shdzz')
+      if(item){
+        return res.json({message: "Đã có bài viết thuộc loại tin này"})
+      }else{
+        PriceOfKind.findOne({ _id: id }).then((kind) => {
+          kind.name = name;
+          kind.price = price;
+          // kind.idKind = idKind;
+          kind.save();
+          return res.json({ message: "Đã update thành công" });
+        });
+      }
+    }
+  )
+
+  
 };

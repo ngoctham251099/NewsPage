@@ -27,16 +27,25 @@ class RenderReport extends React.Component {
       this.setState({ ...this.state, news: res.data.News });
     };
 
+    console.log(this.state.news)
+
     fetchData();
   }
+
   
   state = {
     month: moment(),
     news: [],
   };
+  
 
   render() {
     const { month, news } = this.state;
+    let count = this.state.news.reduce((a, b) => {
+      //console.log(Number(a.price))
+      console.log(b.price)
+        return a + Number(b.price)
+    },0)
 
     return (
       <div className="card-body">
@@ -75,7 +84,7 @@ class RenderReport extends React.Component {
                 <th>Thể loại</th>
                 <th>Chuyên mục</th>
                 <th>Tiền tin</th>
-                <th>Ghi chú</th>
+                {/* <th>Ghi chú</th> */}
               </tr>
             </thead>
             <tbody>
@@ -100,10 +109,14 @@ class RenderReport extends React.Component {
                         })}
                       </td>
 
-                      <td>{item._doc.note}</td>
+                      {/* <td>{item._doc.note}</td> */}
                     </tr>
                   ))
                 : null}
+                <tr>
+                  <td colSpan="6">Tổng tiền: </td>
+                  <td colSpan="2">{count}</td>
+                </tr>
             </tbody>
           </table>
         </div>

@@ -60,7 +60,6 @@ export default function CustomizedSelects(props) {
           onChange={props.onChange}
           input={<BootstrapInput />}
         >
-          {/* <MenuItem value="0">None</MenuItem> */}
           {props.list ? 
             (props.list.map((item, index) => (
               <MenuItem value={item._id}>{item.name}</MenuItem>
@@ -69,23 +68,6 @@ export default function CustomizedSelects(props) {
 
         </Select>
       </FormControl>
-      {/* <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">{props.value}</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={props.value}
-          onChange={props.onChange}
-          label={props.value}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl> */}
     </div>
   );
 }

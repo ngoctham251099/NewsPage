@@ -1,0 +1,13 @@
+{
+  "lastRun": "1617536481486-ini-kind.js",
+  "migrations": [
+    {
+      "title": "1617534853613-init-accouts.js",
+      "timestamp": 1617989528563
+    },
+    {
+      "title": "1617536481486-ini-kind.js",
+      "timestamp": 1617989528586
+    }
+  ]
+}

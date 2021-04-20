@@ -1,33 +1,84 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
+import { toast } from "react-toastify";
+
+import { makeStyles, withStyles } from '@material-ui/core/styles';
+import MenuItem from '@material-ui/core/MenuItem';
+import FormControl from '@material-ui/core/FormControl';
+import Select from '@material-ui/core/Select';
+import InputBase from '@material-ui/core/InputBase';
 
 import Input from "../UI/Input";
-import Select from "../UI/select";
-
+import Select2 from "../UI/select";
 import Button from "../UI/button-add";
+
+const BootstrapInput = withStyles((theme) => ({
+  root: {
+    'label + &': {
+      margin: '8px 0px',
+    },
+  },
+  input: {
+    borderRadius: 4,
+    position: 'relative',
+    backgroundColor: theme.palette.background.paper,
+    border: '1px solid #ced4da',
+    fontSize: 16,
+    padding: '10px 26px 10px 12px',
+    transition: theme.transitions.create(['border-color', 'box-shadow']),
+    // Use the system font instead of the default Roboto font.
+    fontFamily: [
+      '-apple-system',
+      'BlinkMacSystemFont',
+      '"Segoe UI"',
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+      '"Apple Color Emoji"',
+      '"Segoe UI Emoji"',
+      '"Segoe UI Symbol"',
+    ].join(','),
+    '&:focus': {
+      borderRadius: 4,
+      borderColor: '#80bdff',
+      boxShadow: '0 0 0 0.2rem rgba(0,123,255,.25)',
+    },
+  },
+}))(InputBase);
+
+const useStyles = makeStyles((theme) => ({
+  margin: {
+    margin: '8px 0px',
+    width: "99%"
+  },
+}));
+
 
 export default function UpdateUser(props) {
   let history = useHistory();
+  const classes = useStyles();
   const [departments, setDepartments] = useState([]);
+  const [btv, setBTV] = useState([]);
   const [user, setUser] = useState({
     username: "",
     department: "",
     email: "",
     power: "",
     fullName: "",
-  });
+    idBTV: ""
+  }); 
 
   const [power, setPower] = useState([
-    { id: 1, value: "Admin" },
-    { id: 2, value: "Tổng biên tập" },
-    { id: 3, value: "Biên tập viên" },
-    { id: 4, value: "Nhân viên" },
-    { id: 5, value: "Thư ký" },
+    { id: "1", value: "Admin" },
+    { id: "2", value: "Trưởng ban biên tập" },
+    { id: "3", value: "Biên tập viên" },
+    { id: "4", value: "Cộng tác viên" },
+    { id: "5", value: "Thư ký" },
   ]);
   useEffect(() => {
     axios.get("/api-department/").then((res) => {
-      //console.log(res.data.department);
       setDepartments(res.data.department);
     });
   }, []);
@@ -40,32 +91,16 @@ export default function UpdateUser(props) {
       })
       .then((res) => {
         setUser(res.data.user);
-        //console.log(res.data.user);
+        toast.error(res.data.message)
       });
   }, []);
 
-  //  const getPower = () => {
-  //     const power = localStorage.getItem("power");
-  //     const token = localStorage.getItem("token");
-
-  //     if(token){
-  //         switch (power) {
-  //             case "1":
-  //                 return "Admin";
-  //             case "2":
-  //                 return "Tổng biên tập";
-  //                 // break;
-  //             case "3":
-  //                 return "Biên tập viên";
-  //                 // break;
-  //             case "4":
-  //                 return "Nhân viên";
-  //                 // break;
-  //             default:
-  //                 break;
-  //         }
-  //     }
-  // }
+  useEffect(() => {
+    axios.get("/api-user").then((res) => {
+      console.log(res.data.user)
+      setBTV(res.data.user);
+    });
+  }, []);
 
   const onChangeName = (event) => {
     setUser({ ...user, username: event.target.value });
@@ -89,6 +124,12 @@ export default function UpdateUser(props) {
     setUser({ ...user, power: event.target.value });
   };
 
+  const onChangeBTV = (event) => {
+    console.log(event.target.value)
+    setUser({...user, idBTV: event.target.value});
+  };
+
+
   const onSubmit = (e) => {
     const username = user.username;
     const department = user.department;
@@ -102,10 +143,17 @@ export default function UpdateUser(props) {
         email: email,
         department: department,
         power: power,
-        fullName,
+        fullName: fullName,
+        idBTV: user.idBTV
       })
       .then((res) => {
-        history.push("/admin/users");
+        if(res.data.message =="Cập nhật thành công"){
+          toast.success(res.data.message)
+          history.push("/admin/users");
+        }else{
+          toast.error(res.data.message)
+        }
+        
       })
       .catch((err) => {
         console.log(err);
@@ -113,7 +161,7 @@ export default function UpdateUser(props) {
   };
   return (
     <div className="create-user-wrapper">
-      <h3 style={{ marginBottom: 20 }}>Cập nhật tài khoản</h3>
+      <h3 style={{ marginBottom: 20 }}>Cập nhật người dùng</h3>
       <form>
         <label>Tên người dùng</label>
         <Input
@@ -138,34 +186,41 @@ export default function UpdateUser(props) {
         ></Input>
 
         <label>Phòng ban</label>
-
-        {/* <select onChange={onChangeDepartment} value={user.department} ref={React.createRef()}>
-                <option value={user.department}>{user.department}</option>
-            {departments.map((item)=> (
-                        <option value={item.name}>{item.name}</option>
-            ))}
-            </select> */}
-
-        <Select
+        <Select2
           value={user.department}
           onChange={onChangeDepartment}
           list={departments}
-        ></Select>
+        ></Select2>
+      
         <label>Quyền hạn</label>
-
-        {/* <select onChange={onChangePower} ref={React.createRef()}>
-                <option value={user.power}>{user.power}</option>
-                <option value="1">Admin</option>
-                <option value="2">Tổng duyệt tin</option>
-                <option value="3">Sơ duyệt</option>
-                <option value="4">Viết tin</option>
-            </select> */}
-
-        <Select
+        <Select2
           onChange={onChangePower}
           value={user.power}
           listPower={power}
-        ></Select>
+        ></Select2>
+
+        {user.power === "4" ? (
+          <div>
+            <label>Quản lý</label>
+            <FormControl className={classes.margin}>
+              <Select
+                id="demo-customized-select"
+                value={user.idBTV}
+                onChange={onChangeBTV}
+                input={<BootstrapInput />}
+              >
+              {btv.filter(item => {
+              if(user.department == -1){
+                return '';
+              }
+              return item._doc.department === user.department && item._doc.power === "3";
+              }).map(item => {
+                return (<MenuItem value={item._doc._id}>{item._doc.username}</MenuItem>)
+              })}
+              </Select>
+            </FormControl>
+          </div>
+        ):null}
         {/* <input type="text" onChange={onChangePower} value={user.power} ref={React.createRef()}></input> */}
         <Button onClick={onSubmit} title="Cập nhật">
           Submit

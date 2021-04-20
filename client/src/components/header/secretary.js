@@ -8,15 +8,12 @@ import {
 import "../Design/css/admin.css";
 import "../Design/js/jsAdmin";
 import ListUser from "../users/users";
-import ListNews from "../news/list-news";
 import StatiscalTemplace from "../statistical/statistical";
 import ListNewsApproved from "../news/list-news-approved";
 import ListNewsWaitingForApproval from "../news/listNewsWaitingForApproval";
 import ListDepartment from "../departments/ListDepartment";
 import ListKinds from "../kindOfNews/list-kind";
 import CreateUser from "../users/create-user";
-import UpdateUser from "../users/update-user";
-import NewsFromDate from "../news/newsfromDate";
 import NewsFromMonth from "../news/newsFromMonth";
 import NewsFromYear from "../news/newsFromYear";
 import ViewNews from "../news/ViewsNews";
@@ -27,11 +24,16 @@ import UpdateKind from "../kindOfNews/update-kind";
 import UpdateNews from "../news/edit-news";
 import CreateNews from "../news/create";
 import axios from "axios";
+import user from "../images/user.png";
+import UpdateUser from "../users/update-info-user"
 
 import ListCategories from "../categories/listCategories";
 import CreateCategories from "../categories/Create";
 import UpdateCategories from "../categories/update-categories";
 import { THU_KY_ROLE } from "../../config/roles";
+import ListWriter from "../news/list_writer";
+import { AiOutlineOrderedList, AiFillInfoCircle } from "react-icons/ai";
+import Page404 from "./page 404";
 
 export default function Admin(props) {
   let history = useHistory();
@@ -53,14 +55,6 @@ export default function Admin(props) {
     history.push("/");
   };
 
-  const clickCategories = () => {
-    history.push(`${path}/categories`);
-  };
-
-  const clickNews = () => {
-    history.push(`${path}/news`);
-  };
-
   const clickStatiscal = () => {
     history.push(`${path}/statistical`);
   };
@@ -69,7 +63,17 @@ export default function Admin(props) {
     history.push(`${path}`);
   };
 
+  const onClickListWriter = () => {
+    history.push(`${path}/list-writer`);
+  };
+
+  const onClickInfoUser = () => {
+    const id = localStorage.getItem('idUser')
+    history.push(`${path}/info-user/${id}`);
+  };
+
   return (
+    localStorage.getItem('power') === "5" ?
     <div>
       <input type="checkbox" id="nav-toggle" />
       <div className="sidebar">
@@ -94,16 +98,29 @@ export default function Admin(props) {
               </div>
             </li>
 
-            <li>
+            {/* <li>
               <div
                 onClick={clickCategories}
                 className={`${
-                  props.location.pathname === "/secretary/categories" &&
+                  props.location.pathname === "/secretary/list-news" &&
                   "active"
                 }`}
               >
                 <span className="las la-users"></span>
                 <span>Chuyên mục đăng</span>
+              </div>
+            </li> */}
+
+            <li>
+              <div onClick={onClickListWriter}
+               className={`${
+                props.location.pathname === "/secretary/list-writer" &&
+                "active"
+              }`}>
+                <span>
+                <AiOutlineOrderedList />
+                </span>
+                <span>Bài viết cá nhân</span>
               </div>
             </li>
 
@@ -117,6 +134,19 @@ export default function Admin(props) {
               >
                 <span className="las la-clipboard-list"></span>
                 <span>Thống kê</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                onClick={onClickInfoUser}
+                className={`${
+                  props.location.pathname === "/secretary/info-user/:id" &&
+                  "active"
+                }`}
+              >
+                <span> <AiFillInfoCircle/></span>
+                <span>Thay đổi thông tin tài khoản</span>
               </div>
             </li>
 
@@ -139,7 +169,8 @@ export default function Admin(props) {
           </h2>
 
           <div className="user-wrapper">
-            <div>
+          <img src={user} width="40px" height="40px" alt="" />
+            <div className="user-wrapper">
               <h4>{username ? username.username : null}</h4>
             </div>
           </div>
@@ -159,9 +190,18 @@ export default function Admin(props) {
                     path={`${path}/news-waiting-for-approval`}
                     component={ListNewsWaitingForApproval}
                   />
-                  <Route path={`${path}/statistical/author`}>
-                    <NewsFromDate path={`${path}/statistical/author`}></NewsFromDate>
-                  </Route>
+
+                <Route
+                    path={`${path}/info-user/:id`}
+                    key={props.location.key}
+                    render={({ match }) => (
+                      <UpdateUser
+                        key={props.location.key}
+                        match={match}
+                        path={path}
+                      />
+                    )}
+                  ></Route>
 
                   <Route path={`${path}/statistical/kind`}>
                     <NewsFromMonth path={`${path}/statistical/kind`}></NewsFromMonth>
@@ -264,6 +304,10 @@ export default function Admin(props) {
                     <ListKinds path={path}></ListKinds>
                   </Route>
 
+                  <Route path={`${path}/list-writer`}>
+                    <ListWriter  path={path} />
+                  </Route> 
+
                   <Route path={`${path}`} component={ListNewsApproved}>
                     <ListNewsApproved path={path} />
                   </Route>
@@ -275,5 +319,6 @@ export default function Admin(props) {
         </main>
       </div>
     </div>
+    : <Page404/>
   );
 }

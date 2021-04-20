@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 export default function Statiscal(props) {
   console.log(props);

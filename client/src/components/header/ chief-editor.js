@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Switch,
-  useHistory,
-  useLocation,
+	Route,
+	Switch,
+	useHistory,
 } from "react-router-dom";
+import { AiOutlineOrderedList, AiFillInfoCircle } from "react-icons/ai";
+import user from "../images/user.png";
+
 
 import { AiOutlineLogout } from "react-icons/ai";
 
@@ -17,145 +17,223 @@ import ListChiefEditor from "../news/list-chief-editor";
 import ViewNews from "../news/ViewsNews";
 import CreateNews from "../news/create";
 import UpdateNews from "../news/edit-news";
+import ListWriter from "../news/list_writer";
+import UpdateUser from "../users/update-info-user";
+import ListTBBTApproved from "../news/list-tbbt-news";
+import ListTBBTRefuse from "../news/list-tbbt-refuse";
 import {
-  CTV_ROLE,
-  ADMIN_ROLE,
-  TRUONG_BAN_BT_ROLE,
-  BAN_BT_ROLE,
-  THU_KY_ROLE,
+	TRUONG_BAN_BT_ROLE,
 } from "../../config/roles";
+import Page404 from "./page 404";
 
 export default function ChiefEditor(props) {
-  let history = useHistory();
-  let path = "/chief-editor";
+	let history = useHistory();
+	let path = "/chief-editor";
 
-  const [newsComfirm, setNewsConfirm] = useState([]);
-  const [error, setError] = useState();
-  const [username, setUsername] = useState();
+	const [newsComfirm, setNewsConfirm] = useState([]);
+	const [error, setError] = useState();
+	const [username, setUsername] = useState();
 
-  useEffect(() => {
-    const id = localStorage.getItem("idUser");
-    axios.post(`/api-user/user-id/${id}`).then((res) => {
-      setUsername(res.data.News);
-    });
-  }, []);
+	useEffect(() => {
+		const id = localStorage.getItem("idUser");
+		axios.post(`/api-user/user-id/${id}`).then((res) => {
+			setUsername(res.data.News);
+		});
+	}, []);
 
-  useEffect(() => {
-    const linkColor = document.querySelectorAll(".nav__link");
-    function colorLink() {
-      if (linkColor) {
-        linkColor.forEach((l) => l.classList.remove("active"));
-        this.classList.add("active");
-      }
-    }
-    linkColor.forEach((l) => l.addEventListener("click", colorLink));
-  }, []);
+	useEffect(() => {
+		const linkColor = document.querySelectorAll(".nav__link");
+		function colorLink() {
+			if (linkColor) {
+				linkColor.forEach((l) => l.classList.remove("active"));
+				this.classList.add("active");
+			}
+		}
+		linkColor.forEach((l) => l.addEventListener("click", colorLink));
+	}, []);
 
-  //list danh sach cho phe duyet
+	//list danh sach cho phe duyet
 
-  useEffect(async () => {
-    const res = await axios.get("/api-news/list-news-comfirmed");
-    if (res) {
-      console.log(res.data.listNewsConfirmed);
-      setNewsConfirm(res.data.listNewsConfirmed);
-    } else {
-      setError("Không tìm thấy");
-    }
-  }, []);
+	useEffect(async () => {
+		const res = await axios.get("/api-news/list-news-comfirmed");
+		if (res) {
+			console.log(res.data.listNewsConfirmed);
+			setNewsConfirm(res.data.listNewsConfirmed);
+		} else {
+			setError("Không tìm thấy");
+		}
+	}, []);
 
-  const logout = () => {
-    localStorage.removeItem("token");
-    localStorage.removeItem("power");
-    localStorage.removeItem("idUser");
-    history.push("/");
-  };
+	const logout = () => {
+		localStorage.removeItem("token");
+		localStorage.removeItem("power");
+		localStorage.removeItem("idUser");
+		history.push("/");
+	};
 
-  const listNews = () => {
-    history.push(`${path}`);
-  };
-  return (
-    <div>
-      <input type="checkbox" id="nav-toggle" />
-      <div class="sidebar">
-        <div class="sidebar-brand">
-          <h2>
-            <span class="lab la-accusoft"></span>
-            <span>Dashboard</span>
-          </h2>
-        </div>
+	const listNews = () => {
+		history.push(`${path}`);
+	};
 
-        <div class="sidebar-menu">
-          <ul>
-            <li>
-              <div onClick={listNews} href="#" class="nav__link active">
-                <span class="las la-igloo"></span>
-                <span>Dashboard</span>
-              </div>
-            </li>
-            <li>
-              <div onClick={logout} class="nav__link a">
-                <span>
-                  <AiOutlineLogout />
-                </span>
-                <span>Đăng xuất</span>
-              </div>
-            </li>
-          </ul>
-        </div>
-      </div>
+	const listTBBT = () => {
+		history.push(`${path}/list-tbbv-approved`);
+	};
 
-      <div class="main-content">
-        <header>
-          <h2>
-            <label for="nav-toggle">
-              <span class="las la-bars"></span>
-            </label>
-          </h2>
+	const listTBBTRefuse = () => {
+		history.push(`${path}/list-tbbv-refuse`);
+	};
 
-          <div class="user-wrapper">
-            <div>
-              <h4>{username ? username.username : null}</h4>
-            </div>
-          </div>
-        </header>
+	const onClickListWriter = () => {
+		history.push(`${path}/list-writer`);
+	};
+	const onClickInfoUser = () => {
+		const id = localStorage.getItem('idUser')
+		history.push(`${path}/info-user/${id}`);
+	};
+	return (
+		localStorage.getItem('power') === "2" ?
+		<div>
+			<input type="checkbox" id="nav-toggle" />
+			<div class="sidebar">
+				<div class="sidebar-brand">
+					<h2>
+						<span class="lab la-accusoft"></span>
+						<span>Dashboard</span>
+					</h2>
+				</div>
 
-        <main>
-          <div class="recent-grid">
-            <div className="projects">
-              <div className="card">
-                <Switch>
-                  <Route
-                    path={`${path}/news/views/:id`}
-                    key={props.location.key}
-                    render={({ match }) => (
-                      <ViewNews key={props.location.key} match={match} />
-                    )}
-                  ></Route>
+				<div class="sidebar-menu">
+					<ul>
+						<li>
+							<div onClick={listNews} href="#" class="nav__link active">
+								<span class="las la-igloo"></span>
+								<span>Danh sách tin chờ duyệt</span>
+							</div>
+						</li>
+						<li>
+							<div onClick={listTBBT} href="#" class="nav__link ">
+								<span class="las la-igloo"></span>
+								<span>Danh sách tin đã duyệt</span>
+							</div>
+						</li>
 
-                  <Route path={`${path}/news/add`}>
-                    <CreateNews path={path} role={TRUONG_BAN_BT_ROLE}/>
-                  </Route>
+						<li>
+							<div onClick={listTBBTRefuse} href="#" class="nav__link ">
+								<span class="las la-igloo"></span>
+								<span>Danh sách tin từ chối</span>
+							</div>
+						</li>
 
-                  <Route
-                    path={`${path}/news/:id`}
-                    key={props.location.key}
-                    render={({ match }) => (
-                      <UpdateNews
-                        key={props.location.key}
-                        match={match}
-                        role={TRUONG_BAN_BT_ROLE}
-                      />
-                    )}
-                  ></Route>
-                  <Route path={`${path}`}>
-                    <ListChiefEditor path={path} />
-                  </Route>
-                </Switch>
-              </div>
-            </div>
-          </div>
-        </main>
-      </div>
-    </div>
-  );
+						<li>
+							<div onClick={onClickListWriter} className={`nav__link a`}>
+								<span>
+								<AiOutlineOrderedList />
+								</span>
+								<span>Bài viết cá nhân</span>
+							</div>
+						</li>
+
+						<li>
+							<div onClick={onClickInfoUser} className={`nav__link a`}>
+								<span>
+								<AiFillInfoCircle />
+								</span>
+								<span>Thay đổi thông tin tài khoản</span>
+							</div>
+						</li>
+
+						<li>
+							<div onClick={logout} class="nav__link a">
+								<span>
+									<AiOutlineLogout />
+								</span>
+								<span>Đăng xuất</span>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+
+			<div class="main-content">
+				<header>
+					<h2>
+						<label for="nav-toggle">
+							<span class="las la-bars"></span>
+						</label>
+					</h2>
+
+					<div class="user-wrapper">
+						<img src={user} width="40px" height="40px" alt="" />
+						<div className="user-wrapper">
+							<h4>{username ? username.username : null}</h4>
+						</div>
+					</div>
+				</header>
+
+				<main>
+					<div class="recent-grid">
+						<div className="projects">
+							<div className="card">
+								<Switch>
+
+									<Route
+										path={`${path}/news/views/:id`}
+										key={props.location.key}
+										render={({ match }) => (
+											<ViewNews key={props.location.key} match={match} />
+										)}
+									></Route>
+
+									 <Route
+										path={`${path}/info-user/:id`}
+										key={props.location.key}
+										render={({ match }) => (
+											<UpdateUser
+												key={props.location.key}
+												match={match}
+												path={path}
+											/>
+										)}
+									></Route>
+
+									<Route path={`${path}/news/add`}>
+										<CreateNews path={path} role={TRUONG_BAN_BT_ROLE}/>
+									</Route>
+
+									<Route
+										path={`${path}/news/:id`}
+										key={props.location.key}
+										render={({ match }) => (
+											<UpdateNews
+												key={props.location.key}
+												match={match}
+												role={TRUONG_BAN_BT_ROLE}
+											/>
+										)}
+									></Route>
+
+									<Route path={`${path}/list-tbbv-approved`}>
+										<ListTBBTApproved  path={path} />
+									</Route> 
+
+									<Route path={`${path}/list-tbbv-refuse`}>
+										<ListTBBTRefuse  path={path} />
+									</Route> 
+
+									<Route path={`${path}/list-writer`}>
+										<ListWriter  path={path} />
+									</Route>  
+
+									<Route path={`${path}`}>
+										<ListChiefEditor path={path} />
+									</Route>
+								</Switch>
+							</div>
+						</div>
+					</div>
+				</main>
+			</div>
+		</div>
+		: <Page404/>
+	);
 }

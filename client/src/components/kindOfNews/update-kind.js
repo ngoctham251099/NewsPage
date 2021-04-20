@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {  useHistory } from "react-router-dom";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 import Button from "../UI/button-add";
 import Input from "../UI/Input";
@@ -41,7 +42,13 @@ export default function UpdateKind(props){
         })
         .then(
             res => {
-                history.push(`${props.path}/kinds`);
+                if(res.data.message == "Exercise update"){
+                    toast.success(res.data.message)
+                    history.push(`${props.path}/kinds`);
+                }else{
+                    toast.error(res.data.message)
+                }
+                
             }
         ).catch(
             err => {
@@ -55,8 +62,8 @@ export default function UpdateKind(props){
         <h3 style={{ marginBottom: 20 }}>Cập nhật tin</h3>
             <label>Tên loại tin</label>
             <Input ref={React.createRef()} onChange={onChange} value={kind.name}></Input>
-            <label>Mệnh giá</label>
-            <Input ref={React.createRef()} onChange={onChangePrice} value={kind.unitPrice}></Input>
+            {/* <label>Mệnh giá</label>
+            <Input ref={React.createRef()} onChange={onChangePrice} value={kind.unitPrice}></Input> */}
             <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
         </div>  
     )

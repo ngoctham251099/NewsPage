@@ -3,6 +3,7 @@ import { Link, useHistory } from "react-router-dom";
 import axios from 'axios';
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil } from "react-icons/bs";
+import { toast } from "react-toastify";
 
 export default function ListKinds(props){
     let history = useHistory();
@@ -35,10 +36,10 @@ export default function ListKinds(props){
             res => {
                 console.log(res.data.message)
                 if(res.data.message == 'Đã xóa thành công'){
-                    setMessage(res.data.message)
+                    toast.success(res.data.message)
                     show_item_after_delete();
                 }else{
-                    setMessage(res.data.message)
+                    toast.error(res.data.message)
                 }
             }
         )

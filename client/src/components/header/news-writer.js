@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, Route, Router, Switch, useHistory } from "react-router-dom";
+import {  Route, Switch, useHistory } from "react-router-dom";
 import "../Design/css/admin.css";
 import "../Design/js/jsAdmin";
 import ListNewsWriter from "../news/list_writer";
@@ -8,6 +8,10 @@ import CreateNews from "../news/create";
 import axios from "axios";
 import UpdateNews from "../news/edit-news";
 import { CTV_ROLE } from "../../config/roles";
+import { AiFillInfoCircle } from "react-icons/ai";
+import UpdateUser from "../users/update-info-user";
+import user from "../images/user.png";
+import Page404 from "./page 404";
 
 export default function Admin(props) {
   const path = "/news-writer";
@@ -28,7 +32,13 @@ export default function Admin(props) {
     });
   }, []);
 
+  const onClickInfoUser = () => {
+    const id = localStorage.getItem('idUser')
+    history.push(`${path}/info-user/${id}`);
+  };
+
   return (
+    localStorage.getItem('power') === "4" ?
     <div>
       <input type="checkbox" id="nav-toggle" />
       <div class="sidebar">
@@ -43,8 +53,6 @@ export default function Admin(props) {
           <ul>
             <li>
               <div
-                href="#"
-                class="nav__link"
                 className={`nav__link a ${
                   props.location.pathname === "/news-writer" && "active"
                 }`}
@@ -52,6 +60,18 @@ export default function Admin(props) {
               >
                 <span class="las la-clipboard-list"></span>
                 <span>Danh sách bài viết</span>
+              </div>
+            </li>
+
+            <li>
+              <div
+                onClick={onClickInfoUser}
+                className={`nav__link a ${
+                  props.location.pathname === "/news-writer/info-user/:id" && "active"
+                }`}
+              >
+                <span><AiFillInfoCircle/></span>
+                <span>Thay đổi thông tin tài khoản</span>
               </div>
             </li>
 
@@ -75,6 +95,7 @@ export default function Admin(props) {
           </h2>
 
           <div class="user-wrapper">
+          <img src={user} width="40px" height="40px" alt="" />
             <div>
               <h4>{username ? username.username : null}</h4>
             </div>
@@ -98,6 +119,18 @@ export default function Admin(props) {
             <div className="projects">
               <div className="card">
                 <Switch>
+                <Route
+                    path={`${path}/info-user/:id`}
+                    key={props.location.key}
+                    render={({ match }) => (
+                      <UpdateUser
+                        key={props.location.key}
+                        match={match}
+                        path={path}
+                      />
+                    )}
+                  ></Route>
+
                   <Route
                     path={`${path}/news/views/:id`}
                     key={props.location.key}
@@ -105,6 +138,7 @@ export default function Admin(props) {
                       <ViewNews key={props.location.key} match={match} />
                     )}
                   ></Route>
+
 
                   <Route path={`${path}/news/add`}>
                     <CreateNews path={path} role={CTV_ROLE} />
@@ -131,5 +165,6 @@ export default function Admin(props) {
         </main>
       </div>
     </div>
+    : <Page404/>
   );
 }

@@ -1,31 +1,23 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { Link, Prompt } from "react-router-dom";
-import { useHistory } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Moment from "react-moment";
-import { BsPencil } from "react-icons/bs";
-import Button from "../UI/button-add";
-import Select from "../UI/select";
-import { FaCheckCircle, FaExclamationTriangle } from "react-icons/fa";
 import { toast } from "react-toastify";
 
 export default function ListEditor(props) {
-  let history = useHistory();
   let stt = 1;
 
-  const [success, setSuccess] = useState();
-  const [error, setError] = useState();
   const [listKind, setListKind] = useState([]);
-  const [kind, setKind] = useState();
-  const [checked, setChecked] = useState(false);
 
   const [news, setNews] = useState([]);
   useEffect(async () => {
     const id = localStorage.getItem("idUser");
-    const res = await axios.get(`/api-news/views-editor?id=${id}`, {
+    console.log(id)
+    const res = await axios.get(`/api-news/list-news-BTV?id=${id}`, {
       id: localStorage.getItem("idUSer"),
     });
     if (res.data.listNews) {
+      console.log(res.data.listNews)
       setNews(res.data.listNews);
     } else {
       toast.error(res.data.message);
@@ -57,62 +49,19 @@ export default function ListEditor(props) {
     }
   };
 
-  const updateStatus = async (idNews) => {
-    const id = localStorage.getItem("idUser");
-    const res = await axios.post(`/api-news/update-status/${id}/${idNews}`, {
-      kind: kind,
-    });
-    if (res.data.message == "Đã duyệt tin") {
-      toast.success(res.data.message);
-      show_item_after_delete();
-    } else {
-      toast.error(res.data.message);
-    }
-  };
-
-  const updateRefuse = async (idNews) => {
-    const id = localStorage.getItem("idUser");
-    const res = await axios.post(`/api-news/update-refuse/${id}/${idNews}`, {
-      kind: kind,
-    });
-    if (res.data.message == "Đã từ chối duyệt tin") {
-      setSuccess(res.data.message);
-      show_item_after_delete();
-    } else {
-      setError(res.data.message);
-    }
-  };
-
-  const show_item_after_delete = () => {
-    setTimeout(() => {
-      const id = localStorage.getItem("idUser");
-      axios
-        .get(`/api-news/views-editor?id=${id}`, {
-          id: localStorage.getItem("idUSer"),
-        })
-        .then((res) => {
-          setNews(res.data.listNews);
-        });
-    }, 100);
-  };
-
-  const onChangeKind = (e) => {
-    setKind(e.target.value);
-  };
-
   return (
     <div>
       {/* <Prompt message="Are you sure you want to leave?" /> : null} */}
 
       <div className="card-header">
         <h3>Danh Sách Bài Viết</h3>
-        <button
+        {/* <button
           onClick={() => {
             history.push(`${props.path}/news/add`);
           }}
         >
           Thêm
-        </button>
+        </button> */}
       </div>
       <div className="card-body">
         <div className="table-responsive">
@@ -124,7 +73,6 @@ export default function ListEditor(props) {
                 <th>Thumbnail</th>
                 <th>Bút danh</th>
                 <th>Ngày viết</th>
-                <th>Phòng ban</th>
                 <th>Xem bài</th>
                 <th>Hành động</th>
               </tr>
@@ -144,9 +92,6 @@ export default function ListEditor(props) {
                   <td>
                     <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
                   </td>
-                  {/* <td>{getStatus(item.status)}</td> */}
-                  {/* <td>{item.status}</td> */}
-                  <td>{item.department}</td>
                   {/* <td>
                     <Select list={listKind} onChange={onChangeKind}></Select>
                   </td> */}

@@ -1,7 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
-const fs = require('fs');
 const multer = require('multer');
 
 const storage = multer.diskStorage({
@@ -52,8 +50,6 @@ router.post('/update-secretary/:id/:idNews', newsController.updateStatusSecretar
 //view theo tung thang viet bai
 router.get('/view-writer', newsController.viewsWriter)
 
-router.post('/update-status/:id/:idNews', newsController.updateStatusManager)
-router.post('/update-chief-editor/:id/:idNews', newsController.updateStatusPresident)
 router.post('/update-refuse/:id/:idNews', newsController.updateStatusNoReview)
 //update sts
 //View list news theo department cho truong phong vaf status
@@ -88,4 +84,21 @@ router.get('/list-news-comfirmed', newsController.listNewsConfirmed)
 //----------------------------------
 //Danh sách tin chờ được duyệt
 router.get('/list-news-waiting-for-approval', newsController.listNewsWaitingForApproval)
+
+//danh sach cua bien tap vien
+router.get('/list-news-BTV', newsController.listNewBTV);
+
+//danh sach phe duyet cua bien tap vien
+router.get('/list-btv-approved', newsController.listNewsBTV2)
+router.get('/list-tbbt-approved', newsController.listNewsTBBT)
+//danh sach tu choi cua btv and TBBT
+router.get('/list-news-btv-refuse', newsController.listBTVRefuse)
+router.get('/list-news-tbbv-refuse', newsController.listTBBTRefuse)
+
+//yeu cau chinh sua bai viet
+router.post('/news-edit-content/:id/:idNews', newsController.updateStatusEditContent)
+
+//danh sach yeu cau chinh sua cua bien tap vien
+router.get('/list-news-request-edit', newsController.listNewsRequestEdit)
+
 module.exports = router;

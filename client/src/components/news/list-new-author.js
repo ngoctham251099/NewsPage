@@ -1,9 +1,10 @@
+
 import "date-fns";
 import React, { useRef } from "react";
 import ReactToPrint from "react-to-print";
 import RenderReport from "../news/renderReport";
 
-export default function ListNewsFromDate() {
+export default function ListNewsAuthor() {
 
   const componentRef = useRef();
 

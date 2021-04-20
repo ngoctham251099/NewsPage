@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { makeStyles, withStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
@@ -63,7 +62,7 @@ export default function CustomizedSelects(props) {
           {/* <MenuItem value="0">None</MenuItem> */}
           {props.list ? 
             (props.list.map((item, index) => (
-              <MenuItem value={item.name}>{item.name}</MenuItem>
+              <MenuItem value={item._id}>{item.name}</MenuItem>
             ))): null
           }
             
@@ -76,32 +75,16 @@ export default function CustomizedSelects(props) {
           }
 
           {
-            props.month ? (
-              (props.month.map((item) => (
-                <MenuItem value={item}>{item}</MenuItem>
+            props.listQL ? (
+              (props.listQL.map((item) => (
+                <MenuItem value={item._doc._id}>{item._doc.username}</MenuItem>
               )))
             ): null
           }
 
         </Select>
       </FormControl>
-      {/* <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="demo-simple-select-outlined-label">{props.value}</InputLabel>
-        <Select
-          labelId="demo-simple-select-outlined-label"
-          id="demo-simple-select-outlined"
-          value={props.value}
-          onChange={props.onChange}
-          label={props.value}
-        >
-          <MenuItem value="">
-            <em>None</em>
-          </MenuItem>
-          <MenuItem value={10}>Ten</MenuItem>
-          <MenuItem value={20}>Twenty</MenuItem>
-          <MenuItem value={30}>Thirty</MenuItem>
-        </Select>
-      </FormControl> */}
+      
     </div>
   );
 }

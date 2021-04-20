@@ -8,12 +8,12 @@ import { toast } from "react-toastify";
 export default function ListPriceOfKinds(props){
     let history = useHistory();
     const [kinds, setKinds] = useState([]);
-    const [message, setMessage] = useState();
     let stt  = 1;
     useEffect(() => {
         axios.get('/api-price-of-kind')
         .then(
-            res => {    
+            res => {   
+              console.log(res.data.kind) 
                 setKinds(res.data.kind);
             }
         )
@@ -42,8 +42,6 @@ export default function ListPriceOfKinds(props){
                 }
             }
         )
-
-       
     }
 
     const add = () => {
@@ -64,30 +62,34 @@ export default function ListPriceOfKinds(props){
               <tr>
                 <th>STT</th>
                 <th>Tên loai</th>
-                <th>đơn giá</th>
+                <th>Đơn giá</th>
+                <th>Loại tin</th>
                 <th>Edit</th>
                 <th>Remove</th>
               </tr>
             </thead>
             <tbody>
-              {kinds.map( (item , index) => (
+              {kinds ?
+              kinds.map( (item , index) => (
                 <tr key={index}>
                   <td>{stt++}</td>
                   <td>
-                      {item.name}
+                      {item._doc.name}
                   </td>
                   <td>
-                      {item.price}
-                  </td>
-                 
-                  <td>
-                      <Link to={`${props.path}/price-of-kinds/edit/${item._id}`}><BsPencil/></Link>
+                      {item._doc.price}
                   </td>
                   <td>
-                      <a onClick={() => Remove(item._id)}><BsTrashFill color="red"/></a>
+                    {item.nameKind}
+                  </td>
+                  <td>
+                      <Link to={`${props.path}/price-of-kinds/edit/${item._doc._id}`}><BsPencil/></Link>
+                  </td>
+                  <td>
+                      <a onClick={() => Remove(item._doc._id)}><BsTrashFill color="red"/></a>
                   </td>
                 </tr>
-              ))}
+              )): null}
             </tbody>
         </table>
       </div>
