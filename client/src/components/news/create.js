@@ -87,13 +87,14 @@ function CreateNews(props) {
   const [note, setNote] = useState();
   const [kind, setKind] = useState();
   const [category, setCategory] = useState();
+  const [kindImages, setKindImages] = useState();
 
   const [categoryList, setCategoryList] = useState([]);
   const [listKind, setListKind] = useState([]);
   const [priceOfKind, setPriceOfKind] = useState([]);
   const [idPriceOfKind, setIdPriceOfKind] = useState();
+  const [kindOfImages, setKindOfImages] = useState([]);
   const [isPostedFanpage, setIsPostedFanpage] = useState(false);
-  const ckecked = false;
 
   const idUser = localStorage.getItem("idUser");
 
@@ -116,6 +117,13 @@ function CreateNews(props) {
     });
   }, []);
 
+  useEffect(() => {
+    axios.get("/api-price-of-images").then((res) =>{
+      console.log(res.data.kind)
+      setKindOfImages(res.data.kind)
+    });
+  }, []);
+
   const onChangeTitle = (event) => {
     setTitle(event.target.value);
   };
@@ -126,11 +134,16 @@ function CreateNews(props) {
 
   const onChangeContent = (event, editor) => {
     const data = editor.getData();
+    console.log(data)
     setContent(data);
   };
 
   const onChangePrice = (event) => {
     setIdPriceOfKind(event.target.value);
+  };
+
+  const onChangeKindImages = (event) => {
+    setKindImages(event.target.value);
   };
 
   const onChangeKind = (event) => {
@@ -174,6 +187,7 @@ function CreateNews(props) {
     formData.append("note", note);
     formData.append("status", setStatus(role));
     formData.append("idPriceOfKind", idPriceOfKind);
+    formData.append("idKindImages", kindImages);
     formData.append("isPostedFanpage", isPostedFanpage);
     
     axios.post("/api-news/create", formData).then((res) => {
@@ -232,18 +246,16 @@ function CreateNews(props) {
         </div>
         )}
 
-        {/* {role !== CTV_ROLE && (
+        {role !== CTV_ROLE && (
           <div className="item">
-            <label className="title-news">Loại tin</label>
+            <label className="title-news">Loại ảnh<p style={{color: "#ff0000"}}> (nếu loại tin là Bài viết tin/ Ảnh)</p></label>
             <Select2
-              value={idPriceOfKind}
-              list={priceOfKind._doc}
-              onChange={(e) => 
-                setIdPriceOfKind(e.target.value)
-              }
+              value={kindImages}
+              list={kindOfImages}
+              onChange={onChangeKindImages}
             ></Select2>
           </div>
-        )} */}
+        )}
 
         {
           

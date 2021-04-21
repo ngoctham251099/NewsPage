@@ -7,6 +7,9 @@ const PriceOfKind = require("../data/models/priceOfKind");
 const Images = require("../data/models/images");
 const Categories = require("../data/models/Categories")
 const moment = require("moment");
+const Departments = require("../data/models/Department")
+const PriceImages = require("../data/models/kindOfImages");
+const { getUnixTime } = require("date-fns");
 
 const calculatePrice = async (idPrice) => {
  
@@ -54,10 +57,12 @@ module.exports.create = async (req, res, next) => {
 		kindNews,
 		categories,
 		note,
+		idKindImages,
 		idPriceOfKind,
 		isPostedFanpage = false
 	} = req.body;
 	const { avatar } = req.files;
+	console.log(idKindImages)
 	if(!title || !summary || !avatar){
 		return res.json({message: "Không được phép để trống"})
 	}
@@ -79,6 +84,7 @@ module.exports.create = async (req, res, next) => {
 	addnews.author = user.fullName;
 	addnews.date_submitted = new Date();
 	addnews.status = status;
+	addnews.images = listImagesOnContent;
 	addnews.IdUser = idUser;
 	addnews.avatar = urlAvatar;
 	addnews.kindNews = kindNews;
@@ -101,6 +107,10 @@ module.exports.create = async (req, res, next) => {
 		addnews._idTBBT = idUser;
 		addnews.date_TBBT = Date.now();
 	}
+	console.log(listImagesOnContent.length)
+	if(listImagesOnContent.length > 0){
+		addnews.idPriceOfImages = idKindImages;
+	}
 	
 	addnews.isPostedFanpage = isPostedFanpage;
 	await addnews.save();
@@ -108,6 +118,7 @@ module.exports.create = async (req, res, next) => {
 	if(listImagesOnContent.length > 0){
 		addImages.idNews = addnews._id;
 		addImages.name = listImagesOnContent;
+		addImages.idPriceKind = idKindImages;
 	} 
 
 	await addImages.save();
@@ -464,10 +475,11 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
 		News: allNews,
 	});
 };
-
+//thong ke theo noi dung bai viet
 module.exports.statisticalByAuthor = async (req, res) => {
 	const { month } = req.body;
 	const dataPrice =  await PriceOfKind.find();
+	const dataPriceImages = await PriceImages.find();
 	const startOfMonth = moment(month)
 		.clone()
 		.startOf("month")
@@ -490,11 +502,15 @@ module.exports.statisticalByAuthor = async (req, res) => {
 		allNews
 		.filter((item) => item.status === "4")
 		.map((newsData) => {
+			const price = dataPriceImages.find(val => String(val._id) === newsData.idPriceOfImages);
+
 			return {
 				...newsData,
 				price: dataPrice.find(item => String(item._id) === newsData.idPriceOfKind).price,
+				priceImages: price ? newsData.images.length * Number(price.price) : null
 			};
 		})
+
 		return res.json({
 			News: data
 		});
@@ -514,24 +530,55 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		.endOf("month")
 		.format("YYYY-MM-DD hh:mm");
 
-	const getKindPrice = await Kinds.find({});
+		const allNews = await News.find({
+			date_submitted: {
+				$gte: new Date(startOfMonth),
+				$lt: new Date(endOfMonth),
+			},
+		});
 
-	const getNewsByKind = Promise.all(
-		getKindPrice.map(async (item) => {
-			return await News.aggregate([
-				{
-					$match: {
-						kindNews: item,
-						date_submitted: {
-							$gte: new Date(startOfMonth),
-							$lt: new Date(endOfMonth),
-						},
-					},
-				},
-				{ $group: { _id: "$IdUser", count: { $sum: 1 } } },
-			]);
+
+
+	const getKindPrice = await Kinds.find({});
+	const getUser = await Users.find(); 
+	const getNewsByKind = (
+		getUser.forEach((item) => {
+			console.log(item.email)
+			getKindPrice.forEach(val => {
+				console.log(val.name)
+				const d = allNews.find(x => {
+					return  x.kindNews === String(val._id) && x.IdUser === String(item._id);
+				})
+				console.log("\n\n\n" + d)
+			})
 		})
 	)
+
+	// const getNewsByKind =(
+	// 	getUser.map((item) => {
+	// 		return item
+	// 	})
+	// )
+	
+	console.log(getNewsByKind)
+
+	// const getKindPrice = await Kinds.find({});
+	// const getNewsByKind = Promise.all(
+	// 	getKindPrice.map(async (item) => {
+	// 		return await News.aggregate([
+	// 			{
+	// 				$match: {
+	// 					kindNews: item,
+	// 					date_submitted: {
+	// 						$gte: new Date(startOfMonth),
+	// 						$lt: new Date(endOfMonth),
+	// 					},
+	// 				},
+	// 			},
+	// 			{ $group: { _id: "$IdUser", count: { $sum: 1 } } },
+	// 		]);
+	// 	})
+	// )
 };
 
 module.exports.statisticalAuthor = async (req, res) => {
@@ -646,3 +693,5 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 												.where('status').equals("6");
 	return res.json({listNews: data})
 }
+
+

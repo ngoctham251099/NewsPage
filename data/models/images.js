@@ -3,7 +3,8 @@ const Schema = mongoose.Schema;
 
 const imagesSchema = new Schema({
     name: Array,
-    idNews: String
+    idNews: String,
+    idPriceKind: String
 },{
     collection: 'Images'
 })

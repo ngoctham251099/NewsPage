@@ -19,6 +19,7 @@ const newsSchema = new Schema({
     idBTV: String,
     idTBBT: String,
     idPriceOfKind: String,
+    idPriceOfImages: String,
     isPostedFanpage: {
         type: Boolean,
         default: false,

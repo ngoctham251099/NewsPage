@@ -50,6 +50,10 @@ import UpdateCategories from "../categories/update-categories";
 import ListImages from "../images_data/list-images";
 import CreateImages from "../images_data/create-images";
 import UpdateImages from "../images_data/update-images";
+
+import ListKindImages from "../kindOfImages/ListKindOfImages";
+import CreateKindImages from "../kindOfImages/CreateKindOfImages";
+import UpdateKindImages from "../kindOfImages/UpdateKindOfImagesComponent";
 import Page404 from "./page 404";
 import {
   ADMIN_ROLE,
@@ -107,13 +111,6 @@ export default function Admin(props) {
     history.push("/admin/statistical");
   };
 
-  const clickNewsApproved = () => {
-    history.push("/admin/news-approved");
-  };
-
-  const clickNewsWaitingForApproval = () => {
-    history.push("/admin/news-waiting-for-approval");
-  };
   const onClickInfoUser = () => {
     const id = localStorage.getItem('idUser')
     history.push(`${path}/info-user/${id}`);
@@ -195,11 +192,20 @@ export default function Admin(props) {
             </li>
 
             <li>
-              <div onClick={() => history.push("/admin/price-of-kinds")} className={`nav__link a ${props.location.pathname === '/admin/list-images' && 'active'}`}>
+              <div onClick={() => history.push(`${path}/list-images`)} className={`nav__link a ${props.location.pathname === `${path}/list-images` && 'active'}`}>
                 <span>
                   <AiOutlinePicture />
                 </span>
                 <span>Quản lý hình ảnh</span>
+              </div>
+            </li>
+
+            <li>
+              <div onClick={() => history.push(`${path}/list-kind-images`)} className={`nav__link a ${props.location.pathname === `${path}/list-kind-images` && 'active'}`}>
+                <span>
+                  <AiOutlinePicture />
+                </span>
+                <span>Quản lý loại ảnh</span>
               </div>
             </li>
 
@@ -365,6 +371,25 @@ export default function Admin(props) {
                   </Route>
 
                   <Route
+                    path={`${path}/list-kind-images/edit/:id`}
+                    key={props.location.key}
+                    render={({ match }) => (
+                      <UpdateKindImages
+                        key={props.location.key}
+                        match={match}
+                        path={path}
+                      />
+                    )}
+                  ></Route>
+                  <Route path={`${path}/list-kind-images/add`}>
+                    <CreateKindImages/>
+                  </Route>
+
+                  <Route path={`${path}/list-kind-images`}>
+                    <ListKindImages path={path}/>
+                  </Route>
+
+                  <Route
                     path={`${path}/kinds/edit/:id`}
                     key={props.location.key}
                     render={({ match }) => (
@@ -422,6 +447,10 @@ export default function Admin(props) {
                   </Route>
                   <Route path={`${path}/statistical/department`}>
                     <NewsFromYear path={`${path}/statistical/department`}/>
+                  </Route>
+
+                  <Route path={`${path}/list-images`}>
+                    <ListNews path={path}></ListNews>
                   </Route>
                 </Switch>
               </div>

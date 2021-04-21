@@ -5,7 +5,6 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bodyParser = require('body-parser');
 const multiparty = require('connect-multiparty');
-const path = require('path');
 
 const multipartMiddleware = multiparty({uploadDir: "./images"})
 const userRouter = require('./router/Users-router');
@@ -15,8 +14,8 @@ const kindRouter = require('./router/kindOfNews-router');
 const newsRouter = require('./router/news-router');
 const controllerNews = require('./controllers/news-controller')
 const imagesRouter = require('./router/images-router');
-const middleware = require('./middleware/auth');
 const priceOfKindRouter = require('./router/priceOfKind-router');
+const kindOfImagesRouter = require('./router/kindOfImages-router');
 
 
 dotenv.config();
@@ -50,6 +49,8 @@ app.use('/api-categories', categoriesRouter)
 app.use('/api-kind', kindRouter);
 
 app.use('/api-price-of-kind', priceOfKindRouter)
+
+app.use('/api-price-of-images', kindOfImagesRouter)
 
 app.use('/api-news' ,newsRouter); 
 

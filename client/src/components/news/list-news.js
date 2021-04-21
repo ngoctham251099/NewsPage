@@ -182,9 +182,6 @@ function ListNews(props) {
                     <td>
                       <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                     </td>
-                    {/* <td>{item._doc.images.map(element => (
-                                        <img width={400} src={`/api-news/viewFile/${element}`}></img>
-                                    ))}</td>					     */}
                     <td>{getStatus(item._doc.status)}</td>
                     {/* <td>{item._doc.status}</td> */}
                     <td>{item.nameKind}</td>
@@ -209,7 +206,12 @@ function ListNews(props) {
                         <BsTrashFill />
                       </span>
                     </td>
-                    <td>{item.note}</td>
+                    <td
+                    style={{
+                      maxWidth: "180px",
+                      overflowWrap: "break-word",
+                    }}
+                    >{item._doc.note}</td>
                   </tr>
                 ))}
             </tbody>
