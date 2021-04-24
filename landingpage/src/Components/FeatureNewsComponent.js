@@ -1,26 +1,22 @@
 import React from "react";
 
-const FeatureNewsComponent = () => {
+const FeatureNewsComponent = ({ newsData }) => {
+  console.log(newsData[0]?._doc.thumbnail);
   return (
     <div className="row" data-aos="fade-up">
       <div className="col-xl-8 stretch-card grid-margin">
         <div className="position-relative">
           <img
-            src="assets/images/dashboard/banner.jpg"
+            src={newsData[0]?._doc.thumbnail}
             alt="banner"
-            className="img-fluid"
+            className="img-fluid-first-news"
           />
           <div className="banner-content">
-            <div className="badge badge-danger fs-12 font-weight-bold mb-3">
-              global news
-            </div>
-            <h1 className="mb-0">GLOBAL PANDEMIC</h1>
-            <h1 className="mb-2">
-              Coronavirus Outbreak LIVE Updates: ICSE, CBSE Exams Postponed, 168
-              Trains
-            </h1>
+            <h1 className="mb-0 text-uppercase">{newsData[0]?._doc.title}</h1>
+
             <div className="fs-12">
-              <span className="mr-2">Photo </span>10 Minutes ago
+              <span className="mr-2">{newsData[0]?.nameKind} </span>10 Minutes
+              ago
             </div>
           </div>
         </div>
@@ -28,55 +24,25 @@ const FeatureNewsComponent = () => {
       <div className="col-xl-4 stretch-card grid-margin">
         <div className="card bg-dark text-white">
           <div className="card-body">
-            <h2>Latest news</h2>
+            <h2>Tin gần đây</h2>
 
-            <div className="d-flex border-bottom-blue pt-3 pb-4 align-items-center justify-content-between">
-              <div className="pr-3">
-                <h5>Virus Kills Member Of Advising Iran’s Supreme</h5>
-                <div className="fs-12">
-                  <span className="mr-2">Photo </span>10 Minutes ago
+            {newsData.slice(1, 4).map((item, index) => (
+              <div className="d-flex border-bottom-blue pb-4 pt-4 align-items-center justify-content-between" key={index}>
+                <div className="pr-3">
+                  <h5>{item._doc.title}</h5>
+                  <div className="fs-12">
+                    <span className="mr-2">{item.nameKind} </span>10 Minutes ago
+                  </div>
+                </div>
+                <div className="rotate-img">
+                  <img
+                    src={item._doc.thumbnail}
+                    alt="thumb"
+                    className="img-fluid img-lg"
+                  />
                 </div>
               </div>
-              <div className="rotate-img">
-                <img
-                  src="assets/images/dashboard/home_1.jpg"
-                  alt="thumb"
-                  className="img-fluid img-lg"
-                />
-              </div>
-            </div>
-
-            <div className="d-flex border-bottom-blue pb-4 pt-4 align-items-center justify-content-between">
-              <div className="pr-3">
-                <h5>Virus Kills Member Of Advising Iran’s Supreme</h5>
-                <div className="fs-12">
-                  <span className="mr-2">Photo </span>10 Minutes ago
-                </div>
-              </div>
-              <div className="rotate-img">
-                <img
-                  src="assets/images/dashboard/home_2.jpg"
-                  alt="thumb"
-                  className="img-fluid img-lg"
-                />
-              </div>
-            </div>
-
-            <div className="d-flex pt-4 align-items-center justify-content-between">
-              <div className="pr-3">
-                <h5>Virus Kills Member Of Advising Iran’s Supreme</h5>
-                <div className="fs-12">
-                  <span className="mr-2">Photo </span>10 Minutes ago
-                </div>
-              </div>
-              <div className="rotate-img">
-                <img
-                  src="assets/images/dashboard/home_3.jpg"
-                  alt="thumb"
-                  className="img-fluid img-lg"
-                />
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </div>

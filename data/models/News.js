@@ -4,6 +4,7 @@ const Schema = mongoose.Schema;
 const newsSchema = new Schema({
     title: String,
     avatar: String,
+    thumbnail: String,
     content : String,
     author: String,
     date_submitted: Date,

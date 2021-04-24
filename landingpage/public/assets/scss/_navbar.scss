@@ -6,22 +6,7 @@ header {
     font-weight: 500;
     padding: 0;
     display: block;
-    .navbar-brand {
-      margin-right: 0;
-      img {
-        width: 192px;
-      }
-      @media (max-width: 999px) {
-        img {
-          width: 170px;
-        }
-      }
-      @media (max-width: 1024px) {
-        img {
-          width: 130px;
-        }
-      }
-    }
+    
     @media (max-width: 999px) {
       .social-media {
         display: none;

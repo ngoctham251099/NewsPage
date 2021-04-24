@@ -47,6 +47,12 @@ module.exports.showNews = async (req, res, next) => {
 	return res.json({page: data})
 };
 
+function base64Encode(file) {
+	var body = fs.readFileSync(file);
+	return body.toString('base64');
+}
+
+
 module.exports.create = async (req, res, next) => {
 	const {
 		title,
@@ -76,7 +82,6 @@ module.exports.create = async (req, res, next) => {
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
 	const urlAvatar = avatar[0].filename;
 	let user = await Users.findOne({ _id: idUser });
-
 	const addImages = new Images();
 	const addnews = new News();
 	addnews.title = title;
@@ -92,6 +97,7 @@ module.exports.create = async (req, res, next) => {
 	addnews.idPriceOfKind = idPriceOfKind;
 	addnews.note = note;
 	addnews.summary = summary;
+	addnews.thumbnail = `data:${avatar[0].mimetype};base64,` + base64Encode(avatar[0].path)
 	if(userBTV.idBTV){
 		addnews.idBTV = userBTV.idBTV;
 	}
@@ -171,6 +177,7 @@ module.exports.updateNews = async (req, res) => {
 		news.content = content;
 		if (urlAvatar) {
 			news.avatar = urlAvatar;
+			news.thumbnail = `data:${avatar[0].mimetype};base64,` + base64Encode(avatar[0].path)
 		}
 		news.images = listImagesOnContent;
 		news.status = status;

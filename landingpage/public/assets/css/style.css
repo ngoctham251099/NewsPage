@@ -497,6 +497,11 @@ mark,
   height: auto;
 }
 
+.img-fluid-first-news {
+  height: 100%;
+  max-width: 100%;
+}
+
 .img-thumbnail {
   padding: 0.25rem;
   background-color: #fff;
@@ -10191,18 +10196,18 @@ header .navbar .navbar-brand {
 }
 
 header .navbar .navbar-brand img {
-  width: 192px;
+  width: 60px;
 }
 
 @media (max-width: 999px) {
   header .navbar .navbar-brand img {
-    width: 170px;
+    width: 40px;
   }
 }
 
 @media (max-width: 1024px) {
   header .navbar .navbar-brand img {
-    width: 130px;
+    width: 40px;
   }
 }
 
