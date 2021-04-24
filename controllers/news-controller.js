@@ -694,4 +694,41 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 	return res.json({listNews: data})
 }
 
+module.exports.listCategory = async (req, res) => {
+	const data = await Categories.find();
+	return res.json({category: data})
+}
+
+module.exports.listNewsbyCategory = async(req, res) => {
+	const {id} = req.params;
+	const getKind = Kinds.find();
+	const getCategories = Categories.find();
+
+	const getNews = await News.find({categories: id});
+	const data = await getNews.map(item => {
+		return{
+			...item,
+			nameKind: getKind.find( val => String(val._id) === kindNews).name,
+			nameCategories: getCategories.find(val => String(val._id) === category)
+		}
+	})
+	return res.json({news: data})
+}
+
+module.exports.NewsById = async (req, res) => {
+	const {id} = req.params;
+	const getKind = Kinds.find();
+	const getCategories = Categories.find();
+
+	const getNews = await News.find({_id: id})
+	const data = await getNews.map(item => {
+		return{
+			...item,
+			nameKind: getKind.find( val => String(val._id) === kindNews).name,
+			nameCategories: getCategories.find(val => String(val._id) === category)
+		}
+	})
+	return res.json({news: data})
+
+}
 
