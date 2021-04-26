@@ -485,6 +485,8 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
 //thong ke theo noi dung bai viet
 module.exports.statisticalByAuthor = async (req, res) => {
 	const { month } = req.body;
+	const getKind = await Kinds.find();
+	const getCategory = await Categories.find();
 	const dataPrice =  await PriceOfKind.find();
 	const dataPriceImages = await PriceImages.find();
 	const startOfMonth = moment(month)
@@ -514,7 +516,9 @@ module.exports.statisticalByAuthor = async (req, res) => {
 			return {
 				...newsData,
 				price: dataPrice.find(item => String(item._id) === newsData.idPriceOfKind).price,
-				priceImages: price ? newsData.images.length * Number(price.price) : null
+				priceImages: price ? Number(price.price) : null,
+				nameKind: newsData.kindNews ? getKind.find( val => String(val._id) === newsData.kindNews ).name : null,
+				nameCategory: newsData.categories ? getCategory.find(val => String(val._id) === newsData.categories).name : null
 			};
 		})
 
@@ -699,11 +703,6 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 												.where('idBTV').equals(id)
 												.where('status').equals("6");
 	return res.json({listNews: data})
-}
-
-module.exports.listCategory = async (req, res) => {
-	const data = await Categories.find();
-	return res.json({category: data})
 }
 
 module.exports.listNewsbyCategory = async(req, res) => {

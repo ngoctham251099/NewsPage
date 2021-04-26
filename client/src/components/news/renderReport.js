@@ -103,8 +103,8 @@ class RenderReport extends React.Component {
 											</td>
 											<td>{item._doc.author}</td>
 
-											<td>{item._doc.kindNews}</td>
-											<td>{item._doc.categories}</td>
+											<td>{item.nameKind}</td>
+											<td>{item.nameCategory}</td>
 											<td>
 												{item.price.toLocaleString("it-IT", {
 																	style: "currency",
