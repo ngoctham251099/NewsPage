@@ -39,6 +39,21 @@ const listStatus = [
  
 ];
 
+const listSearch = [
+	{
+		id: "1",
+		value: "Tiêu đề"
+	},
+	{
+		id: "2",
+		value: "Tác giả"
+	},
+	{
+		id: "3",
+		value: "Loại tin"
+	},
+]
+
 export default function ListEditor(props) {
 	let history = useHistory();
 	let stt = 1;
@@ -130,19 +145,7 @@ export default function ListEditor(props) {
 		<div>
 			{/* <Prompt message="Are you sure you want to leave?" /> : null} */}
 			<div className="card-header">
-				<h3>Danh sách bài viết</h3>
-					<select
-						style={{
-							marginLeft: "12px",
-							height: "30px",
-							borderRadius: "12px",
-						}}
-						onChange={(e) => setCurrentFilter(e.target.value)}
-					>
-						{listStatus.map((status) => (
-							<option value={status.id}>{status.value}</option>
-						))}
-					</select>
+				<h3>Danh sách bài viết yếu cầu chỉnh sửa</h3>
 
 					<input style={{
 						padding: ".6rem",
@@ -152,6 +155,28 @@ export default function ListEditor(props) {
 						borderRadius: "12px",
 					}} type="text" placeholder="Tìm kiếm bài viết theo tiêu đề" onChange={(e) => {setSearch(e.target.value)}}></input>
 					
+				{/* <div className="search" style={{
+					textAlign:"center"
+				}}>
+					<input style={{
+						padding: ".6rem",
+						outline: "none",
+						border: "1px solid",
+						width: "600px"
+					}} type="text" placeholder="Tìm kiếm" onChange={(e) => {setSearch(e.target.value)}}></input>
+					<select
+							style={{
+								height: "30px",
+								height: "41px",
+								outline: "none"
+							}}
+							onChange={(e) => setCurrentFilter(e.target.value)}
+						>
+							{listSearch.map((status) => (
+								<option value={status.id}>{status.value}</option>
+							))}
+					</select>
+				</div> */}
 				<button
 					onClick={() => {
 						history.push(`${props.path}/news/add`);
@@ -187,8 +212,7 @@ export default function ListEditor(props) {
 								}
 							})
 							.filter((item) => {
-								if (currentFilter === "-1") return item;
-								return item.status === currentFilter;
+								return item.status === "5";
 							})
 							.map((item, index) => (
 								<tr key={index}>
@@ -238,12 +262,6 @@ export default function ListEditor(props) {
 											"Không thể  xóa"
 										)}
 									</td>
-
-									{/* <td>
-										<span onClick={() => Remove(item._id)}>
-											<BsTrashFill/>
-										</span>
-										</td> */}
 								</tr>
 								
 							))}

@@ -3,6 +3,7 @@ import {  Route, Switch, useHistory } from "react-router-dom";
 import "../Design/css/admin.css";
 import "../Design/js/jsAdmin";
 import ListNewsWriter from "../news/list_writer";
+import ListNewsEditRequired from "../news/list-news-edit-required-ctv";
 import ViewNews from "../news/ViewsNews";
 import CreateNews from "../news/create";
 import axios from "axios";
@@ -65,6 +66,18 @@ export default function Admin(props) {
 
             <li>
               <div
+                className={`nav__link a ${
+                  props.location.pathname === "/news-writer/list-news-edit-required" && "active"
+                }`}
+                onClick={() => history.push("/news-writer/list-news-edit-required")}
+              >
+                <span class="las la-clipboard-list"></span>
+                <span>Danh sách yêu cầu chỉnh sửa</span>
+              </div>
+            </li>
+
+            <li>
+              <div
                 onClick={onClickInfoUser}
                 className={`nav__link a ${
                   props.location.pathname === "/news-writer/info-user/:id" && "active"
@@ -104,15 +117,6 @@ export default function Admin(props) {
 
         <main>
           <div class="cards">
-            {/* <div class="card-single">
-                        <div>
-                            <h1>$6k</h1>
-                            <span>Income</span>
-                        </div>
-                        <div>
-                            <span class="las la-google-wallet"></span>
-                        </div>
-                    </div> */}
           </div>
 
           <div class="recent-grid">
@@ -139,6 +143,9 @@ export default function Admin(props) {
                     )}
                   ></Route>
 
+                  <Route path={`${path}/list-news-edit-required`}>
+                    <ListNewsEditRequired path={path} role={CTV_ROLE} />
+                  </Route>
 
                   <Route path={`${path}/news/add`}>
                     <CreateNews path={path} role={CTV_ROLE} />

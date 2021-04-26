@@ -47,9 +47,6 @@ import ListCategories from "../categories/listCategories";
 import CreateCategories from "../categories/Create";
 import UpdateCategories from "../categories/update-categories";
 
-import ListImages from "../images_data/list-images";
-import CreateImages from "../images_data/create-images";
-import UpdateImages from "../images_data/update-images";
 
 import ListKindImages from "../kindOfImages/ListKindOfImages";
 import CreateKindImages from "../kindOfImages/CreateKindOfImages";
@@ -187,16 +184,7 @@ export default function Admin(props) {
                 <span>
                   <GoChecklist />
                 </span>
-                <span>Quản lý loại tin</span>
-              </div>
-            </li>
-
-            <li>
-              <div onClick={() => history.push(`${path}/list-images`)} className={`nav__link a ${props.location.pathname === `${path}/list-images` && 'active'}`}>
-                <span>
-                  <AiOutlinePicture />
-                </span>
-                <span>Quản lý hình ảnh</span>
+                <span>Đơn giá và chất lượng tin</span>
               </div>
             </li>
 
@@ -350,26 +338,7 @@ export default function Admin(props) {
                   <Route path={`${path}/news`}>
                     <ListNews path={path}></ListNews>
                   </Route>
-
-                  <Route
-                    path={`${path}/list-images/edit/:id`}
-                    key={props.location.key}
-                    render={({ match }) => (
-                      <UpdateImages
-                        key={props.location.key}
-                        match={match}
-                        path={path}
-                      />
-                    )}
-                  ></Route>
-                  <Route path={`${path}/list-images/add`}>
-                    <CreateImages></CreateImages>
-                  </Route>
-
-                  <Route path={`${path}/list-images`}>
-                    <ListImages path={path}></ListImages>
-                  </Route>
-
+                  
                   <Route
                     path={`${path}/list-kind-images/edit/:id`}
                     key={props.location.key}

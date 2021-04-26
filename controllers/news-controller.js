@@ -4,7 +4,6 @@ const fs = require("fs");
 const Users = require("../data/models/Users");
 const Kinds = require("../data/models/KindOfNews");
 const PriceOfKind = require("../data/models/priceOfKind");
-const Images = require("../data/models/images");
 const Categories = require("../data/models/Categories")
 const moment = require("moment");
 const Departments = require("../data/models/Department")
@@ -67,9 +66,10 @@ module.exports.create = async (req, res, next) => {
 		idPriceOfKind,
 		isPostedFanpage = false
 	} = req.body;
+	const user = await Users.findOne({ _id: idUser });
 	const { avatar } = req.files;
 	console.log(idKindImages)
-	if(!title || !summary || !avatar){
+	if(!title || !summary || !avatar || !categories){
 		return res.json({message: "Không được phép để trống"})
 	}
 
@@ -77,12 +77,16 @@ module.exports.create = async (req, res, next) => {
 		return res.json({message: "Điền nội dung tin, bài"})
 	}
 
+	if(user.power !== "1"){
+		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
+			return res.json({message: "Loại tin và chất lượng không được để trống"})
+		}
+	}
+
 	const userBTV = await Users.findOne({_id: idUser});
 
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
 	const urlAvatar = avatar[0].filename;
-	let user = await Users.findOne({ _id: idUser });
-	const addImages = new Images();
 	const addnews = new News();
 	addnews.title = title;
 	addnews.content = content;
@@ -113,21 +117,12 @@ module.exports.create = async (req, res, next) => {
 		addnews._idTBBT = idUser;
 		addnews.date_TBBT = Date.now();
 	}
-	console.log(listImagesOnContent.length)
 	if(listImagesOnContent.length > 0){
 		addnews.idPriceOfImages = idKindImages;
 	}
 	
 	addnews.isPostedFanpage = isPostedFanpage;
 	await addnews.save();
-
-	if(listImagesOnContent.length > 0){
-		addImages.idNews = addnews._id;
-		addImages.name = listImagesOnContent;
-		addImages.idPriceKind = idKindImages;
-	} 
-
-	await addImages.save();
 	return res.json({ message: "Thêm thành công" });
 };
 
@@ -167,6 +162,12 @@ module.exports.updateNews = async (req, res) => {
 	} = req.body;
 	const { avatar = "" } = req.files;
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
+
+	if(user.power !== "1"){
+		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
+			return res.json({message: "Loại tin và chất lượng không được để trống"})
+		}
+	}
 
 	const urlAvatar = avatar ? avatar[0].filename : null;
 	if (avatar == null) return res.json({ message: "Chọn hình" });
