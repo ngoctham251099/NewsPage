@@ -30,7 +30,7 @@ import ListPriceOfKind from "../kindOfNews/list-price-of-kind";
 import ListNewAuthor from "../news/list-new-author";
 import CreateUser from "../users/create-user";
 import UpdateUser from "../users/update-user";
-import NewsFromMonth from "../news/newsFromMonth";
+import NewsFromMonth from "../news/list-new-author 2";
 import NewsFromYear from "../news/newsFromYear";
 import ViewNews from "../news/ViewsNews";
 import UpdateDepartment from "../departments/update-department";

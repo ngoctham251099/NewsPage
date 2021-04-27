@@ -530,10 +530,24 @@ module.exports.statisticalByAuthor = async (req, res) => {
 		
 };
 
-module.exports.statisticalByAuthor2 = async (req, res) => {
-	const { month } = req.body;
+function getLookup () {
+	Users.aggregate([
+		{
+			$lookup: {
+				from: "News",
+				localField: "_id",
+				foreignField: "IdUser",
+				as: "arrayNews"
+			}
+		}
+	])
+}
 
-	const startOfMonth = moment(month)
+module.exports.statisticalByAuthor2 = async (req, res) => {
+	//const { month } = req.body;
+	const month = "2021-04-23 11:59"
+
+	const startOfMonth = moment("2021-04-22 11:59")
 		.clone()
 		.startOf("month")
 		.format("YYYY-MM-DD hh:mm");
@@ -541,6 +555,8 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		.clone()
 		.endOf("month")
 		.format("YYYY-MM-DD hh:mm");
+		console.log("2021-04-22 11:59")
+		console.log(endOfMonth)
 
 		const allNews = await News.find({
 			date_submitted: {
@@ -548,49 +564,47 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 				$lt: new Date(endOfMonth),
 			},
 		});
-
-
-
-	const getKindPrice = await Kinds.find({});
+	const getKind = await Kinds.find({});
+	const getPriceKind = await PriceOfKind.find({})
 	const getUser = await Users.find(); 
-	const getNewsByKind = (
-		getUser.forEach((item) => {
-			console.log(item.email)
-			getKindPrice.forEach(val => {
-				console.log(val.name)
-				const d = allNews.find(x => {
-					return  x.kindNews === String(val._id) && x.IdUser === String(item._id);
-				})
-				console.log("\n\n\n" + d)
-			})
+
+	Users.aggregate([
+		{ "$lookup": {
+			"let": { "userObjId": { "$toString": "$_id" }},
+			"from": "News",
+			"pipeline": [
+				{ 
+					"$match":
+					{"date_submitted": {
+						"$gte": new Date(startOfMonth),
+						"$lte": new Date(endOfMonth)
+					},
+					"status": "4",
+					 "$expr": { "$eq": [ "$IdUser", "$$userObjId" ],}}
+				},
+				{
+					"$group": {"_id": {"IdUser": "$IdUser", "kindNews": "$kindNews"}, "count" : {"$sum": 1}}
+				}
+			],
+			"as": "userDetails"
+		}}
+	]).exec((e, d)=> {
+
+		const kind = d.map(item => {
+			return {
+				...item,
+				newsArr: 
+				item.userDetails.map(val => {
+				return {
+					...val,
+					nameKind : getKind.find(x => String(x._id) === val._id.kindNews).name,
+					price: getPriceKind.find(x => x.idKind === val._id.kindNews).price
+				}
+			})}
 		})
-	)
+		res.json({News: kind})
+	})
 
-	// const getNewsByKind =(
-	// 	getUser.map((item) => {
-	// 		return item
-	// 	})
-	// )
-	
-	console.log(getNewsByKind)
-
-	// const getKindPrice = await Kinds.find({});
-	// const getNewsByKind = Promise.all(
-	// 	getKindPrice.map(async (item) => {
-	// 		return await News.aggregate([
-	// 			{
-	// 				$match: {
-	// 					kindNews: item,
-	// 					date_submitted: {
-	// 						$gte: new Date(startOfMonth),
-	// 						$lt: new Date(endOfMonth),
-	// 					},
-	// 				},
-	// 			},
-	// 			{ $group: { _id: "$IdUser", count: { $sum: 1 } } },
-	// 		]);
-	// 	})
-	// )
 };
 
 module.exports.statisticalAuthor = async (req, res) => {
