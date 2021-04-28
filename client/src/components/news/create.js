@@ -212,68 +212,6 @@ function CreateNews(props) {
           {/* <input type="text" placeholder="title" onChange={onChangeTitle} ></input> */}
         </div>
 
-        {role !== CTV_ROLE && (
-          <div className="item">
-            <label className="title-news">Thể loại</label>
-            <Select2
-              value={kind}
-              list={listKind}
-              onChange={onChangeKind}
-            ></Select2  >
-          </div>
-        )}
-      
-        {role !== CTV_ROLE && (
-          <div>
-            <label>Chất lượng loại tin</label>
-            <FormControl className={classes.margin}>
-              <Select
-                id="demo-customized-select"
-                value={idPriceOfKind}
-                onChange={onChangePrice}
-                input={<BootstrapInput />}
-              >
-              {priceOfKind.filter(item => {
-              if(kind == -1){ 
-                return '';
-              }
-                return String(item.idKind) === kind;
-              }).map(item => {
-                return (<MenuItem value={item._id}>{item.name}</MenuItem>)
-              })}
-              </Select>
-            </FormControl>
-        </div>
-        )}
-
-        {role !== CTV_ROLE && (
-          <div className="item">
-            <label className="title-news">Loại ảnh<p style={{color: "#ff0000"}}> (nếu loại tin là Bài viết tin/ Ảnh)</p></label>
-            <Select2
-              value={kindImages}
-              list={kindOfImages}
-              onChange={onChangeKindImages}
-            ></Select2>
-          </div>
-        )}
-
-        {
-          
-        }
-
-        {role !== CTV_ROLE && (
-          <div className="item">
-            <label className="title-news">Chủ đề tin</label>
-            <Select2
-              value={category}
-              list={categoryList}
-              onChange={(e) => {
-                setCategory(e.target.value)
-              }}
-            ></Select2>
-          </div>
-        )}
-
         <div className="item">
           <label>Tóm tắt</label>
           <Input onChange={onChangeSummary}></Input>
@@ -298,7 +236,65 @@ function CreateNews(props) {
             }}
           />
         </div>
-        {role === TRUONG_BAN_BT_ROLE && (
+
+        {role !== CTV_ROLE && (
+          <div className="item">
+            <label className="title-news">Thể loại</label>
+            <Select2
+              value={kind}
+              list={listKind}
+              onChange={onChangeKind}
+            ></Select2  >
+          </div>
+        )}
+        {kind !== undefined ? (
+          role !== CTV_ROLE && (
+            <div>
+              <label>Chất lượng loại tin</label>
+              <FormControl className={classes.margin}>
+                <Select
+                  id="demo-customized-select"
+                  value={idPriceOfKind}
+                  onChange={onChangePrice}
+                  input={<BootstrapInput />}
+                >
+                {priceOfKind.filter(item => {
+                if(kind == -1){ 
+                  return '';
+                }
+                  return String(item.idKind) === kind;
+                }).map(item => {
+                  return (<MenuItem value={item._id}>{item.name}</MenuItem>)
+                })}
+                </Select>
+              </FormControl>
+            </div>
+          )
+        ): null}
+
+        {role !== CTV_ROLE && (
+          <div className="item">
+            <label className="title-news">Loại ảnh<p style={{color: "#ff0000"}}> (nếu loại tin là Bài viết tin/ Ảnh)</p></label>
+            <Select2
+              value={kindImages}
+              list={kindOfImages}
+              onChange={onChangeKindImages}
+            ></Select2>
+          </div>
+        )}
+
+          <div className="item">
+            <label className="title-news">Chuyên mục đăng</label>
+            <Select2
+              value={category}
+              list={categoryList}
+              onChange={(e) => {
+                setCategory(e.target.value)
+              }}
+            ></Select2>
+          </div>
+
+        {role !== CTV_ROLE && (
           <div className="item">
             <label className="title-news">Ghi chú</label>
             <Input onChange={(event) => setNote(event.target.value)}></Input>

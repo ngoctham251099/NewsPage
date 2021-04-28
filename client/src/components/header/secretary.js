@@ -13,6 +13,7 @@ import ListNewsApproved from "../news/list-news-approved";
 import ListNewsWaitingForApproval from "../news/listNewsWaitingForApproval";
 import ListDepartment from "../departments/ListDepartment";
 import ListKinds from "../kindOfNews/list-kind";
+import ListNewsPost from "../news/list-news-post-TK.";
 import CreateUser from "../users/create-user";
 import NewsFromMonth from "../news/newsFromMonth";
 import NewsFromYear from "../news/newsFromYear";
@@ -67,6 +68,10 @@ export default function Admin(props) {
     history.push(`${path}/list-writer`);
   };
 
+  const onClickListNewsPost = () => {
+    history.push(`${path}/list-news-post`);
+  };
+
   const onClickInfoUser = () => {
     const id = localStorage.getItem('idUser')
     history.push(`${path}/info-user/${id}`);
@@ -98,18 +103,18 @@ export default function Admin(props) {
               </div>
             </li>
 
-            {/* <li>
+            <li>
               <div
-                onClick={clickCategories}
+                onClick={onClickListNewsPost}
                 className={`${
-                  props.location.pathname === "/secretary/list-news" &&
+                  props.location.pathname === "/secretary/list-news-post" &&
                   "active"
                 }`}
               >
                 <span className="las la-users"></span>
-                <span>Chuyên mục đăng</span>
+                <span>Danh sách tin đã đăng</span>
               </div>
-            </li> */}
+            </li>
 
             <li>
               <div onClick={onClickListWriter}
@@ -230,6 +235,11 @@ export default function Admin(props) {
                   <Route path={`${path}/departments/add`}>
                     <CreateDepartment></CreateDepartment>
                   </Route>
+
+                  <Route path={`${path}/list-news-post`}>
+                    <ListNewsPost path={path}/>
+                  </Route>
+
                   <Route path={`${path}/departments`}>
                     <ListDepartment path={path}></ListDepartment>
                   </Route>

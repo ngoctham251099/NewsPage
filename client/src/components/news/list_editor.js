@@ -51,17 +51,9 @@ export default function ListEditor(props) {
 
   return (
     <div>
-      {/* <Prompt message="Are you sure you want to leave?" /> : null} */}
 
       <div className="card-header">
-        <h3>Danh Sách Bài Viết</h3>
-        {/* <button
-          onClick={() => {
-            history.push(`${props.path}/news/add`);
-          }}
-        >
-          Thêm
-        </button> */}
+        <h3>Danh Sách Bài Viết Chờ Duyệt</h3>
       </div>
       <div className="card-body">
         <div className="table-responsive">
@@ -92,9 +84,6 @@ export default function ListEditor(props) {
                   <td>
                     <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
                   </td>
-                  {/* <td>
-                    <Select list={listKind} onChange={onChangeKind}></Select>
-                  </td> */}
                   <td>
                     <Link to={`${props.path}/news/views/${item._id}`}>
                       Views
@@ -107,18 +96,6 @@ export default function ListEditor(props) {
                           Chỉnh sửa và phê duyệt
                       </Link>
                     </span>
-                    {/* <span style={{ padding: "5px" }}>
-                      <FaCheckCircle
-                        color="#6DD400"
-                        onClick={() => updateStatus(item._id)}
-                      />
-                    </span>
-                    <span style={{ padding: "5px" }}>
-                      <FaExclamationTriangle
-                        color="#FF302F"
-                        onClick={() => updateRefuse(item._id)}
-                    </span>
-                      /> */}
                   </td>
                 </tr>
               ))}

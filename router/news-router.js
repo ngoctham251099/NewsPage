@@ -65,7 +65,7 @@ router.post('/statisticalFromDateToDate', newsController.statisticalFromDateToDa
 
 router.post('/statisticalByAuthor', newsController.statisticalByAuthor )
 router.get('/statisticalByAuthor2', newsController.statisticalByAuthor2 )
-
+router.get('/statisticalByDepartment', newsController.statisticalByDepartment)
 
 //Thống kê từ tháng này đến tháng kia
 router.post('/statisticalFromMonthtoMonth', newsController.statisticalFromMonthtoMonth)
@@ -101,8 +101,6 @@ router.post('/news-edit-content/:id/:idNews', newsController.updateStatusEditCon
 //danh sach yeu cau chinh sua cua bien tap vien
 router.get('/list-news-request-edit', newsController.listNewsRequestEdit)
 
-
-router.get('/list-catetory', newsController.listCategory)
 router.post('/list-news-by-caterogy/:id', newsController.listNewsbyCategory)
 router.post('/list-news-by-id/:id', newsController.NewsById )
 

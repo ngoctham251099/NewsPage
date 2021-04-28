@@ -1,5 +1,4 @@
-const Kinds = require('../data/models/kindOfImages');
-const Images = require('../data/models/images');
+const Kinds = require('../data/models/kindOfImages')
 
 //show list kind
 module.exports.showsKindOfImages = (req, res, next) => {

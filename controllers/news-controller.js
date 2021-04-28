@@ -4,12 +4,12 @@ const fs = require("fs");
 const Users = require("../data/models/Users");
 const Kinds = require("../data/models/KindOfNews");
 const PriceOfKind = require("../data/models/priceOfKind");
-const Images = require("../data/models/images");
 const Categories = require("../data/models/Categories")
 const moment = require("moment");
 const Departments = require("../data/models/Department")
 const PriceImages = require("../data/models/kindOfImages");
 const { getUnixTime } = require("date-fns");
+const { isArray } = require("util");
 
 const calculatePrice = async (idPrice) => {
  
@@ -67,9 +67,10 @@ module.exports.create = async (req, res, next) => {
 		idPriceOfKind,
 		isPostedFanpage = false
 	} = req.body;
+	const user = await Users.findOne({ _id: idUser });
 	const { avatar } = req.files;
 	console.log(idKindImages)
-	if(!title || !summary || !avatar){
+	if(!title || !summary || !avatar || !categories){
 		return res.json({message: "Không được phép để trống"})
 	}
 
@@ -77,12 +78,16 @@ module.exports.create = async (req, res, next) => {
 		return res.json({message: "Điền nội dung tin, bài"})
 	}
 
+	if(user.power !== "1"){
+		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
+			return res.json({message: "Loại tin và chất lượng không được để trống"})
+		}
+	}
+
 	const userBTV = await Users.findOne({_id: idUser});
 
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
 	const urlAvatar = avatar[0].filename;
-	let user = await Users.findOne({ _id: idUser });
-	const addImages = new Images();
 	const addnews = new News();
 	addnews.title = title;
 	addnews.content = content;
@@ -95,6 +100,7 @@ module.exports.create = async (req, res, next) => {
 	addnews.kindNews = kindNews;
 	addnews.categories = categories;
 	addnews.idPriceOfKind = idPriceOfKind;
+	addnews.idDepartment = user.department;
 	addnews.note = note;
 	addnews.summary = summary;
 	addnews.thumbnail = `data:${avatar[0].mimetype};base64,` + base64Encode(avatar[0].path)
@@ -113,21 +119,12 @@ module.exports.create = async (req, res, next) => {
 		addnews._idTBBT = idUser;
 		addnews.date_TBBT = Date.now();
 	}
-	console.log(listImagesOnContent.length)
 	if(listImagesOnContent.length > 0){
 		addnews.idPriceOfImages = idKindImages;
 	}
 	
 	addnews.isPostedFanpage = isPostedFanpage;
 	await addnews.save();
-
-	if(listImagesOnContent.length > 0){
-		addImages.idNews = addnews._id;
-		addImages.name = listImagesOnContent;
-		addImages.idPriceKind = idKindImages;
-	} 
-
-	await addImages.save();
 	return res.json({ message: "Thêm thành công" });
 };
 
@@ -167,6 +164,12 @@ module.exports.updateNews = async (req, res) => {
 	} = req.body;
 	const { avatar = "" } = req.files;
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
+
+	if(user.power !== "1"){
+		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
+			return res.json({message: "Loại tin và chất lượng không được để trống"})
+		}
+	}
 
 	const urlAvatar = avatar ? avatar[0].filename : null;
 	if (avatar == null) return res.json({ message: "Chọn hình" });
@@ -485,6 +488,8 @@ module.exports.statisticalFromDateToDate = async (req, res) => {
 //thong ke theo noi dung bai viet
 module.exports.statisticalByAuthor = async (req, res) => {
 	const { month } = req.body;
+	const getKind = await Kinds.find();
+	const getCategory = await Categories.find();
 	const dataPrice =  await PriceOfKind.find();
 	const dataPriceImages = await PriceImages.find();
 	const startOfMonth = moment(month)
@@ -514,7 +519,9 @@ module.exports.statisticalByAuthor = async (req, res) => {
 			return {
 				...newsData,
 				price: dataPrice.find(item => String(item._id) === newsData.idPriceOfKind).price,
-				priceImages: price ? newsData.images.length * Number(price.price) : null
+				priceImages: price ? Number(price.price) : null,
+				nameKind: newsData.kindNews ? getKind.find( val => String(val._id) === newsData.kindNews ).name : null,
+				nameCategory: newsData.categories ? getCategory.find(val => String(val._id) === newsData.categories).name : null
 			};
 		})
 
@@ -524,6 +531,19 @@ module.exports.statisticalByAuthor = async (req, res) => {
 	}
 		
 };
+
+function getLookup () {
+	Users.aggregate([
+		{
+			$lookup: {
+				from: "News",
+				localField: "_id",
+				foreignField: "IdUser",
+				as: "arrayNews"
+			}
+		}
+	])
+}
 
 module.exports.statisticalByAuthor2 = async (req, res) => {
 	const { month } = req.body;
@@ -536,6 +556,8 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		.clone()
 		.endOf("month")
 		.format("YYYY-MM-DD hh:mm");
+		console.log("2021-04-22 11:59")
+		console.log(endOfMonth)
 
 		const allNews = await News.find({
 			date_submitted: {
@@ -543,49 +565,106 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 				$lt: new Date(endOfMonth),
 			},
 		});
-
-
-
-	const getKindPrice = await Kinds.find({});
+	const getKind = await Kinds.find({});
+	const getPriceKind = await PriceOfKind.find({})
 	const getUser = await Users.find(); 
-	const getNewsByKind = (
-		getUser.forEach((item) => {
-			console.log(item.email)
-			getKindPrice.forEach(val => {
-				console.log(val.name)
-				const d = allNews.find(x => {
-					return  x.kindNews === String(val._id) && x.IdUser === String(item._id);
-				})
-				console.log("\n\n\n" + d)
-			})
+
+	Users.aggregate([
+		{ "$lookup": {
+			"let": { "userObjId": { "$toString": "$_id" }},
+			"from": "News",
+			"pipeline": [
+				{ 
+					"$match":
+					{"date_submitted": {
+						"$gte": new Date(startOfMonth),
+						"$lte": new Date(endOfMonth)
+					},
+					"status": "4",
+					 "$expr": { "$eq": [ "$IdUser", "$$userObjId" ],}}
+				},
+				{
+					"$group": {"_id": {"IdUser": "$IdUser", "kindNews": "$kindNews"}, "count" : {"$sum": 1}}
+				}
+			],
+			"as": "userDetails"
+		}}
+	]).exec((e, d)=> {
+
+		const kind = d.map(item => {
+			return {
+				...item,
+				newsArr: 
+				item.userDetails.map(val => {
+				return {
+					...val,
+					nameKind : getKind.find(x => String(x._id) === val._id.kindNews).name,
+					price: getPriceKind.find(x => x.idKind === val._id.kindNews).price
+				}
+			})}
 		})
-	)
+		res.json({News: kind})
+	})
 
-	// const getNewsByKind =(
-	// 	getUser.map((item) => {
-	// 		return item
-	// 	})
-	// )
-	
-	console.log(getNewsByKind)
+};
 
-	// const getKindPrice = await Kinds.find({});
-	// const getNewsByKind = Promise.all(
-	// 	getKindPrice.map(async (item) => {
-	// 		return await News.aggregate([
-	// 			{
-	// 				$match: {
-	// 					kindNews: item,
-	// 					date_submitted: {
-	// 						$gte: new Date(startOfMonth),
-	// 						$lt: new Date(endOfMonth),
-	// 					},
-	// 				},
-	// 			},
-	// 			{ $group: { _id: "$IdUser", count: { $sum: 1 } } },
-	// 		]);
-	// 	})
-	// )
+module.exports.statisticalByDepartment = async (req, res) => {
+	//const { month } = req.body;
+	const month = "2021-04-23 11:59"
+
+	const startOfMonth = moment("2021-04-22 11:59")
+		.clone()
+		.startOf("month")
+		.format("YYYY-MM-DD hh:mm");
+	const endOfMonth = moment(month)
+		.clone()
+		.endOf("month")
+		.format("YYYY-MM-DD hh:mm");
+		console.log("2021-04-22 11:59")
+		console.log(endOfMonth)
+
+	const getKind = await Kinds.find({});
+	const getPriceKind = await PriceOfKind.find({})
+
+	Departments.aggregate([
+		{ "$lookup": {
+			"let": { "userObjId": { "$toString": "$_id" }},
+			"from": "News",
+			"pipeline": [
+				{ 
+					"$match":
+					{"date_submitted": {
+						"$gte": new Date(startOfMonth),
+						"$lte": new Date(endOfMonth)
+					},
+					"status": "4",
+					 "$expr": { "$eq": [ "$idDepartment", "$$userObjId" ],}}
+				},
+				{
+					"$group": {"_id": {"IdUser": "$IdUser", "kindNews": "$kindNews"}, "count" : {"$sum": 1}}
+				}
+			],
+			"as": "userDetails"
+		}}
+	]).exec((e, d)=> {
+		console.log(d)
+		
+		const kind = d.map(item => {
+			let count=0;
+			console.log(item.userDetails.length)
+			return {
+				...item,
+				sumNews: item.userDetails.length <=0 ? item.userDetails.forEach(element => {
+					
+					count = count + element.count
+					console.log(count)
+					return count;
+				}) : null
+			}
+		})
+		res.json({News: kind})
+	})
+
 };
 
 module.exports.statisticalAuthor = async (req, res) => {
@@ -699,11 +778,6 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 												.where('idBTV').equals(id)
 												.where('status').equals("6");
 	return res.json({listNews: data})
-}
-
-module.exports.listCategory = async (req, res) => {
-	const data = await Categories.find();
-	return res.json({category: data})
 }
 
 module.exports.listNewsbyCategory = async(req, res) => {

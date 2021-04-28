@@ -9,7 +9,7 @@ class RenderReport extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.month !== this.state.month) {
 			const fetchData = async () => {
-				const res = await axios.post("/api-news/statisticalByAuthor", {
+				const res = await axios.get("/api-news/statisticalByAuthor2", {
 					month: this.state.month || moment(),
 				});
 				this.setState({ ...this.state, news: res.data.News });
@@ -21,17 +21,20 @@ class RenderReport extends React.Component {
 
 	componentDidMount() {
 		const fetchData = async () => {
-			const res = await axios.post("/api-news/statisticalByAuthor", {
+			const res = await axios.get("/api-news/statisticalByAuthor2", {
 				month: this.state.month || moment(),
 			});
 			this.setState({ ...this.state, news: res.data.News });
 		};
 
-		console.log(this.state.news)
+		const fetchKind = async () => {
+			const res = await axios.get("/api-kind");
+			this.setState({ ...this.state, kind: res.data.kind });
+		};
 
+		fetchKind();
 		fetchData();
 	}
-
 	
 	state = {
 		month: moment(),
@@ -40,7 +43,7 @@ class RenderReport extends React.Component {
 	
 
 	render() {
-		const { month, news } = this.state;
+		const { month, news, kind } = this.state;
 		let count1 = this.state.news.reduce((a, b) => {
 				return a + Number(b.price)
 		},0)
@@ -79,46 +82,43 @@ class RenderReport extends React.Component {
 					>
 						<thead>
 							<tr>
-								<th>STT</th>
-								<th>Tiêu đề</th>
-								<th>Ngày viết</th>
-								<th>Bút danh</th>
-								<th>Thể loại</th>
-								<th>Chuyên mục</th>
-								<th>Tiền tin</th>
-								<th>Tiền ảnh</th>
-								{/* <th>Ghi chú</th> */}
+								<th rowspan="2">STT</th>
+								<th rowspan="2">Họ tên</th>
+								{kind ? kind.map((item, index) => (
+									<th key={index} colSpan="2">{item.name}</th>
+								) ): null}
+								<th>Ghi chú</th>
+							</tr>
+							<tr>
+								{kind ? kind.map(val => {
+									return (
+										<>
+											<td>sl</td>
+											<td>Tiền</td>
+										</>
+									)
+								}):null}
 							</tr>
 						</thead>
 						<tbody>
 							{news
 								? news.map((item, index) => (
-										<tr key={item._doc._id}>
+										<tr key={index}>
 											<td>{index + 1}</td>
-											<td>{item._doc.title}</td>
-											<td>
-												<Moment format="DD/MM/YYYY">
-													{item._doc.date_submitted}
-												</Moment>
-											</td>
-											<td>{item._doc.author}</td>
-
-											<td>{item.nameKind}</td>
-											<td>{item.nameCategory}</td>
-											<td>
-												{item.price.toLocaleString("it-IT", {
-																	style: "currency",
-																	currency: "VND",
-																})}
-											</td>
-
-											<td>{item.priceImages}</td>
-														</tr>
-													))
-												: null}
+											<td>{item.username}</td>
+											{item.newsArr.map(val => (
+												<>
+													<td>{val.count}</td>
+													<td>{val.price}</td>
+												</>
+											))}
+											
+										</tr>
+									))
+							: null}
 											
 								<tr>
-									<td colSpan="6">Tổng tiền: </td>
+									<td colSpan="9">Tổng tiền: </td>
 									<td>{count1}</td>
 									<td>{count2}</td>
 								</tr>

@@ -17,6 +17,8 @@ const listSearch = [
 
 ]
 
+
+
 export default function ListEditor(props) {
 	let history = useHistory();
 	let stt = 1;
@@ -29,9 +31,9 @@ export default function ListEditor(props) {
 	useEffect(async () => {
 		const id = localStorage.getItem("idUser");
 		console.log(id)
-		const res = await axios.get(`/api-news/list-tbbt-approved?id=${id}`);
-		if (res.data.listNews) {
-			setNews(res.data.listNews);
+		const res = await axios.get(`/api-news`);
+		if (res.data.page) {
+			setNews(res.data.page);
 		} else {
 			toast.error(res.data.message);
 		}
@@ -42,26 +44,6 @@ export default function ListEditor(props) {
 			setListKind(res.data.kind);
 		});
 	}, []);
-
-	const getStatus = (power) => {
-		switch (power) {
-			case "1":
-				return "Chờ phê duyệt";
-			// break;
-			case "2":
-				return "Đã xác nhận";
-			// break;
-			case "3":
-				return "Đã phê duyệt";
-			// break;
-			case "4":
-				return "Từ chối";
-			// break;
-			default:
-				break;
-		}
-	};
-
 
 	return (
 	<div>
@@ -112,37 +94,40 @@ export default function ListEditor(props) {
 							}
 							
 							if(currentFilter === "1"){
-								if(val.title.toLowerCase().includes(search.toLowerCase())){
+								if(val.doc.title.toLowerCase().includes(search.toLowerCase())){
 									return val;
 								}
 							}
 
 							if(currentFilter === "2"){
-								if(val.author.toLowerCase().includes(search.toLowerCase())){
+								if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
 									return val;
 								}
 							}
 							
 						})
+            .filter((item) => {
+              return item._doc.status === "4";
+            })
 						.map((item) => (
-							<tr key={item._id}>
+							<tr key={item._doc._id}>
 								<td>{stt++}</td>
-								<td>{item.title}</td>
+								<td>{item._doc.title}</td>
 								<td>
 									<img
 										width={150}
-										src={`/api-news/viewFile/${item.avatar}`}
+										src={`/api-news/viewFile/${item._doc.avatar}`}
 									></img>
 								</td>
-								<td>{item.author}</td>
+								<td>{item._doc.author}</td>
 								<td>
-									<Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
+									<Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
 								</td>
 								<td>
-									<Moment format="DD/MM/YYYY">{item.date_TBBT}</Moment>
+									<Moment format="DD/MM/YYYY">{item._doc.date_TBBT}</Moment>
 								</td>
 								<td>
-									<Link to={`${props.path}/news/views/${item._id}`}>
+									<Link to={`${props.path}/news/views/${item._doc._id}`}>
 										Views
 									</Link>
 								</td>
