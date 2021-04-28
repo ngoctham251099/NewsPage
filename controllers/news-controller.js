@@ -9,6 +9,7 @@ const moment = require("moment");
 const Departments = require("../data/models/Department")
 const PriceImages = require("../data/models/kindOfImages");
 const { getUnixTime } = require("date-fns");
+const { isArray } = require("util");
 
 const calculatePrice = async (idPrice) => {
  
@@ -99,6 +100,7 @@ module.exports.create = async (req, res, next) => {
 	addnews.kindNews = kindNews;
 	addnews.categories = categories;
 	addnews.idPriceOfKind = idPriceOfKind;
+	addnews.idDepartment = user.department;
 	addnews.note = note;
 	addnews.summary = summary;
 	addnews.thumbnail = `data:${avatar[0].mimetype};base64,` + base64Encode(avatar[0].path)
@@ -544,10 +546,9 @@ function getLookup () {
 }
 
 module.exports.statisticalByAuthor2 = async (req, res) => {
-	//const { month } = req.body;
-	const month = "2021-04-23 11:59"
+	const { month } = req.body;
 
-	const startOfMonth = moment("2021-04-22 11:59")
+	const startOfMonth = moment(month)
 		.clone()
 		.startOf("month")
 		.format("YYYY-MM-DD hh:mm");
@@ -601,6 +602,65 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 					price: getPriceKind.find(x => x.idKind === val._id.kindNews).price
 				}
 			})}
+		})
+		res.json({News: kind})
+	})
+
+};
+
+module.exports.statisticalByDepartment = async (req, res) => {
+	//const { month } = req.body;
+	const month = "2021-04-23 11:59"
+
+	const startOfMonth = moment("2021-04-22 11:59")
+		.clone()
+		.startOf("month")
+		.format("YYYY-MM-DD hh:mm");
+	const endOfMonth = moment(month)
+		.clone()
+		.endOf("month")
+		.format("YYYY-MM-DD hh:mm");
+		console.log("2021-04-22 11:59")
+		console.log(endOfMonth)
+
+	const getKind = await Kinds.find({});
+	const getPriceKind = await PriceOfKind.find({})
+
+	Departments.aggregate([
+		{ "$lookup": {
+			"let": { "userObjId": { "$toString": "$_id" }},
+			"from": "News",
+			"pipeline": [
+				{ 
+					"$match":
+					{"date_submitted": {
+						"$gte": new Date(startOfMonth),
+						"$lte": new Date(endOfMonth)
+					},
+					"status": "4",
+					 "$expr": { "$eq": [ "$idDepartment", "$$userObjId" ],}}
+				},
+				{
+					"$group": {"_id": {"IdUser": "$IdUser", "kindNews": "$kindNews"}, "count" : {"$sum": 1}}
+				}
+			],
+			"as": "userDetails"
+		}}
+	]).exec((e, d)=> {
+		console.log(d)
+		
+		const kind = d.map(item => {
+			let count=0;
+			console.log(item.userDetails.length)
+			return {
+				...item,
+				sumNews: item.userDetails.length <=0 ? item.userDetails.forEach(element => {
+					
+					count = count + element.count
+					console.log(count)
+					return count;
+				}) : null
+			}
 		})
 		res.json({News: kind})
 	})

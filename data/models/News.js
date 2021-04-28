@@ -16,6 +16,7 @@ const newsSchema = new Schema({
     },
     kindNews: String,
     categories: String,
+    idDepartment: String,
     note: String,
     idBTV: String,
     idTBBT: String,
