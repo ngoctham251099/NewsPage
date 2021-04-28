@@ -23,7 +23,7 @@ module.exports.getUsers = async (req, res, next) => {
     if(item.idBTV){
     return {
       ...item,
-      nameDepartment: getDepartment.find( val => String(val._id) === item.department).name,
+      nameDepartment: getDepartment.find( val => String(val._id) === item.department).name || '',
       nameBTV: item.idBTV ? getBTV.find( val => String(val._id )== item.idBTV).username : '',
     }}else{
       return {
