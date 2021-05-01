@@ -4,7 +4,7 @@ const Users = require("../data/models/Users")
 
 //show list department
 module.exports.showsDepartments = (req, res, next) => {
-  Departments.find()
+  Departments.find().sort({name: 1})
     .then((department) => {
       res.send({ department: department });
     })

@@ -10,7 +10,7 @@ module.exports.showsKindOfNews = async (req, res, next) => {
   const data = price.map(item => {
     return {
       ...item,
-      nameKind: getKind.find(val => String(val._id) === item.idKind).name
+      nameKind: getKind.find(val => String(val._id) === item.idKind)?.name
     }
   })
   

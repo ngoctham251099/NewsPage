@@ -5,7 +5,7 @@ const News = require('../data/models/News');
 
 //show list kind
 module.exports.showsKindOfNews = (req, res, next) => {
-    Kinds.find()
+    Kinds.find().sort({name: 1})
     .then(kind => {
         res.send({kind: kind});
     })

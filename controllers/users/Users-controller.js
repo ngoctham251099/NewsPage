@@ -24,7 +24,7 @@ module.exports.getUsers = async (req, res, next) => {
     return {
       ...item,
       nameDepartment: getDepartment.find( val => String(val._id) === item.department)?.name,
-      nameBTV: item.idBTV ? getBTV.find( val => String(val._id )== item.idBTV).username : '',
+      nameBTV: getBTV.find( val => String(val._id )== item.idBTV)?.username,
     }}else{
       return {
         ...item,
@@ -401,11 +401,10 @@ module.exports.editUser = (req, res, next) => {
     .catch((err) => res.status(400).json({ err: err }));
 };
 
-module.exports.updateUser = (req, res, next) => {
-  const {id} = req.params.id;
+module.exports.updateUser = async (req, res, next) => {
+  const {id} = req.params;
   const {username, email, department, fullName, idBTV, power} = req.body;
-  const getBTV = Users.findOne({idBTV: id});
-  console.log(idBTV)
+  const getBTV = await Users.findOne({idBTV: id});
   if(power ==="4" && !idBTV) {
     return res.json({message: "Chọn người sơ duyệt bài viết"})
   }
@@ -413,21 +412,17 @@ module.exports.updateUser = (req, res, next) => {
   if(getBTV){
     return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
   }
-  Users.findById(id).then((user) => {
+  const user = await Users.findById(id)
+  console.log(user)
   user.username = username;
   user.email = email;
   user.department = department;
   user.power = power;
   user.fullName = fullName;
-  ser.idBTV = idBTV;
+  user.idBTV = idBTV;
 
-  user
-    .save()
-    .then(() => res.json({ message: "Cập nhật thành công" }))
-    .catch((err) => res.status(400).json("Err: " + err));
-  console.log(username, email, department, power);
-    // console.log(username, email)
-  });
+  await user.save()
+  return res.json({ message: "Cập nhật thành công" })
 };
 
 module.exports.findById = (req, res) => {
@@ -444,9 +439,3 @@ module.exports.findIdBTV = async (req, res) => {
   const data = Users.find({power : 3});
   return res.json({userBVT : data})
 }
-
-// //gửi mail từ chối
-// module.export.sendEmail = async (req, res) => {
-//   const {text} = req.body;
-  
-// }

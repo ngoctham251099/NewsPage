@@ -22,7 +22,7 @@ export default function Statiscal(props) {
       <div className="cards">
         <div className={`card-single ${props.currentPath === '/admin/statistical/author' && 'card-active'}`}>
           <div onClick={LinkDate}>
-            <h4>Thống kê theo tác giả</h4>
+            <h4>Thống kê theo bài viết</h4>
           </div>
           <div>
             <span className="las la-users"></span>
@@ -30,7 +30,7 @@ export default function Statiscal(props) {
         </div>
         <div onClick={LinkMonth} className={`card-single ${props.currentPath === '/admin/statistical/kind' && 'card-active'}`}>
           <div>
-            <h4>Thống kê theo loại tin</h4>
+            <h4>Thống kê theo tác giả</h4>
           </div>
           <div>
             <span className="las la-clipboard"></span>

@@ -9,10 +9,12 @@ class RenderReport extends React.Component {
 	componentDidUpdate(prevProps, prevState) {
 		if (prevState.month !== this.state.month) {
 			const fetchData = async () => {
-				const res = await axios.get("/api-news/statisticalByAuthor2", {
+				const res = await axios.post("/api-news/statisticalByAuthor2", {
 					month: this.state.month || moment(),
 				});
 				this.setState({ ...this.state, news: res.data.News });
+				this.setState({ ...this.state, sumBykind: res.data.sumBykind });
+				this.setState({ ...this.state, sumAll: res.data.sumAll });
 			};
 
 			fetchData();
@@ -21,37 +23,42 @@ class RenderReport extends React.Component {
 
 	componentDidMount() {
 		const fetchData = async () => {
-			const res = await axios.get("/api-news/statisticalByAuthor2", {
+			const res = await axios.post("/api-news/statisticalByAuthor2", {
 				month: this.state.month || moment(),
 			});
 			this.setState({ ...this.state, news: res.data.News });
+			this.setState({ ...this.state, sumBykind: res.data.sumByKind });
+			this.setState({ ...this.state, sumAll: res.data.sumAll });
 		};
+
 
 		const fetchKind = async () => {
 			const res = await axios.get("/api-kind");
 			this.setState({ ...this.state, kind: res.data.kind });
 		};
 
+		const fetchUser = async () => {
+			const res = await axios.get("/api-user");
+			this.setState({ ...this.state, user: res.data.user });
+		};
+		fetchUser();
 		fetchKind();
 		fetchData();
 	}
-	
+
 	state = {
 		month: moment(),
 		news: [],
+		kind:[],
+		user: [],
+		sumBykind: [],
+		sumAll: []
 	};
 	
 
 	render() {
-		const { month, news, kind } = this.state;
-		let count1 = this.state.news.reduce((a, b) => {
-				return a + Number(b.price)
-		},0)
-
-		let count2 = this.state.news.reduce((a, b) => {
-			return a + Number(b.priceImages)
-		},0)
-
+		const { month, news, kind, sumBykind, sumAll } = this.state;
+		console.log(this.state.sumBykind)
 		return (
 			<div className="card-body">
 				<div className="table-responsive">
@@ -87,7 +94,8 @@ class RenderReport extends React.Component {
 								{kind ? kind.map((item, index) => (
 									<th key={index} colSpan="2">{item.name}</th>
 								) ): null}
-								<th>Ghi chú</th>
+								<th rowSpan="2">Tổng tiền</th>
+								<th rowSpan="2">Ghi chú</th>
 							</tr>
 							<tr>
 								{kind ? kind.map(val => {
@@ -102,26 +110,46 @@ class RenderReport extends React.Component {
 						</thead>
 						<tbody>
 							{news
-								? news.map((item, index) => (
+								? news
+								.sort()
+								.map((item, index) => (
 										<tr key={index}>
 											<td>{index + 1}</td>
-											<td>{item.username}</td>
-											{item.newsArr.map(val => (
+											<td>{item.user.username} </td>
+											{item.news
+											.sort(function(a, b) {
+												var nameA = a.nameKind
+												var nameB = b.nameKind
+												if (nameA < nameB) {
+													return -1;
+												}
+												if (nameA > nameB) {
+													return 1;
+												}
+											
+												// name trùng nhau
+												return 0;
+											})
+											.map(val => (
 												<>
 													<td>{val.count}</td>
 													<td>{val.price}</td>
 												</>
 											))}
-											
+											<td>{item.sum}</td>
+											<td></td>
 										</tr>
 									))
 							: null}
-											
-								<tr>
-									<td colSpan="9">Tổng tiền: </td>
-									<td>{count1}</td>
-									<td>{count2}</td>
-								</tr>
+							<td colSpan="2">Tổng cộng</td>
+							{sumBykind ? sumBykind.map(item => (
+								<>
+									<td>{item.count}</td>
+									<td>{item.sumPrice}</td>
+								</>
+							)):null}
+							<td>{sumAll}</td>
+							<td></td>
 						</tbody>
 					</table>
 				</div>

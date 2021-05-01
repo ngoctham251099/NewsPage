@@ -64,8 +64,8 @@ router.post('/statisticalFromMonth', newsController.statisticalFromMonth )
 router.post('/statisticalFromDateToDate', newsController.statisticalFromDateToDate )
 
 router.post('/statisticalByAuthor', newsController.statisticalByAuthor )
-router.get('/statisticalByAuthor2', newsController.statisticalByAuthor2 )
-router.get('/statisticalByDepartment', newsController.statisticalByDepartment)
+router.post('/statisticalByAuthor2', newsController.statisticalByAuthor2 )
+router.post('/statisticalByDepartment', newsController.statisticalByDepartment)
 
 //Thống kê từ tháng này đến tháng kia
 router.post('/statisticalFromMonthtoMonth', newsController.statisticalFromMonthtoMonth)

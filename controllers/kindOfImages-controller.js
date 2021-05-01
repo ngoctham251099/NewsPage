@@ -2,7 +2,7 @@ const Kinds = require('../data/models/kindOfImages')
 
 //show list kind
 module.exports.showsKindOfImages = (req, res, next) => {
-		Kinds.find()
+		Kinds.find().sort({name: 1})
 		.then(kind => {
 				res.send({kind: kind});
 		})
