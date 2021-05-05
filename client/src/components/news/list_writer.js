@@ -71,7 +71,7 @@ export default function ListEditor(props) {
 			let count = data.length;
 			console.log(count)
 			if(count > 0){
-				toast.error(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
+				toast.warning(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
 			}
 		} 
 	}, []);

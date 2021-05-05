@@ -128,7 +128,6 @@ function ListNews(props) {
           </select>
           <input style={{
           padding: ".5rem",
-          borderRadius: "2rem",
           outline: "none",
           border: "1px solid",
           width: "600px",

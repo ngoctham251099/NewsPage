@@ -166,16 +166,23 @@ export default function EditNews(props) {
 		formData.append("status", setStatus(role));
 		formData.append("note", news.note);
 		formData.append("isPostedFanpage", news.isPostedFanpage);
+		formData.append('idUser', localStorage.getItem("idUser"))
 
 		if (news.categories) {
 			formData.append("categories", news.categories);
 		}
-
 		axios
 			.post(`/api-news/update/${props.match.params.id}`, formData)
 			.then((res) => {
-				const redirect = props.match.url.split("/");
-				history.push(`/${redirect[1] + "/" + redirect[2]}`);
+				if(res.data.message === "Cập nhật thành công"){
+					toast.success("Đã phê duyệt")
+					const redirect = props.match.url.split("/");
+					// history.push(`/${redirect[1] + "/" + redirect[2]}`);
+					history.goBack();
+				}else{
+					toast.error(res.data.message)
+				}
+				
 			});
 	};
 
@@ -235,7 +242,8 @@ export default function EditNews(props) {
 		if (res.data.message == "Yêu cầu chỉnh sửa thành công") {
 			toast.success(res.data.message);
 			const redirect = props.match.url.split("/");
-			history.push(`/${redirect[1] + "/" + redirect[2]}`);
+			//history.push(`/${redirect[1] + "/" + redirect[2]}`);
+			history.goBack();
 		} else {
 			toast.error(res.data.message);
 		}

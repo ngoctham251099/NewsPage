@@ -10,6 +10,7 @@ const userSchema = new Schema({
     email: {type: String,unique: true},
     department: {type: String,},
     power: {type: String},
+    phoneNumber: {type: String},
     idBTV: {type: String},
     resetPasswordToken: String,
     resetPasswordExpires: Date

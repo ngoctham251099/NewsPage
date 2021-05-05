@@ -58,7 +58,6 @@ export default function ListEditor(props) {
 	let history = useHistory();
 	let stt = 1;
 
-	const [, setListKind] = useState([]);
 	const [search, setSearch] = useState("");
 
 	const [news, setNews] = useState([]);
@@ -70,19 +69,7 @@ export default function ListEditor(props) {
 		});
 		if (res.data.arrNews) {
 			setNews(res.data.arrNews);
-			const data = await res.data.arrNews.filter( item => item.status === "5");
-			let count = data.length;
-			console.log(count)
-			if(count > 0){
-				toast.error(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
-			}
 		} 
-	}, []);
-
-	useEffect(() => {
-		axios.get("/api-kind").then((res) => {
-			setListKind(res.data.kind);
-		});
 	}, []);
 
 	useEffect(async()=>{

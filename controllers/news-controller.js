@@ -63,7 +63,6 @@ module.exports.create = async (req, res, next) => {
 		note,
 		idKindImages,
 		idPriceOfKind,
-		priceBBT,
 		isPostedFanpage = false
 	} = req.body;
 	const user = await Users.findOne({ _id: idUser });
@@ -77,7 +76,9 @@ module.exports.create = async (req, res, next) => {
 		return res.json({message: "Điền nội dung tin, bài"})
 	}
 
-	if(user.power !== "1"){
+	console.log(user.power)
+
+	if(user.power !== "4"){
 		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
 			return res.json({message: "Loại tin và chất lượng không được để trống"})
 		}
@@ -155,16 +156,19 @@ module.exports.updateNews = async (req, res) => {
 		content,
 		status,
 		kindNews,
+		idUser,
 		note,
 		power,
 		categories,
 		idPriceOfKind, 
 		isPostedFanpage = false
 	} = req.body;
+	console.log(idUser)
 	const { avatar = "" } = req.files;
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
-	const user = Users.findOne({_id: id})
-	if(user.power !== "1"){
+	const user = await Users.findOne({_id: idUser})
+	console.log(user)
+	if(user.power !== "4"){
 		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
 			return res.json({message: "Loại tin và chất lượng không được để trống"})
 		}
@@ -173,7 +177,8 @@ module.exports.updateNews = async (req, res) => {
 	const urlAvatar = avatar ? avatar[0].filename : null;
 	if (avatar == null) return res.json({ message: "Chọn hình" });
 
-	const news = await News.findById(id);
+	const news = await News.findOne({_id: id});
+	
 	if (news) {
 		news.title = title;
 		news.content = content;
@@ -206,10 +211,6 @@ module.exports.updateNews = async (req, res) => {
 		
 		news.isPostedFanpage = isPostedFanpage;
 		await news.save();
-
-		// const imagesUpdate = await Images.findOne({_id: news._id})
-		// imagesUpdate.name = listImagesOnContent;
-		// await imagesUpdate.save();
 		return res.json({ message: "Cập nhật thành công" });
 	}
 };
@@ -353,7 +354,7 @@ module.exports.updateStatusNoReview = async (req, res) => {
 		}
 
 		if(user.power === "2"){
-			editNews.isCheckedRefuseBTV = true;
+			editNews.isCheckedRefuseTBBT = true;
 		}
 		await editNews.save();
 		return res.json({ message: "Đã từ chối duyệt tin" });
@@ -638,7 +639,7 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 	let sumPrice = 0;
 	getKind.forEach(item => {
 		let sum = 0;
-		const getNews = allNews.filter( val => val.kindNews === String(item._id))
+		const getNews = allNews.filter( val => val.kindNews === String(item._id) && val.status === '4')
 		const price = getPriceKind.find(val => String(val.idKind) === String(item._id))?.price
 		console.log(price)
 		sum = getNews.length;
@@ -665,8 +666,7 @@ module.exports.statisticalByDepartment = async (req, res) => {
 		.clone()
 		.endOf("month")
 		.format("YYYY-MM-DD hh:mm");
-		console.log("2021-04-22 11:59")
-		console.log(endOfMonth)
+		console.log(startOfMonth)
 
 	const allNews = await News.find({
 		date_submitted: {
@@ -709,9 +709,9 @@ module.exports.statisticalByDepartment = async (req, res) => {
 		let sumAll = 0;
 		getKind.forEach(item => {
 			let sum = 0;
-			const getNews = allNews.filter( val => val.kindNews === String(item._id))
-			sum = getNews.length;
-			sumAll = sumAll + getNews.length;
+			const getNews1 = allNews.filter( val => val.kindNews === String(item._id) && val.status === '4')
+			sum = getNews1.length;
+			sumAll = sumAll + getNews1.length;
 			arrCount.push({count: sum})
 		})
 		console.log(sumAll)

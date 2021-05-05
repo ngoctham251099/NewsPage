@@ -15,6 +15,7 @@ export default function UpdateUser(props) {
     email: "",
     password: "",
     confirmPassword:'',
+    phoneNumber: ''
   });
 
   useEffect(() => {
@@ -31,6 +32,10 @@ export default function UpdateUser(props) {
 
   const onChangeName = (event) => {
     setUser({ ...user, username: event.target.value });
+  };
+
+  const onChangePhone = (event) => {
+    setUser({ ...user, phoneNumber: event.target.value });
   };
 
   const onChangeEmail = (event) => {
@@ -90,7 +95,7 @@ export default function UpdateUser(props) {
         <label>Số điện thoại</label>
         <Input
           type="text"
-          onChange={onChangeName}
+          onChange={onChangePhone}
           value={user.phoneNumber}
         ></Input>
         

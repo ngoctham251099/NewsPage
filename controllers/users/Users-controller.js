@@ -190,7 +190,7 @@ module.exports.editInfo = async (req, res, next) => {
 
 module.exports.updateInfoUser = async(req, res) => {
   const {id} = req.params;
-  const {username, email, password, confirmPassword, phone} = req.body;
+  const {username, email, password, confirmPassword, phoneNumber} = req.body;
 
   const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
   console.log(!emailRegexp.test(email))
@@ -208,7 +208,7 @@ module.exports.updateInfoUser = async(req, res) => {
   const user = await Users.findById(id);
 
   user.username = username;
-  user.phoneNumber = phone;
+  user.phoneNumber = phoneNumber;
   user.email = email;
   user.password = user.generateHash(password);
   if(password === confirmPassword){

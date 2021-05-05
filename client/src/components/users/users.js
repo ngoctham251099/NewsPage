@@ -73,6 +73,7 @@ const Remove = async (id) => {
                           <th className="username">Tên người dùng</th>
                           <th className="username">Bút danh</th>
                           <th className="email">Email</th>
+                          <th>Số điện thoại</th>
                           <th className="department">Phòng ban</th>
                           <th>Quản lý</th>
                           <th className="power">Quyền hạn</th>

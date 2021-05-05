@@ -25,6 +25,18 @@ export default function Admin(props) {
   };
 
   const [username, setUsername] = useState();
+  const [count, setCount] = useState();
+
+  useEffect(async () => {
+		const id = localStorage.getItem("idUser");
+		const res = await axios.get(`/api-news/view-writer?id=${id}`, {
+			id: localStorage.getItem("idUSer"),
+		});
+		if (res.data.arrNews) {
+			const data = await res.data.arrNews.filter( item => item.status === "5");
+			setCount(data.length)
+		} 
+	}, []);
 
   useEffect(() => {
     const id = localStorage.getItem("idUser");
@@ -72,16 +84,27 @@ export default function Admin(props) {
                 onClick={() => history.push("/news-writer/list-news-edit-required")}
               >
                 <span class="las la-clipboard-list"></span>
-                <span>Danh sách yêu cầu chỉnh sửa</span>
+                <span>DS yêu cầu chỉnh sửa </span>
+                {/* <b 
+                  style={{
+                    marginLeft:"10px",
+                    padding: "4px 10px",
+                    outline: "none",
+                    background: "#e74c3c",
+                    borderRadius: "50%",
+                    color: "#fff  "
+                  }}>
+                    {count > 0 ? count :0}
+                </b> */}
               </div>
             </li>
 
             <li>
               <div
-                onClick={onClickInfoUser}
                 className={`nav__link a ${
-                  props.location.pathname === "/news-writer/info-user/:id" && "active"
+                  props.location.pathname === `${path}/info-user/:id` && "active"
                 }`}
+                onClick={onClickInfoUser}
               >
                 <span><AiFillInfoCircle/></span>
                 <span>Thay đổi thông tin tài khoản</span>
