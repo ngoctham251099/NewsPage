@@ -14,6 +14,7 @@ const listSearch = [
 		id: "2",
 		value: "Tác giả"
 	},
+  
 
 ]
 
@@ -68,7 +69,7 @@ export default function ListEditor(props) {
     <div>
       
       <div className="card-header">
-        <h3>Danh Sách bài viết đã duyệt</h3>
+        <h3>Danh sách bài viết đã duyệt</h3>
         <div className="search" style={{
 					textAlign:"center"
 				}}>

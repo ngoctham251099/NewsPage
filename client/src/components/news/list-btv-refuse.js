@@ -49,7 +49,7 @@ export default function ListEditor(props) {
     <div>
 
       <div className="card-header">
-        <h3>Danh Sách bài viết đã duyệt</h3>
+        <h3>Danh Sách bài viết đã từ chối</h3>
       </div>
       <div className="card-body">
         <div className="table-responsive">

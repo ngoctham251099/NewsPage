@@ -63,6 +63,7 @@ module.exports.create = async (req, res, next) => {
 		note,
 		idKindImages,
 		idPriceOfKind,
+		priceBBT,
 		isPostedFanpage = false
 	} = req.body;
 	const user = await Users.findOne({ _id: idUser });
@@ -260,7 +261,7 @@ module.exports.viewsIdNews = async (req, res, next) => {
 //list danh sach cua nguoi viet de in ra. view theo nguoi dung
 module.exports.viewsWriter = async (req, res, next) => {
 	const { id } = req.query;
-	const arrNews = await News.find({ IdUser: id });
+	const arrNews = await News.find({ IdUser: id }).sort({date_submitted: -1});
 	if (arrNews) {
 		return res.json({ arrNews: arrNews });
 	} else {
@@ -273,7 +274,7 @@ module.exports.viewsDepartment = async (req, res) => {
 	const { id } = req.query;
 	const user = await Users.findOne({ _id: id });
 	if (user.power == "3") {
-		const listNews = await News.find({ status: "1" });
+		const listNews = await News.find({ status: "1" }).sort({date_submitted: -1});
 		return res.json({ listNews: listNews });
 	} else {
 		return res.json({ message: "Không được phép xem" });
@@ -290,7 +291,7 @@ module.exports.viewsDepartmentPresident = async (req, res) => {
 	//	const {power} = req.query;
 	const user = await Users.findOne({ _id: id });
 	if (user.power == "2") {
-		const listNews = await News.find({ status: "2" });
+		const listNews = await News.find({ status: "2" }).sort({date_submitted: -1});
 		console.log(listNews)
 		const data = listNews.map(item => {
 			return {

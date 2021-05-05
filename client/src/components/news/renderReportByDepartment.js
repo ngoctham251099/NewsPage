@@ -62,7 +62,7 @@ class RenderReport extends React.Component {
 							alignItems: "center",
 						}}
 					>
-						Thống kê bài viết theo tác giả{" "}
+						Thống kê bài viết theo phòng ban{" "}
 						<span style={{ marginLeft: 12 }}>
 							<MuiPickersUtilsProvider utils={DateFnsUtils}>
 								<DatePicker

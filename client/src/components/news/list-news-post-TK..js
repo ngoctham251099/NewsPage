@@ -14,6 +14,10 @@ const listSearch = [
 		id: "2",
 		value: "Tác giả"
 	},
+	{
+		id: "3",
+		value: "Loại tin"
+	},
 
 ]
 
@@ -48,7 +52,7 @@ export default function ListEditor(props) {
 	return (
 	<div>
 		<div className="card-header">
-			<h3>Danh Sách bài viết đã duyệt</h3>
+			<h3>Danh Sách bài viết đã đăng</h3>
 			<div className="search" style={{
 					textAlign:"center"
 				}}>
@@ -101,6 +105,11 @@ export default function ListEditor(props) {
 
 							if(currentFilter === "2"){
 								if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+									return val;
+								}
+							}
+							if(currentFilter === "3"){
+								if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
 									return val;
 								}
 							}

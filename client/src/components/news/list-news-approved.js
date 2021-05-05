@@ -46,10 +46,6 @@ function ListNews(props) {
           return (t.author == elem.author) === index;
         });
       });
-      console.log(list);
-
-      // list = list.filter((elem, index, self) => self.findIndex(
-      //     (t) => {return (t.x === elem.x && t.y === elem.y)}) === index)
     };
     countNews();
   }, []);

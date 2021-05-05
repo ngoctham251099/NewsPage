@@ -39,6 +39,21 @@ const listStatus = [
  
 ];
 
+const listSearch = [
+	{
+		id: "1",
+		value: "Tiêu đề"
+	},
+	{
+		id: "2",
+		value: "Tác giả"
+	},
+	{
+		id: "3",
+		value: "Loại tin"
+	},
+]
+
 export default function ListEditor(props) {
 	let history = useHistory();
 	let stt = 1;
@@ -48,6 +63,7 @@ export default function ListEditor(props) {
 
 	const [news, setNews] = useState([]);
 	const [message, setMessage] = useState();
+	const [currentFilter1, setCurrentFilter1] = useState("1");
 	useEffect(async () => {
 		const id = localStorage.getItem("idUser");
 		const res = await axios.get(`/api-news/view-writer?id=${id}`, {
@@ -144,13 +160,28 @@ export default function ListEditor(props) {
 						))}
 					</select>
 
+					<div className="search" style={{
+					textAlign:"center"
+				}}>
 					<input style={{
 						padding: ".6rem",
 						outline: "none",
 						border: "1px solid",
-						width: "600px",
-						borderRadius: "12px",
-					}} type="text" placeholder="Tìm kiếm bài viết theo tiêu đề" onChange={(e) => {setSearch(e.target.value)}}></input>
+						width: "600px"
+					}} type="text" placeholder="Tìm kiếm" onChange={(e) => {setSearch(e.target.value)}}></input>
+					<select
+							style={{
+								height: "30px",
+								height: "41px",
+								outline: "none"
+							}}
+							onChange={(e) => {console.log(e.target.value); setCurrentFilter(e.target.value)}}
+						>
+							{listSearch.map((status) => (
+								<option value={status.id}>{status.value}</option>
+							))}
+					</select>
+				</div>
 					
 				<button
 					onClick={() => {
@@ -179,12 +210,29 @@ export default function ListEditor(props) {
 						</thead>
 						<tbody>
 							{news
-							.filter((val) => {
+							.filter(val => {
 								if(search == ""){
 									return val;
-								}else if(val.title.toLowerCase().includes(search.toLowerCase())){
-									return val;
 								}
+								
+								if(currentFilter1 === "1"){
+									if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
+										return val;
+									}
+								}
+
+								if(currentFilter1 === "2"){
+									if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+										return val;
+									}
+								}
+
+								if(currentFilter1 === "3"){
+									if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
+										return val;
+									}
+								}
+								
 							})
 							.filter((item) => {
 								if (currentFilter === "-1") return item;

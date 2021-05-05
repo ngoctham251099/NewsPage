@@ -152,9 +152,7 @@ function CreateNews(props) {
 
   const onChangeAvarta = (e) => {
     e.preventDefault();
-    console.log(e.target.files[0]);
     setAvatar(e.target.files[0]);
-    //  console.log(res.data.fileNameInServer)
   };
 
   const classes1 = useStyles1();
@@ -193,7 +191,8 @@ function CreateNews(props) {
     axios.post("/api-news/create", formData).then((res) => {
       if(res.data.message == "Thêm thành công"){
         toast.success(res.data.message);
-        history.push(`${props.path}/news`);
+        // history.push(`${props.path}/news`);
+        history.goBack();
       }else{
         toast.error(res.data.message)
       }
