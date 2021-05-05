@@ -48,10 +48,6 @@ const listSearch = [
 		id: "2",
 		value: "Tác giả"
 	},
-	{
-		id: "3",
-		value: "Loại tin"
-	},
 ]
 
 export default function ListEditor(props) {
@@ -216,19 +212,13 @@ export default function ListEditor(props) {
 								}
 								
 								if(currentFilter1 === "1"){
-									if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
+									if(val.title.toLowerCase().includes(search.toLowerCase())){
 										return val;
 									}
 								}
 
 								if(currentFilter1 === "2"){
-									if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
-										return val;
-									}
-								}
-
-								if(currentFilter1 === "3"){
-									if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
+									if(val.author.toLowerCase().includes(search.toLowerCase())){
 										return val;
 									}
 								}

@@ -98,7 +98,7 @@ export default function ListEditor(props) {
 							}
 							
 							if(currentFilter === "1"){
-								if(val.doc.title.toLowerCase().includes(search.toLowerCase())){
+								if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
 									return val;
 								}
 							}

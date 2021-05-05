@@ -3,10 +3,24 @@ import axios from "axios";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
 
+const listSearch = [
+	{
+		id: "1",
+		value: "Tiêu đề"
+	},
+	{
+		id: "2",
+		value: "Tác giả"
+	},
+
+]
+
 function ListNews(props) {
   const [news, setNews] = useState([]);
   const [images, setImages] = useState();
   const [count, setCount] = useState();
+  const [search, setSearch] = useState("");
+  const [currentFilter, setCurrentFilter] = useState("1");
   let stt = 1;
   let d = 0;
   useEffect(() => {
@@ -53,6 +67,28 @@ function ListNews(props) {
     <div>
       <div className="card-header">
         <h3>Danh sách tin chờ đăng</h3>
+        <div className="search" style={{
+					textAlign:"center"
+				}}>
+					<input style={{
+						padding: ".6rem",
+						outline: "none",
+						border: "1px solid",
+						width: "600px"
+					}} type="text" placeholder="Tìm kiếm" onChange={(e) => {setSearch(e.target.value)}}></input>
+					<select
+							style={{
+								height: "30px",
+								height: "41px",
+								outline: "none"
+							}}
+							onChange={(e) => {console.log(e.target.value); setCurrentFilter(e.target.value)}}
+						>
+							{listSearch.map((status) => (
+								<option value={status.id}>{status.value}</option>
+							))}
+					</select>
+				</div>  
       </div>
       <div className="card-body">
         <div className="table-responsive">
@@ -73,7 +109,26 @@ function ListNews(props) {
             <tbody>
                 {console.log(news)}
               {news.length
-                ? news.map((item) => (
+                ? news
+                .filter(val => {
+                  if(search == ""){
+                    return val;
+                  }
+                  
+                  if(currentFilter === "1"){
+                    if(val.title.toLowerCase().includes(search.toLowerCase())){
+                      return val;
+                    }
+                  }
+    
+                  if(currentFilter === "2"){
+                    if(val.author.toLowerCase().includes(search.toLowerCase())){
+                      return val;
+                    }
+                  }
+                  
+                })
+                .map((item) => (
                     <tr key={item._id}>
                       <td>{stt++}</td>
                       <td>{item.title}</td>

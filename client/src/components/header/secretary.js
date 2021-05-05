@@ -15,7 +15,8 @@ import ListDepartment from "../departments/ListDepartment";
 import ListKinds from "../kindOfNews/list-kind";
 import ListNewsPost from "../news/list-news-post-TK.";
 import CreateUser from "../users/create-user";
-import NewsFromMonth from "../news/newsFromMonth";
+import ReportNews from "../news/list-new-author";
+import NewsFromMonth from "../news/list-new-author 2";
 import NewsFromYear from "../news/newsFromYear";
 import ViewNews from "../news/ViewsNews";
 import UpdateDepartment from "../departments/update-department";
@@ -207,7 +208,9 @@ export default function Admin(props) {
                       />
                     )}
                   ></Route>
-
+                  <Route path={`${path}/statistical/author`}>
+                    <ReportNews path={`${path}/statistical/author`}></ReportNews>
+                  </Route>
                   <Route path={`${path}/statistical/kind`}>
                     <NewsFromMonth path={`${path}/statistical/kind`}></NewsFromMonth>
                   </Route>
@@ -318,7 +321,7 @@ export default function Admin(props) {
                     <ListWriter  path={path} />
                   </Route> 
 
-                  <Route path={`${path}`} component={ListNewsApproved}>
+                  <Route exact path={`${path}`} component={ListNewsApproved}>
                     <ListNewsApproved path={path} />
                   </Route>
                   
