@@ -130,7 +130,6 @@ export default function ListEditor(props) {
 
 	return (
 		<div>
-			{/* <Prompt message="Are you sure you want to leave?" /> : null} */}
 			<div className="card-header">
 				<h3>Danh sách bài viết yếu cầu chỉnh sửa</h3>
 
@@ -142,28 +141,6 @@ export default function ListEditor(props) {
 						borderRadius: "12px",
 					}} type="text" placeholder="Tìm kiếm bài viết theo tiêu đề" onChange={(e) => {setSearch(e.target.value)}}></input>
 					
-				{/* <div className="search" style={{
-					textAlign:"center"
-				}}>
-					<input style={{
-						padding: ".6rem",
-						outline: "none",
-						border: "1px solid",
-						width: "600px"
-					}} type="text" placeholder="Tìm kiếm" onChange={(e) => {setSearch(e.target.value)}}></input>
-					<select
-							style={{
-								height: "30px",
-								height: "41px",
-								outline: "none"
-							}}
-							onChange={(e) => setCurrentFilter(e.target.value)}
-						>
-							{listSearch.map((status) => (
-								<option value={status.id}>{status.value}</option>
-							))}
-					</select>
-				</div> */}
 				<button
 					onClick={() => {
 						history.push(`${props.path}/news/add`);
@@ -179,8 +156,9 @@ export default function ListEditor(props) {
 							<tr>
 								<th>STT</th>
 								<th>Tiêu đề</th>
-								<th>Thumbnail</th>
 								<th>Bút danh</th>
+								<th>Thể loại</th>
+								<th>Chuyên mục đăng</th>
 								<th>Ngày viết</th>
 								<th>Trạng thái</th>
 								<th>Ghi chú</th>
@@ -194,12 +172,12 @@ export default function ListEditor(props) {
 							.filter((val) => {
 								if(search == ""){
 									return val;
-								}else if(val.title.toLowerCase().includes(search.toLowerCase())){
+								}else if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
 									return val;
 								}
 							})
 							.filter((item) => {
-								return item.status === "5";
+								return item._doc.status === "5";
 							})
 							.map((item, index) => (
 								<tr key={index}>
@@ -207,32 +185,28 @@ export default function ListEditor(props) {
 									<td style={{
 												maxWidth: "180px",
 												overflowWrap: "break-word",
-											}}>{item.title}</td>
+											}}>{item._doc.title}</td>
+									<td>{item._doc.author}</td>
+									<td>{item.nameKind}</td>
+									<td>{item.nameCategories}</td>
 									<td>
-										<img
-											width={150}
-											src={`/api-news/viewFile/${item.avatar}`}
-										></img>
+										<Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
 									</td>
-									<td>{item.author}</td>
-									<td>
-										<Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
-									</td>
-									<td>{getStatus(item.status)}</td>
+									<td>{getStatus(item._doc.status)}</td>
 									<td style={{
 												maxWidth: "180px",
 												overflowWrap: "break-word",
 											}}>
-												{item.note}
+												{item._doc.note}
 									</td>
 									<td>
-										<Link to={`${props.path}/news/views/${item._id}`}>
+										<Link to={`${props.path}/news/views/${item._doc._id}`}>
 											Xem thử
 										</Link>
 									</td>
 									<td>
-										{(item.status === "1" || item.status === "5") ? (
-											<Link to={`${props.path}/news/${item._id}`}>
+										{(item._doc.status === "1" || item._doc.status === "5") ? (
+											<Link to={`${props.path}/news/${item._doc._id}`}>
 												<BsPencil />
 											</Link>
 										) : (
@@ -241,8 +215,8 @@ export default function ListEditor(props) {
 									</td>
 
 									<td>
-										{(item.status === "1" || item.status === "5") ? (
-											<span onClick={() => Remove(item._id)}>
+										{(item._doc.status === "1" || item._doc.status === "5") ? (
+											<span onClick={() => Remove(item._doc._id)}>
 											<BsTrashFill/>
 											</span>
 										) : (

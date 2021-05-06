@@ -293,16 +293,14 @@ export default function EditNews(props) {
 				</div>
 				)}
 
-				{role !== CTV_ROLE && (
 					<div className="item">
-						<label className="title-news">Chủ đề tin</label>
+						<label className="title-news">Chuyên mục đăng tin</label>
 						<Select2
 							value={news.categories}
 							list={categoryList}
 							onChange={(e) => setNews({ ...news, categories: e.target.value })}
 						></Select2>
 					</div>
-				)}
 
 				<div className="item">
 					<label>Thumbnail</label>

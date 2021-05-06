@@ -48,21 +48,21 @@ function ListNews(props) {
     }
   };
 
-  useEffect(() => {
-    const countNews = () => {
-      news.forEach((item) => {
-        d++;
-      });
-      setCount(d);
+  // useEffect(() => {
+  //   const countNews = () => {
+  //     news.forEach((item) => {
+  //       d++;
+  //     });
+  //     setCount(d);
 
-      let list = news.filter((elem, index, seft) => {
-        seft.findIndex((t) => {
-          return (t.author == elem.author) === index;
-        });
-      });
-    };
-    countNews();
-  }, []);
+  //     let list = news.filter((elem, index, seft) => {
+  //       seft.findIndex((t) => {
+  //         return (t.author == elem.author) === index;
+  //       });
+  //     });
+  //   };
+  //   countNews();
+  // }, []);
   return (
     <div>
       <div className="card-header">
@@ -97,18 +97,16 @@ function ListNews(props) {
               <tr>
                 <th>STT</th>
                 <th>Tiêu đề</th>
-                <th>Avatar</th>
                 <th>Bút danh</th>
+                <th>Thể loại</th>
+                <th>Chuyên mục đăng</th>
                 <th>Ngày viết</th>
-                <th>Trạng thái</th>
-                <th>Phòng ban</th>
                 <th>Xem thử</th>
                 <th>Hành động</th>
               </tr>
             </thead>
             <tbody>
-                {console.log(news)}
-              {news.length
+              {news
                 ? news
                 .filter(val => {
                   if(search == ""){
@@ -116,51 +114,41 @@ function ListNews(props) {
                   }
                   
                   if(currentFilter === "1"){
-                    if(val.title.toLowerCase().includes(search.toLowerCase())){
+                    if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
                       return val;
                     }
                   }
     
                   if(currentFilter === "2"){
-                    if(val.author.toLowerCase().includes(search.toLowerCase())){
+                    if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
                       return val;
                     }
                   }
                   
                 })
-                .map((item) => (
-                    <tr key={item._id}>
-                      <td>{stt++}</td>
-                      <td>{item.title}</td>
-                      <td>
-                        <img
-                          width={150}
-                          src={`/api-news/viewFile/${item.avatar}`}
-                        ></img>
-                      </td>
-                      <td>{item.author}</td>
+                .map((item, index) => (
+                    <tr key={index}>
+                      <td>{index + 1}</td>
+                      <td>{item._doc.title}</td>
+                      <td>{item._doc.author}</td>
+                      <td>{item.nameKind}</td>
+                      <td>{item.nameCategories}</td>
                       <td>
                         <Moment format="DD/MM/YYYY">
-                          {item.date_submitted}
+                          {item._doc.date_submitted}
                         </Moment>
                       </td>
-                      {/* <td>{item.images.map(element => (
-                                            <img width={400} src={`/api-news/viewFile/${element}`}></img>
-                                        ))}</td>					     */}
-                      <td>{getStatus(item.status)}</td>
-                      <td>{item.department}</td>
 
                       <td>
-                        <Link to={`${props.path}/news/views/${item._id}`}>
+                        <Link to={`${props.path}/news/views/${item._doc._id}`}>
                           Xem thử
                         </Link>
                       </td>
                       <td>
-                        <Link to={`${props.path}/news/${item._id}`}>
+                        <Link to={`${props.path}/news/${item._doc._id}`}>
                           Chỉnh sửa và đăng tin
                         </Link>
                       </td>
-                      {/* <td><Button onClick={()=>updateStatus(item._id)} title="Đăng tin"/></td> */}
                     </tr>
                   ))
                 : <tr><td colSpan="9" style={{paddingTop: 12}}>Không có tin nào chờ đăng</td></tr>}

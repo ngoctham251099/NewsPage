@@ -91,7 +91,6 @@ function ListNews(){
                             <tr>
                                 <th>STT</th>
                                 <th>Tiêu đề</th>
-                                <th>Avatar</th>
                                 <th>Bút danh</th>
                                 <th>Ngày viết</th>
                                 <th>Trạng thái</th>
@@ -104,7 +103,6 @@ function ListNews(){
                                 <tr key = {item._id}>
                                     <td>{stt++}</td>
                                     <td>{item.title}</td>
-                                    <td><img width={150} src={`/api-news/viewFile/${item.avatar}`}></img></td>
                                     <td>{item.author}</td>
                                     <td><Moment format="DD/MM/YYYY">{item.date_submitted}</Moment></td>
                                     {/* <td>{item.images.map(element => (

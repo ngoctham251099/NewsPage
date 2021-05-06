@@ -48,13 +48,16 @@ const listSearch = [
 		id: "2",
 		value: "Tác giả"
 	},
+	{
+		id: "3",
+		value: "Loại tin"
+	},
 ]
 
 export default function ListEditor(props) {
 	let history = useHistory();
 	let stt = 1;
 
-	const [, setListKind] = useState([]);
 	const [search, setSearch] = useState("");
 
 	const [news, setNews] = useState([]);
@@ -65,27 +68,17 @@ export default function ListEditor(props) {
 		const res = await axios.get(`/api-news/view-writer?id=${id}`, {
 			id: localStorage.getItem("idUSer"),
 		});
-		if (res.data.arrNews) {
+		setNews(res.data.arrNews);
+		if (res.data.arrNews.length > 0) {
+			
 			setNews(res.data.arrNews);
-			const data = await res.data.arrNews.filter( item => item.status === "5");
+			const data = await res.data.arrNews.filter( item => item._doc.status === "5");
 			let count = data.length;
-			console.log(count)
 			if(count > 0){
 				toast.warning(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
 			}
 		} 
 	}, []);
-
-	useEffect(() => {
-		axios.get("/api-kind").then((res) => {
-			setListKind(res.data.kind);
-		});
-	}, []);
-
-	useEffect(async()=>{
-		console.log(news)
-		
-	},'')
 
 	const getStatus = (power) => {
 		switch (power) {
@@ -140,7 +133,6 @@ export default function ListEditor(props) {
 
 	return (
 		<div>
-			{/* <Prompt message="Are you sure you want to leave?" /> : null} */}
 			<div className="card-header">
 				<h3>Danh sách bài viết</h3>
 					<select
@@ -171,7 +163,7 @@ export default function ListEditor(props) {
 								height: "41px",
 								outline: "none"
 							}}
-							onChange={(e) => {console.log(e.target.value); setCurrentFilter(e.target.value)}}
+							onChange={(e) => { setCurrentFilter1(e.target.value)}}
 						>
 							{listSearch.map((status) => (
 								<option value={status.id}>{status.value}</option>
@@ -194,10 +186,11 @@ export default function ListEditor(props) {
 							<tr>
 								<th>STT</th>
 								<th>Tiêu đề</th>
-								<th>Thumbnail</th>
 								<th>Bút danh</th>
 								<th>Ngày viết</th>
 								<th>Trạng thái</th>
+								<th>Loại tin</th>
+								<th>Chuyên mục đăng</th>
 								<th>Ghi chú</th>
 								<th>Xem</th>
 								<th>Sửa</th>
@@ -212,21 +205,30 @@ export default function ListEditor(props) {
 								}
 								
 								if(currentFilter1 === "1"){
-									if(val.title.toLowerCase().includes(search.toLowerCase())){
+									if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
 										return val;
 									}
 								}
 
 								if(currentFilter1 === "2"){
-									if(val.author.toLowerCase().includes(search.toLowerCase())){
+									if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
 										return val;
 									}
+								}
+
+								if(currentFilter1 === "3"){
+									if(val.nameKind){
+										if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
+											return val;
+										}
+									}
+									
 								}
 								
 							})
 							.filter((item) => {
 								if (currentFilter === "-1") return item;
-								return item.status === currentFilter;
+								return item._doc.status === currentFilter;
 							})
 							.map((item, index) => (
 								<tr key={index}>
@@ -234,32 +236,28 @@ export default function ListEditor(props) {
 									<td style={{
 												maxWidth: "180px",
 												overflowWrap: "break-word",
-											}}>{item.title}</td>
+											}}>{item._doc.title}</td>
+									<td>{item._doc.author}</td>
 									<td>
-										<img
-											width={150}
-											src={`/api-news/viewFile/${item.avatar}`}
-										></img>
+										<Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
 									</td>
-									<td>{item.author}</td>
-									<td>
-										<Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
-									</td>
-									<td>{getStatus(item.status)}</td>
+									<td>{getStatus(item._doc.status)}</td>
+									<td>{item.nameKind}</td>
+									<td>{item.nameCategories}</td>
 									<td style={{
 												maxWidth: "180px",
 												overflowWrap: "break-word",
 											}}>
-												{item.note}
+												{item._doc.note}
 									</td>
 									<td>
-										<Link to={`${props.path}/news/views/${item._id}`}>
+										<Link to={`${props.path}/news/views/${item._doc._id}`}>
 											Xem thử
 										</Link>
 									</td>
 									<td>
-										{(item.status === "1" || item.status === "5") ? (
-											<Link to={`${props.path}/news/${item._id}`}>
+										{(item._doc.status === "1" || item._doc.status === "5") ? (
+											<Link to={`${props.path}/news/${item._doc._id}`}>
 												<BsPencil />
 											</Link>
 										) : (
@@ -268,20 +266,14 @@ export default function ListEditor(props) {
 									</td>
 
 									<td>
-										{(item.status === "1" || item.status === "5") ? (
-											<span onClick={() => Remove(item._id)}>
+										{(item._doc.status === "1" || item._doc.status === "5") ? (
+											<span onClick={() => Remove(item._doc._id)}>
 											<BsTrashFill/>
 											</span>
 										) : (
 											"Không thể  xóa"
 										)}
 									</td>
-
-									{/* <td>
-										<span onClick={() => Remove(item._id)}>
-											<BsTrashFill/>
-										</span>
-										</td> */}
 								</tr>
 								
 							))}

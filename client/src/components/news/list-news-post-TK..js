@@ -83,8 +83,9 @@ export default function ListEditor(props) {
 						<tr>
 							<th>STT</th>
 							<th>Tiêu đề</th>
-							<th>Thumbnail</th>
 							<th>Bút danh</th>
+							<th>Thể loại</th>
+							<th>Chuyên mục đăng</th>
 							<th>Ngày viết</th>
 							<th>Ngày duyệt</th>
 							<th>Xem bài</th>
@@ -109,9 +110,10 @@ export default function ListEditor(props) {
 								}
 							}
 							if(currentFilter === "3"){
-								if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
-									return val;
-								}
+								if(val.nameKind)
+									if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
+										return val;
+									}
 							}
 							
 						})
@@ -122,13 +124,9 @@ export default function ListEditor(props) {
 							<tr key={item._doc._id}>
 								<td>{stt++}</td>
 								<td>{item._doc.title}</td>
-								<td>
-									<img
-										width={150}
-										src={`/api-news/viewFile/${item._doc.avatar}`}
-									></img>
-								</td>
 								<td>{item._doc.author}</td>
+								<td>{item.nameKind}</td>
+								<td>{item.nameCategories}</td>
 								<td>
 									<Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
 								</td>

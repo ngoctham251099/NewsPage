@@ -262,12 +262,17 @@ module.exports.viewsIdNews = async (req, res, next) => {
 //list danh sach cua nguoi viet de in ra. view theo nguoi dung
 module.exports.viewsWriter = async (req, res, next) => {
 	const { id } = req.query;
+	const kind = await Kinds.find();
+	const category = await Categories.find();
 	const arrNews = await News.find({ IdUser: id }).sort({date_submitted: -1});
-	if (arrNews) {
-		return res.json({ arrNews: arrNews });
-	} else {
-		return res.json({ error: "Không tìm thấy bài viết" });
-	}
+	const data = arrNews.map(item => {
+		return {
+			...item,
+			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+		}
+	})
+	return res.json({ arrNews: data });
 };
 
 //tim news cua tung truong phong de phe duyet va trang thai
@@ -289,7 +294,7 @@ module.exports.viewsDepartment = async (req, res) => {
 module.exports.viewsDepartmentPresident = async (req, res) => {
 	const { id } = req.query;
 	const getKinds = await Kinds.find();
-	//	const {power} = req.query;
+	const getCategory = await Categories.find();
 	const user = await Users.findOne({ _id: id });
 	if (user.power == "2") {
 		const listNews = await News.find({ status: "2" }).sort({date_submitted: -1});
@@ -297,7 +302,8 @@ module.exports.viewsDepartmentPresident = async (req, res) => {
 		const data = listNews.map(item => {
 			return {
 				...item,
-				nameKind: getKinds.find(val => String(val._id) === item.kindNews)?.name
+				nameKind: getKinds.find(val => String(val._id) === item.kindNews)?.name,
+				nameCategories: getCategory.find(val => String(val._id) === item.categories)?.name
 			}
 		})
 
@@ -739,11 +745,16 @@ module.exports.statisticalAuthor = async (req, res) => {
 //Danh sach tin da phe duyet
 module.exports.listNewsApproved = async (req, res) => {
 	const listNews = await News.find({ status: "3" });
-	if (!listNews) {
-		return res.json({ message: "Không có tin nào được duyệt" });
-	} else {
-		return res.json({ listNewsApproved: listNews });
-	}
+	const kind = await Kinds.find();
+	const category = await Categories.find();
+	const data = listNews.map(item => {
+		return {
+			...item,
+			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+		}
+	})
+		return res.json({ listNewsApproved: data });
 };
 
 //Danh sach tin da xac nhan
@@ -780,10 +791,20 @@ module.exports.listNewBTV = async (req, res) => {
 //Danh sach da duyet boi bien tap vien
 module.exports.listNewsBTV2 = async (req, res) => {
 	const {id} = req.query;
+	const kind = await Kinds.find();
+	const category = await Categories.find();
 
-	const data = await News.find()
+	const getNews = await News.find()
 										.where('isCheckedBTV').equals(true)
 										.where('idBTV').equals(id)
+	
+	const data = getNews.map (item => {
+		return {
+			...item,
+			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+		}
+	})
 
 	return res.json({listNews: data})
 }
@@ -792,23 +813,38 @@ module.exports.listNewsBTV2 = async (req, res) => {
 module.exports.listNewsTBBT = async (req, res) => {
 	const {id} = req.query;
 
-	console.log(id)
+	const kind = await Kinds.find();
+	const category = await Categories.find();
 
-	const data = await News.find()
+	const getNews = await News.find()
 													// .where('idBTV').equals(id)
 													.where('isCheckedTBBT').equals(true);
 
+	const data = getNews.map(item => {
+		return{
+			...item,
+			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+		}
+	})
 	return res.json({listNews: data})
 }
 
 //danh sach tu choi cua bbv
 module.exports.listBTVRefuse = async (req, res) => {
 	const {id} = req.query;
-
-	console.log(id);
-	const data = await News.find()
+	const kind = await Kinds.find();
+	const category = await Categories.find();
+	const getNews = await News.find()
 												.where('idBTV').equals(id)
 												.where('isCheckedRefuseBTV').equals(true);
+	const data = getNews.map(item => {
+		return{
+			...item,
+			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+		}
+	})
 	return res.json({listNews: data})
 }
 
@@ -816,9 +852,20 @@ module.exports.listBTVRefuse = async (req, res) => {
 module.exports.listTBBTRefuse = async (req, res) => {
 	const {id} = req.query;
 
-	console.log(id);
-	const data = await News.find()
+	const kind = await Kinds.find();
+	const category = await Categories.find(); 
+
+	const getNews = await News.find()
 												.where('isCheckedRefuseTBBT').equals(true);
+
+	const data = getNews.map(item => {
+		return{
+			...item,
+			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+		}
+	})
+												
 	return res.json({listNews: data})
 }
 
@@ -835,8 +882,8 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 
 module.exports.listNewsbyCategory = async(req, res) => {
 	const {id} = req.params;
-	const getKind = Kinds.find();
-	const getCategories = Categories.find();
+	const getKind = await Kinds.find();
+	const getCategories =await Categories.find();
 
 	const getNews = await News.find({categories: id});
 	const data = await getNews.map(item => {

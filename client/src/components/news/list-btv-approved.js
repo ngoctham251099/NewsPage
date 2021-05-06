@@ -100,8 +100,9 @@ export default function ListEditor(props) {
               <tr>
                 <th>STT</th>
                 <th>Tiêu đề</th>
-                <th>Thumbnail</th>
                 <th>Bút danh</th>
+                <th>Loaị tin</th>
+                <th>Chuyên mục đăng</th>
                 <th>Ngày viết</th>
                 <th>Ngày duyệt</th>
                 <th>Xem bài</th>
@@ -115,39 +116,35 @@ export default function ListEditor(props) {
 								}
                 
                 if(currentFilter === "1"){
-                  if(val.title.toLowerCase().includes(search.toLowerCase())){
+                  if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
                     return val;
                   }
                 }
 
                 if(currentFilter === "2"){
-                  if(val.author.toLowerCase().includes(search.toLowerCase())){
+                  if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
                     return val;
                   }
                 }
                 
               })
               .map((item) => (
-                <tr key={item._id}>
+                <tr key={item._doc._id}>
                   <td>{stt++}</td>
-                  <td>{item.title}</td>
+                  <td>{item._doc.title}</td>
+                  <td>{item._doc.author}</td>
+                  <td>{item.nameKind}</td>
+                  <td>{item.nameCategories}</td>
                   <td>
-                    <img
-                      width={150}
-                      src={`/api-news/viewFile/${item.avatar}`}
-                    ></img>
-                  </td>
-                  <td>{item.author}</td>
-                  <td>
-                    <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
+                    <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                   </td>
 
                   <td>
-                    <Moment format="DD/MM/YYYY">{item.date_BTV}</Moment>
+                    <Moment format="DD/MM/YYYY">{item._doc.date_BTV}</Moment>
                   </td>
 
                   <td>
-                    <Link to={`${props.path}/news/views/${item._id}`}>
+                    <Link to={`${props.path}/news/views/${item._doc._id}`}>
                       Views
                     </Link>
                   </td>

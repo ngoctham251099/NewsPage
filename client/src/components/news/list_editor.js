@@ -4,10 +4,29 @@ import { Link } from "react-router-dom";
 import Moment from "react-moment";
 import { toast } from "react-toastify";
 
+const listSearch = [
+	{
+		id: "1",
+		value: "Tiêu đề"
+	},
+	{
+		id: "2",
+		value: "Tác giả"
+	},
+	// {
+	// 	id: "3",
+	// 	value: "Loại tin"
+	// },
+
+]
+
+
 export default function ListEditor(props) {
   let stt = 1;
 
   const [listKind, setListKind] = useState([]);
+  const [currentFilter, setCurrentFilter] = useState("1");
+  const [search, setSearch] = useState("");
 
   const [news, setNews] = useState([]);
   useEffect(async () => {
@@ -54,6 +73,28 @@ export default function ListEditor(props) {
 
       <div className="card-header">
         <h3>Danh Sách Bài Viết Chờ Duyệt</h3>
+        <div className="search" style={{
+					textAlign:"center"
+				}}>
+					<input style={{
+						padding: ".6rem",
+						outline: "none",
+						border: "1px solid",
+						width: "600px"
+					}} type="text" placeholder="Tìm kiếm" onChange={(e) => {setSearch(e.target.value)}}></input>
+					<select
+							style={{
+								height: "30px",
+								height: "41px",
+								outline: "none"
+							}}
+							onChange={(e) => { setCurrentFilter(e.target.value)}}
+						>
+							{listSearch.map((status) => (
+								<option value={status.id}>{status.value}</option>
+							))}
+					</select>
+				</div>
       </div>
       <div className="card-body">
         <div className="table-responsive">
@@ -70,7 +111,31 @@ export default function ListEditor(props) {
               </tr>
             </thead>
             <tbody>
-              {news.map((item) => (
+              {news
+              .filter(val => {
+                if(search == ""){
+                  return val;
+                }
+                
+                if(currentFilter === "1"){
+                  if(val.title.toLowerCase().includes(search.toLowerCase())){
+                    return val;
+                  }
+                }
+  
+                if(currentFilter === "2"){
+                  if(val.author.toLowerCase().includes(search.toLowerCase())){
+                    return val;
+                  }
+                }
+                // if(currentFilter === "3"){
+                //   if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
+                //     return val;
+                //   }
+                // }
+                
+              })
+              .map((item) => (
                 <tr key={item._id}>
                   <td>{stt++}</td>
                   <td>{item.title}</td>
