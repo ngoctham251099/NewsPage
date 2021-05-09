@@ -111,16 +111,24 @@ class RenderReport extends React.Component {
 																	currency: "VND",
 																})}
 											</td>
-
-											<td>{item.priceImages}</td>
+											<td>{item.priceImages.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
 														</tr>
 													))
 												: null}
 											
 								<tr>
 									<td colSpan="6">Tổng tiền: </td>
-									<td>{count1}</td>
-									<td>{count2}</td>
+									<td>{count1.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
+									<td>{count2.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
 								</tr>
 						</tbody>
 					</table>

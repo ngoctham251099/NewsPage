@@ -37,8 +37,7 @@ export default function ListPriceOfKinds(props){
 							show_item_after_delete();
 
 					}else{
-						toast.error(res.data.message);
-							
+						toast.error(res.data.message);		
 					}
 				}
 			)
@@ -77,7 +76,10 @@ export default function ListPriceOfKinds(props){
 											{item.name}
 									</td>
 									<td>
-											{item.price}
+											{item.price.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}
 									</td>
 									<td>
 											<Link to={`${props.path}/list-kind-images/edit/${item._id}`}><BsPencil/></Link>

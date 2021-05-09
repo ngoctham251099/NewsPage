@@ -15,7 +15,8 @@ import { BAN_BT_ROLE } from "../../config/roles";
 import Page404 from "./page 404";
 import { AiOutlineOrderedList, AiFillInfoCircle, AiOutlineLogout } from "react-icons/ai";
 import user from "../images/user.png";
-import UpdateUser from "../users/update-info-user"
+import UpdateUser from "../users/update-info-user";
+import { toast } from "react-toastify";
 
 export default function Admin(props) {
   let path = "/editor";
@@ -32,11 +33,37 @@ export default function Admin(props) {
   useEffect(() => {
     const id = localStorage.getItem("idUser");
     axios.post(`/api-user/user-id/${id}`).then((res) => {
-      setUsername(res.data.News);
+      setUsername(res.data.user);
     });
   }, []);
 
-  let stt = 1;
+  // useEffect(async () => {
+	// 	const id = localStorage.getItem("idUser");
+	// 	const res = await axios.get(`/api-news/view-writer?id=${id}`, {
+	// 		id: localStorage.getItem("idUSer"),
+	// 	});
+	// }, []);
+
+  useEffect(async () => {
+    const id = localStorage.getItem("idUser");
+    console.log(id)
+    const res = await axios.get(`/api-news/list-news-request-edit?id=${id}`, {
+      id: localStorage.getItem("idUSer")
+    });
+    console.log(res.data.listNews)
+    if (res.data.listNews.length > 0) {
+      console.log(res.data.listNews)
+      const db = res.data.listNews;
+     const data = await db.filter( item => item.status === "6");
+			let count = data.length;
+			if(count > 0){
+				toast.warning(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
+			}
+    } else {
+      toast.error(res.data.message);
+    }
+  }, []);
+
   useEffect(() => {
     const linkColor = document.querySelectorAll(".nav__link");
     function colorLink() {
@@ -132,7 +159,7 @@ export default function Admin(props) {
                 <span >
                 <AiOutlineOrderedList />
                 </span>
-                <span>Bài viết yêu cầu  chỉnh sửa</span>
+                <span>Bài viết yêu cầu chỉnh sửa</span>
               </div>
             </li>
 

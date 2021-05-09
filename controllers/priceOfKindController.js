@@ -29,8 +29,12 @@ module.exports.getPriceOfKind = async (req, res, next) => {
 module.exports.createPriceKind = async (req, res, next) => {
   const { name, price, idKind } = req.body;
 
-  if (!name) {
+  if (!name || !idKind) {
     return res.json({ message: "Tên loại không được để trống" });
+  }
+
+  if(!Number(price)){
+    return res.json({message: "Đơn giá không đúng. Vui lòng nhập lại"})
   }
 
   const findKind = await PriceOfKind.findOne({ name: name });
@@ -38,31 +42,26 @@ module.exports.createPriceKind = async (req, res, next) => {
   if (findKind) {
     return res.json({ message: "Loại tin đã tồn tại" });
   }
-
   let addKind = new PriceOfKind();
   addKind.name = name;
   addKind.price = price;
   addKind.idKind = idKind;
 
-  const newKind = await addKind.save();
-  if (newKind) {
-    res.status(200).json({ message: `Thêm thành công!` });
-  } else {
-    (err) => {
-      res.status(400).send({ message: `Thêm không thành công` });
-    };
-  }
+  await addKind.save();
+  res.status(200).json({ message:`Thêm thành công!` });
 };
 
 //delete kind
 module.exports.deletePriceKind = async (req, res, next) => {
   const { id } = req.params;
 
-  const news = await News.findOne({ idPriceOfKind: id });
+  const cate = await PriceOfKind.findOne({_id: id});
+
+  const news = await News.findOne({ idPriceOfKind: cate._id });
 
   if (news) {
     return res.json({
-      message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xóa loại tin này.`,
+      message: `Đã có bài viết thuộc loại tin này`,
     });
   } else {
     await PriceOfKind.deleteOne({ _id: id });
@@ -71,27 +70,16 @@ module.exports.deletePriceKind = async (req, res, next) => {
 };
 
 //update kind
-module.exports.updateKindOfNews = (req, res, next) => {
+module.exports.updateKindOfNews = async (req, res, next) => {
   const { id } = req.params;
   let { name, price } = req.body;
-
-  News.findOne({ idPriceOfKind: id })
-  .then(
-    item => {
-      console.log('shdzz')
-      if(item){
-        return res.json({message: "Đã có bài viết thuộc loại tin này"})
-      }else{
-        PriceOfKind.findOne({ _id: id }).then((kind) => {
-          kind.name = name;
-          kind.price = price;
-          // kind.idKind = idKind;
-          kind.save();
-          return res.json({ message: "Đã update thành công" });
-        });
-      }
-    }
-  )
-
-  
+  const kind = await PriceOfKind.findOne({ _id: id })
+  const news =await News.findOne({idPriceOfKind : kind._id})
+  if(news){
+    return res.json({message: "Đã có bài viết thuộc đơn giá này"})
+  }
+  kind.name = name;
+  kind.price = price;
+  kind.save();
+  return res.json({ message: "Đã update thành công" });
 };

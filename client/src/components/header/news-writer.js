@@ -13,6 +13,7 @@ import { AiFillInfoCircle } from "react-icons/ai";
 import UpdateUser from "../users/update-info-user";
 import user from "../images/user.png";
 import Page404 from "./page 404";
+import { toast } from "react-toastify";
 
 export default function Admin(props) {
   const path = "/news-writer";
@@ -25,16 +26,37 @@ export default function Admin(props) {
   };
 
   const [username, setUsername] = useState();
-  const [count, setCount] = useState();
+  // const [count, setCount] = useState();
+
+  // useEffect(async () => {
+	// 	const id = localStorage.getItem("idUser");
+	// 	const res = await axios.get(`/api-news/view-writer?id=${id}`, {
+	// 		id: localStorage.getItem("idUSer"),
+	// 	});
+	// 	if (res.data.arrNews) {
+	// 		const data = await res.data.arrNews.filter( item => item.status === "5");
+	// 		// setCount(data.length)
+  //     let count = data.length;
+	// 		if(count > 0){
+	// 			toast.warning(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
+	// 		}
+	// 	} 
+	// }, []);
 
   useEffect(async () => {
 		const id = localStorage.getItem("idUser");
 		const res = await axios.get(`/api-news/view-writer?id=${id}`, {
 			id: localStorage.getItem("idUSer"),
 		});
-		if (res.data.arrNews) {
-			const data = await res.data.arrNews.filter( item => item.status === "5");
-			setCount(data.length)
+		// setNews(res.data.arrNews);
+		if (res.data.arrNews.length > 0) {
+			
+			// setNews(res.data.arrNews);
+			const data = await res.data.arrNews.filter( item => item._doc.status === "5");
+			let count = data.length;
+			if(count > 0){
+				toast.warning(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
+			}
 		} 
 	}, []);
 
@@ -85,24 +107,13 @@ export default function Admin(props) {
               >
                 <span class="las la-clipboard-list"></span>
                 <span>DS yêu cầu chỉnh sửa </span>
-                {/* <b 
-                  style={{
-                    marginLeft:"10px",
-                    padding: "4px 10px",
-                    outline: "none",
-                    background: "#e74c3c",
-                    borderRadius: "50%",
-                    color: "#fff  "
-                  }}>
-                    {count > 0 ? count :0}
-                </b> */}
               </div>
             </li>
 
             <li>
               <div
                 className={`nav__link a ${
-                  props.location.pathname === `${path}/info-user/:id` && "active"
+                  props.location.pathname === `${path}/info-user/${localStorage.getItem('idUser')}` && "active"
                 }`}
                 onClick={onClickInfoUser}
               >

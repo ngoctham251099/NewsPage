@@ -2,7 +2,6 @@ import React from "react";
 import { DatePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import DateFnsUtils from "@date-io/date-fns";
 import moment from "moment";
-import Moment from "react-moment";
 import axios from "axios";
 
 class RenderReport extends React.Component {
@@ -58,7 +57,6 @@ class RenderReport extends React.Component {
 
 	render() {
 		const { month, news, kind, sumBykind, sumAll } = this.state;
-		console.log(this.state.sumBykind)
 		return (
 			<div className="card-body">
 				<div className="table-responsive">
@@ -133,10 +131,16 @@ class RenderReport extends React.Component {
 											.map(val => (
 												<>
 													<td>{val.count}</td>
-													<td>{val.price}</td>
+													<td>{val.price.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
 												</>
 											))}
-											<td>{item.sum}</td>
+											<td>{item.sum.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
 											<td></td>
 										</tr>
 									))
@@ -145,10 +149,16 @@ class RenderReport extends React.Component {
 							{sumBykind ? sumBykind.map(item => (
 								<>
 									<td>{item.count}</td>
-									<td>{item.sumPrice}</td>
+									<td>{item.sumPrice.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
 								</>
 							)):null}
-							<td>{sumAll}</td>
+							<td>{sumAll.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}</td>
 							<td></td>
 						</tbody>
 					</table>

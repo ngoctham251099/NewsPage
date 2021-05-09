@@ -67,7 +67,8 @@ export default function UpdateUser(props) {
     email: "",
     power: "",
     fullName: "",
-    idBTV: ""
+    idBTV: "",
+    phoneNumber: ""
   }); 
 
   const [power, setPower] = useState([
@@ -114,6 +115,10 @@ export default function UpdateUser(props) {
     setUser({ ...user, fullName: event.target.value });
   };
 
+  const onChangePhoneNumber = (event) => {
+    setUser({ ...user, phoneNumber: event.target.value });
+  };
+
   const onChangeDepartment = (event) => {
     console.log(event.target.value);
     setUser({ ...user, department: event.target.value });
@@ -144,7 +149,8 @@ export default function UpdateUser(props) {
         department: department,
         power: power,
         fullName: fullName,
-        idBTV: user.idBTV
+        idBTV: user.idBTV,
+        phoneNumber: user.phoneNumber
       })
       .then((res) => {
         if(res.data.message =="Cập nhật thành công"){
@@ -183,6 +189,13 @@ export default function UpdateUser(props) {
           placeholder="Bút danh"
           onChange={onChangeFullName}
           value={user.fullName}
+        ></Input>
+
+        <label>Số điện thoại</label>
+        <Input
+          type="text"
+          onChange={onChangePhoneNumber}
+          value={user.phoneNumber}
         ></Input>
 
         <label>Phòng ban</label>

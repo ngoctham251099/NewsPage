@@ -33,6 +33,7 @@ export default function ListCategories(props){
       }
 
     let Remove = async (id) =>{
+      if(window.confirm("Bạn chắc chắn muốn xóa chuyện mục này")){
         const res = await axios.delete(`/api-categories/delete/${id}`)
         if(res.data.message == "Đã xóa thành công"){
           toast.success(res.data.message);
@@ -40,6 +41,7 @@ export default function ListCategories(props){
         }else{
           toast.error(res.data.message);
         }
+      }
         
     }
 

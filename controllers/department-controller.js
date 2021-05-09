@@ -32,10 +32,9 @@ module.exports.deleteDepartment = async (req, res, next) => {
   const { id } = req.params;
 
   const find = await Departments.findOne({ _id: id });
-  const news = await Users.findOne({ department: find.name });
+  const news = await Users.findOne({ department: find._id });
   console.log("news", news);
   if (news) {
-    console.log(news);
     return res.json({
       message: `Đã có người dùng thuộc phòng ban này.`,
     });
@@ -59,19 +58,11 @@ module.exports.updateDepartment = (req, res, next) => {
   let nameChange = req.body.nameChange;
   const { id } = req.params;
   Departments.findById(id).then((department) => {
-    News.findOne({ department: department.name }).then((response) => {
-      if (response) {
-        return res.json({
-          message: `Đã có bài viết thuộc phòng ban này. Hãy xóa bài viết trước khi xóa phòng ban này.`,
-        });
-      } else {
-        department.name = nameChange;
+    department.name = nameChange;
         department
           .save()
           .then(() => res.json({ message: "Exercise update" }))
           .catch((err) => res.status(400).json("Err: " + err));
-      }
-    });
   });
 };
 

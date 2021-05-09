@@ -5,6 +5,7 @@ import "../Design/css/Signin.css";
 import image3 from "../images/logo3.svg";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import cookie from 'react-cookies';
 
 function SignIn(props) {
   const [email, setEmail] = useState();
@@ -19,13 +20,15 @@ function SignIn(props) {
         email: email,
         password: password,
       })
-      .then((res) => {
+      .then((res) => {                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  
         console.log(res.data.auth);
         if (res.data.auth) {
           localStorage.setItem("token", res.data.token);
           localStorage.setItem("idUser", res.data.user._id);
+         // cookie.save('idUser', res.data._id, {  path: '/', signed: true, httpOnly: true })  
+      //    setCookie('token', res.data.token, { signed: true, httpOnly: true })  
+          
           setMessage(res.data.message);
-          console.log(res.data.user.power);
           setPower(res.data.user.power);
           if (res.data.user.power === "1") {
             localStorage.setItem("power", res.data.user.power);
@@ -53,53 +56,15 @@ function SignIn(props) {
   };
 
   const onChangeEmail = (event) => {
-    console.log(event.target.value);
     setEmail(event.target.value);
   };
 
   const onChangePassword = (event) => {
-    console.log(event.target.value);
     setPassword(event.target.value);
   };
 
-  // const userAuthenticated = () => {
-  //     axios.get('/api/example',{
-  //         headers: {"x-access-token": localStorage.getItem('token')}
-  //     })
-  //     .then(
-  //         res => {
-  //            // console.log(res.data.auth);
-  //             setPower(res.data.user.power);
-  //         }
-  //     )
-  // }
-
-  // const clickSignUp = () => {
-  //     const container = document.querySelector(".container");
-
-  //     document.addEventListener("click", () => {
-  //         container.classList.add("sign-up-mode");
-  //       });
-  // }
-
-  // const clickSignIn = () => {
-  //     const container = document.querySelector(".container");
-
-  //     document.addEventListener("click", () => {
-  //         container.classList.remove("sign-up-mode");
-  //     });
-  // }
-
   return (
     <div>
-      {/* <h1>Signin</h1> */}
-      {message ? <div>{message}</div> : null}
-      {/* <input type="text" placeholder='email' onChange={onChangeEmail}></input>
-                <input type="password" placeholder='password' onChange={onChangePassword}></input>
-                <button onClick={logIn}>submit</button>
-                <button onClick={userAuthenticated}> check</button>
-                <Link to='/forgot-password'>Forgot password</Link> */}
-
       <div class="container">
         <div class="forms-container">
           <div class="forms-container">

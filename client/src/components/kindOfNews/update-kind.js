@@ -43,7 +43,7 @@ export default function UpdateKind(props){
         .then(
             res => {
                 if(res.data.message == "Exercise update"){
-                    toast.success(res.data.message)
+                    toast.success("Cập nhật thành công")
                     history.push(`${props.path}/kinds`);
                 }else{
                     toast.error(res.data.message)

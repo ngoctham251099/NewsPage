@@ -89,6 +89,7 @@ const Remove = async (id) => {
                                   <td>{item._doc.username}</td>
                                   <td>{item._doc.fullName}</td>
                                   <td>{item._doc.email}</td>
+                                  <td>{item._doc.phoneNumber}</td>
                                   <td>{item.nameDepartment}</td>
                                   <td>{item.nameBTV ? item.nameBTV : ''}</td>
                                   <td>{getPower(item._doc.power)}</td> 

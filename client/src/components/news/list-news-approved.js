@@ -97,6 +97,7 @@ function ListNews(props) {
               <tr>
                 <th>STT</th>
                 <th>Tiêu đề</th>
+                <th>Thumbnail</th>
                 <th>Bút danh</th>
                 <th>Thể loại</th>
                 <th>Chuyên mục đăng</th>
@@ -130,6 +131,12 @@ function ListNews(props) {
                     <tr key={index}>
                       <td>{index + 1}</td>
                       <td>{item._doc.title}</td>
+                      <td>
+                        <img
+                          width={150}
+                          src={`/api-news/viewFile/${item._doc.avatar}`}
+                        ></img>
+                      </td>
                       <td>{item._doc.author}</td>
                       <td>{item.nameKind}</td>
                       <td>{item.nameCategories}</td>

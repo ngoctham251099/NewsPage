@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import {  useHistory } from "react-router-dom";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 import Button from "../UI/button-add";
 import Input from "../UI/Input";
@@ -35,10 +36,10 @@ export default function UpdateDepartment(props){
         .then(
             res => {
                 if(res.data.message == "Exercise update"){
-                    console.log(props.path)
+                    toast.success("Cập nhật thành công")
                     history.push(`${props.path}/departments`);
                 }else{
-                    setMessage(res.data.message)
+                    toast.error(res.data.message)
                 }
             }
         ).catch(
@@ -50,7 +51,7 @@ export default function UpdateDepartment(props){
 
     return(
         <div className="create-user-wrapper">
-      <h3 style={{ marginBottom: 20 }}>Cập nhật</h3>
+      <h3 style={{ marginBottom: 20 }}>Cập nhật phòng ban</h3>
             <Input ref={React.createRef()} onChange={onChange} value={department.name}></Input>
             <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
         </div>  

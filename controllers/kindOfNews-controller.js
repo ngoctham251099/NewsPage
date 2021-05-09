@@ -1,5 +1,3 @@
-const { response } = require('express');
-const express = require('express');
 const Kinds = require('../data/models/KindOfNews');
 const News = require('../data/models/News');
 
@@ -44,7 +42,7 @@ module.exports.deleteKindOfNews = async (req, res, next) => {
 
     const find = await Kinds.findOne({_id: id})
     if(find){
-        const news = await News.findOne({kindNews: find.name})    
+        const news = await News.findOne({kindNews: find._id})    
         if(news) {
             return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi xóa loại tin này.`})
         }else{
@@ -81,7 +79,7 @@ module.exports.updateKindOfNews =  (req, res, next) => {
                 .then(
                     response => {
                         if(response){
-                            return res.json({message: `Đã có bài viết thuộc loại tin này. Hãy xóa bài viết trước khi sửa loại tin này.`})
+                            return res.json({message: `Đã có bài viết thuộc loại tin này`})
                         }else{
                             kind.name = nameChange;
                             kind.unitPrice = price;

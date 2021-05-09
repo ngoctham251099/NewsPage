@@ -206,7 +206,9 @@ export default function Admin(props) {
               </div>
             </li>
             <li>
-              <div onClick={onClickInfoUser} className={`nav__link a`}>
+              <div onClick={onClickInfoUser} className={`nav__link a ${
+                  props.location.pathname === `${path}/info-user/${localStorage.getItem('idUser')}` && "active"
+                }`}>
                 <span>
                 <AiFillInfoCircle />
                 </span>

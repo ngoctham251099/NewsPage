@@ -10,6 +10,7 @@ export default function ListNewsAuthor() {
 
   return (
     <div>
+      
       <RenderReport ref={componentRef} />
       <div
         style={{

@@ -146,9 +146,8 @@ export default function Admin(props) {
             <li>
               <div
                 onClick={onClickInfoUser}
-                className={`${
-                  props.location.pathname === "/secretary/info-user/:id" &&
-                  "active"
+                className={`nav__link a ${
+                  props.location.pathname === `${path}/info-user/${localStorage.getItem('idUser')}` && "active"
                 }`}
               >
                 <span> <AiFillInfoCircle/></span>

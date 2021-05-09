@@ -81,6 +81,7 @@ export default function EditNews(props) {
 	const { role } = props;
 	const classes = useStyles();
 	const [priceOfKind, setPriceOfKind] = useState([]);
+	const [kindOfImages, setKindOfImages] = useState([]);
 
 	let history = useHistory();
 	const [news, setNews] = useState({
@@ -95,7 +96,8 @@ export default function EditNews(props) {
 		note: "",
 		categories: "",
 		summary: "",
-		isPostedFanpage: false
+		isPostedFanpage: false,
+		kindOfImages: "",
 	});
 
 	const [listKind, setListKind] = useState([]);
@@ -115,6 +117,14 @@ export default function EditNews(props) {
 		);
 	}, []);
 
+	useEffect(() => {
+    axios.get("/api-price-of-images").then((res) =>{
+      console.log(res.data.kind)
+      setKindOfImages(res.data.kind)
+    });
+  }, []);
+
+
 	useEffect(async () => {
 		const res = await axios.post(`/api-news/edit/${props.match.params.id}`, {
 			id: props.match.params.id,
@@ -124,8 +134,6 @@ export default function EditNews(props) {
 			setNews(res.data.news);
 			setContent(res.data.news.content);
 			setArrImages(res.data.news.images);
-		} else {
-			console.log("jhedjshzb");
 		}
 	}, []);
 
@@ -167,6 +175,7 @@ export default function EditNews(props) {
 		formData.append("note", news.note);
 		formData.append("isPostedFanpage", news.isPostedFanpage);
 		formData.append('idUser', localStorage.getItem("idUser"))
+		formData.append('kindOfImages', news.kindOfImages);
 
 		if (news.categories) {
 			formData.append("categories", news.categories);
@@ -213,6 +222,10 @@ export default function EditNews(props) {
 		setNews({ ...news, summary: event.target.value });
 	};
 
+	const onChangeKindImages = (event) => {
+    setNews({ ...news, kindOfImages: event.target.value });
+  };
+
 	const onChangePrice = (e) => {
 		setNews({ ...news, idPriceOfKind: e.target.value });
 	};
@@ -258,49 +271,6 @@ export default function EditNews(props) {
 					<label className="title-news">Tiêu đề</label>
 					<Input value={news.title} onChange={onChangeTitle}></Input>
 				</div>
-
-				{role !== CTV_ROLE  && (
-					<div className="item">
-						<label className="title-news">Thể loại</label>
-						<Select2
-							value={news.kindNews}
-							list={listKind}
-							onChange={onChangeKind}
-						></Select2>
-					</div>
-				)}
-
-				{role !== CTV_ROLE && (
-					<div>
-						<label>Chất lượng loại tin</label>
-						<FormControl className={classes.margin}>
-							<Select
-								id="demo-customized-select"
-								value={news.idPriceOfKind}
-								onChange={onChangePrice}
-								input={<BootstrapInput />}
-							>
-							{priceOfKind.filter(item => {
-							if(news.kindNews == -1){ 
-								return '';
-							}
-								return String(item.idKind) === news.kindNews;
-							}).map(item => {
-								return (<MenuItem value={item._id}>{item.name}</MenuItem>)
-							})}
-							</Select>
-						</FormControl>
-				</div>
-				)}
-
-					<div className="item">
-						<label className="title-news">Chuyên mục đăng tin</label>
-						<Select2
-							value={news.categories}
-							list={categoryList}
-							onChange={(e) => setNews({ ...news, categories: e.target.value })}
-						></Select2>
-					</div>
 
 				<div className="item">
 					<label>Thumbnail</label>
@@ -391,6 +361,60 @@ export default function EditNews(props) {
 						/>
 					</div>
 				)}
+
+				{role !== CTV_ROLE  && (
+					<div className="item">
+						<label className="title-news">Thể loại</label>
+						<Select2
+							value={news.kindNews}
+							list={listKind}
+							onChange={onChangeKind}
+						></Select2>
+					</div>
+				)}
+
+				{role !== CTV_ROLE && (
+          <div className="item">
+            <label className="title-news">Loại ảnh<p style={{color: "#ff0000"}}> (nếu loại tin là Bài viết tin/ Ảnh)</p></label>
+            <Select2
+              value={news.kindOfImages}
+              list={kindOfImages}
+              onChange={onChangeKindImages}
+            ></Select2>
+          </div>
+        )}
+
+				{role !== CTV_ROLE && (
+					<div>
+						<label>Chất lượng loại tin</label>
+						<FormControl className={classes.margin}>
+							<Select
+								id="demo-customized-select"
+								value={news.idPriceOfKind}
+								onChange={onChangePrice}
+								input={<BootstrapInput />}
+							>
+							{priceOfKind.filter(item => {
+							if(news.kindNews == -1){ 
+								return '';
+							}
+								return String(item.idKind) === news.kindNews;
+							}).map(item => {
+								return (<MenuItem value={item._id}>{item.name}</MenuItem>)
+							})}
+							</Select>
+						</FormControl>
+				</div>
+				)}
+
+					<div className="item">
+						<label className="title-news">Chuyên mục đăng tin</label>
+						<Select2
+							value={news.categories}
+							list={categoryList}
+							onChange={(e) => setNews({ ...news, categories: e.target.value })}
+						></Select2>
+					</div>
 
 				{role !== CTV_ROLE && (
 					<div className="item">

@@ -6,6 +6,7 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 const Users = require("../../data/models/Users");
 const Departments = require("../../data/models/Department");
+const News = require("../../data/models/News");
 
 const getBTV = async (idBTV) => {
   if(!idBTV){
@@ -103,6 +104,10 @@ module.exports.createUser = async (req, res) => {
 
   if (password !== confirmPassword) {
     return res.json({ message: "Mật khẩu không trùng khớp" });
+  }
+
+  if(!Number(phoneNumber) || phoneNumber.length < 10){
+    return res.json({message: "Số điện thoại không đúng. Yêu cầu nhập lại"})
   }
 
   const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -383,6 +388,12 @@ module.exports.updatePasswordViaEmail = (req, res, next) => {
 
 module.exports.delete = async (req, res, next) => {
   const userBTV = await Users.findOne({idBTV: req.params.id});
+  const getNews = await News.findOne({IdUser: req.params.id});
+
+  if(getNews) {
+    return res.json({message: "Đã có bài viết thuộc người dùng này"});
+  }
+
   if(userBTV){
     return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
   }
@@ -403,7 +414,7 @@ module.exports.editUser = (req, res, next) => {
 
 module.exports.updateUser = async (req, res, next) => {
   const {id} = req.params;
-  const {username, email, department, fullName, idBTV, power} = req.body;
+  const {username, email, department, fullName, idBTV, power, phoneNumber} = req.body;
   const getBTV = await Users.findOne({idBTV: id});
   if(power ==="4" && !idBTV) {
     return res.json({message: "Chọn người sơ duyệt bài viết"})
@@ -412,14 +423,19 @@ module.exports.updateUser = async (req, res, next) => {
   if(getBTV){
     return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
   }
+
+  if(!Number(phoneNumber) || phoneNumber.length < 10){
+    return res.json({message: "Số điện thoại không đúng. Yêu cầu nhập lại"})
+  }
+
   const user = await Users.findById(id)
-  console.log(user)
   user.username = username;
   user.email = email;
   user.department = department;
   user.power = power;
   user.fullName = fullName;
   user.idBTV = idBTV;
+  user.phoneNumber = phoneNumber
 
   await user.save()
   return res.json({ message: "Cập nhật thành công" })
@@ -429,7 +445,7 @@ module.exports.findById = (req, res) => {
   const { id } = req.params;
 
   Users.findOne({ _id: id }).then((item) => {
-    res.json({ News: item });
+    res.json({ user: item });
   });
 };
 

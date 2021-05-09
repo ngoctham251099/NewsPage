@@ -29,19 +29,21 @@ export default function ListPriceOfKinds(props){
     }
 
     let Remove = (id) =>{
+      if(window.confirm("Bạn chắc muốn xóa đơn giá này?")){
         axios.delete(`/api-price-of-kind/delete/${id}`)
         .then(
             res => {
-                if(res.data.message == 'Đã xóa thành công'){
-        toast.success(res.data.message);
+                if(res.data.message === 'Đã xóa thành công'){
+                  toast.success(res.data.message);
                    show_item_after_delete();
         
                 }else{
-        toast.success(res.data.message);
+                  toast.error(res.data.message);
                     
                 }
             }
         )
+      }
     }
 
     const add = () => {
@@ -77,7 +79,10 @@ export default function ListPriceOfKinds(props){
                       {item._doc.name}
                   </td>
                   <td>
-                      {item._doc.price}
+                      {item._doc.price.toLocaleString("it-IT", {
+																	style: "currency",
+																	currency: "VND",
+																})}
                   </td>
                   <td>
                     {item.nameKind}

@@ -45,7 +45,8 @@ const newsSchema = new Schema({
         default: false,
     },
     date_BTV: Date,
-    date_TBBT: Date
+    date_TBBT: Date,
+    date_post: Date,
 }, {
     collection: 'News'
 });

@@ -42,7 +42,8 @@ module.exports.deleteCategories = async (req, res, next) => {
 
 		const find = await Categories.findOne({_id: id})
 		if(find){
-				const news = await News.findOne({categories: find.name})    
+				const news = await News.findOne({categories: find._id})    
+				console.log(news)
 				if(news) {
 						console.log(news)
 						return res.json({message: `Đã có bài viết thuộc chuyên mục này. Hãy xóa bài viết trước khi xóa chuyên mục này.`})
@@ -76,20 +77,10 @@ module.exports.updateCategories = (req, res, next) => {
 				Categories.findOne({name: nameChange})
 				.then(
 						item => {
-								News.findOne({categories: categories.name})
-								.then(
-										response => {
-											console.log(response)
-											if(response) {
-															return res.json({message: `Đã có bài viết thuộc chuyên mục này. Hãy xóa bài viết trước khi sửa chuyên mục này.`})
-											}else{
-															categories.name = nameChange;
-															categories.save()
-															.then(() => res.json({message:'Exercise update'}))
-															.catch( err => res.status(400).json('Err: ' + err));
-															}
-						}
-				)
+							categories.name = nameChange;
+							categories.save()
+							res.json({message:'Exercise update'}
+							)
 						}
 				)
 				

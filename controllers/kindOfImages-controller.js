@@ -1,4 +1,5 @@
 const Kinds = require('../data/models/kindOfImages')
+const News = require('../data/models/News')
 
 //show list kind
 module.exports.showsKindOfImages = (req, res, next) => {
@@ -37,7 +38,8 @@ module.exports.deleteKindOfImages = async (req, res, next) => {
 
 		const find = await Kinds.findOne({_id: id})
 		if(find){
-				const news = await Images.findOne({kindNews: find.name})    
+				const news = await News.findOne({idPriceOfImages: find._id})   
+				console.log(news) 
 				if(news) {
 						return res.json({message: `Đã có hình ảnh thuộc loại này.`})
 				}else{
@@ -70,7 +72,7 @@ module.exports.updateKindOfImages =  (req, res, next) => {
 		.then(
 				kind => {
 						if(kind) {
-								Images.findOne({_id: kind.idKind})
+								News.findOne({idPriceOfImages: kind._id})
 								.then(
 										response => {
 												if(response){

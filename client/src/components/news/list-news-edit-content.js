@@ -31,7 +31,6 @@ export default function ListEditor(props) {
       id: localStorage.getItem("idUSer"),
     });
     if (res.data.listNews) {
-      console.log(res.data.listNews)
       setNews(res.data.listNews);
     } else {
       toast.error(res.data.message);
@@ -95,8 +94,10 @@ export default function ListEditor(props) {
               <tr>
                 <th>STT</th>
                 <th>Tiêu đề</th>
+                <th>Thumbnail</th>
                 <th>Bút danh</th>
                 <th>Ngày viết</th>
+                <th>Chuyên mục đăng</th>
                 <th>Ghi chú</th>
                 <th>Xem bài</th>
                 <th>Hành động</th>
@@ -133,25 +134,31 @@ export default function ListEditor(props) {
                   <td style={{
 												maxWidth: "180px",
 												overflowWrap: "break-word",
-											}}>{item.title}</td>
-                  <td>{item.author}</td>
+											}}>{item._doc.title}</td>
                   <td>
-                    <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
+                    <img
+                      width={150}
+                      src={`/api-news/viewFile/${item._doc.avatar}`}
+                    ></img>
                   </td>
+                  <td>{item._doc.author}</td>
+                  <td>
+                    <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
+                  </td>
+                  <td>{item.nameCategories}</td>
                   <td style={{
 												maxWidth: "180px",
 												overflowWrap: "break-word",
-											}}>{item.note}</td>
-
+											}}>{item._doc.note}</td>
                   <td>
-                    <Link to={`${props.path}/news/views/${item._id}`}>
+                    <Link to={`${props.path}/news/views/${item._doc._id}`}>
                       Xem thử
                     </Link>
                   </td>
 
                   <td style={{ width: 120 }}>
                     <span style={{ padding: "5px" }}>
-                      <Link to={`${props.path}/news/${item._id}`}>
+                      <Link to={`${props.path}/news/${item._doc._id}`}>
                           Chỉnh sửa và phê duyệt
                       </Link>
                     </span>

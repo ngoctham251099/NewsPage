@@ -78,10 +78,6 @@ export default function ListNewsFromDate(){
                           <td>{stt++}</td>
                           <td>{item.name}</td>
                           <td>{item.count}</td>
-                          {/* <td>{item.author}</td>
-                          <td><Moment format="DD/MM/YYYY">{item.date_submitted}</Moment></td>			     
-                          <td>{item.status === "1" ? "Cho phe duyet": "Da Phe duyet"}</td>
-                          <td>{item.department}</td> */}
                           <td></td>
                       </tr>
                   ))

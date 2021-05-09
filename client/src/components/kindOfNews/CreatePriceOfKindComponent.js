@@ -5,6 +5,7 @@ import Select2 from "../UI/select2";
 
 import Input from "../UI/Input";
 import Button from "../UI/button-add";
+import { toast } from "react-toastify";
 function CreatePriceOfKindComponent(props) {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
@@ -25,7 +26,15 @@ function CreatePriceOfKindComponent(props) {
 				idKind: idKind
       })
       .then((res) => {
-        history.replace(`${props.path}`);
+        console.log(res.data.message)
+        if(res.data.message === `Thêm thành công!`){
+          console.log("sdnjk")
+          toast.success(res.data.message)
+          history.replace(`${props.path}`);
+        }else{
+          toast.error(res.data.message)
+        }
+          
       });
   };
 

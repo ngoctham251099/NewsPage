@@ -4,7 +4,7 @@ const Schema = mongoose.Schema;
 const PriceOfKindSchema = new Schema(
   {
     name: String,
-    price: String,
+    price: Number,
     idKind: String
   },
   {

@@ -164,6 +164,7 @@ function ListNews(props) {
                 <th>Thumbnail</th>
                 <th>Bút danh</th>
                 <th>Ngày viết</th>
+                <th>Ngày đăng</th>
                 <th>Trạng thái</th>
                 <th>Thể loại</th>
                 <th>Chuyên mục</th>
@@ -226,6 +227,9 @@ function ListNews(props) {
                     <td>
                       <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                     </td>
+                    <td>{
+                      item._doc.date_post ? <Moment format="DD/MM/YYYY">{item._doc.date_post}</Moment> : null
+                      }</td>
                     <td>{getStatus(item._doc.status)}</td>
                     {/* <td>{item._doc.status}</td> */}
                     <td>{item.nameKind}</td>

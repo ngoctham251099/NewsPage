@@ -8,12 +8,15 @@ const Categories = require("../data/models/Categories")
 const moment = require("moment");
 const Departments = require("../data/models/Department")
 const PriceImages = require("../data/models/kindOfImages");
+const { get } = require("../router/news-router");
 
 const calculatePrice = async (idPrice) => {
  
 	if(idPrice != 'undefined'){
 		const data =  await PriceOfKind.findOne({_id: idPrice});
-		return data.price;
+		if(data){
+			return data.price;
+		}
 	}
 	return 0;
 	
@@ -40,7 +43,7 @@ module.exports.showNews = async (req, res, next) => {
 			price: calculatePrice(item.idPriceOfKind),
 			nameKind: getKind.find(val => String(val._id) === item.kindNews)?.name ,
 			nameCategories: getCategories.find( val => String(val._id) === item.categories)?.name ,
-			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.name
+			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.price
 		}}) 
 	return res.json({page: data})
 };
@@ -67,7 +70,6 @@ module.exports.create = async (req, res, next) => {
 	} = req.body;
 	const user = await Users.findOne({ _id: idUser });
 	const { avatar } = req.files;
-	console.log(idKindImages)
 	if(!title || !summary || !avatar || !categories){
 		return res.json({message: "Không được phép để trống"})
 	}
@@ -76,14 +78,11 @@ module.exports.create = async (req, res, next) => {
 		return res.json({message: "Điền nội dung tin, bài"})
 	}
 
-	console.log(user.power)
-
 	if(user.power !== "4"){
 		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
 			return res.json({message: "Loại tin và chất lượng không được để trống"})
 		}
 	}
-
 	const userBTV = await Users.findOne({_id: idUser});
 
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
@@ -100,6 +99,7 @@ module.exports.create = async (req, res, next) => {
 	addnews.kindNews = kindNews;
 	addnews.categories = categories;
 	addnews.idPriceOfKind = idPriceOfKind;
+	
 	addnews.idDepartment = user.department;
 	addnews.note = note;
 	addnews.summary = summary;
@@ -107,6 +107,9 @@ module.exports.create = async (req, res, next) => {
 	if(userBTV.idBTV){
 		addnews.idBTV = userBTV.idBTV;
 	}
+	if(listImagesOnContent.length > 0){
+		addnews.idPriceOfImages = idKindImages
+	}	
 
 	if(user.power === "3"){
 		addnews.isCheckedBTV = true;
@@ -121,6 +124,10 @@ module.exports.create = async (req, res, next) => {
 	}
 	if(listImagesOnContent.length > 0){
 		addnews.idPriceOfImages = idKindImages;
+	}
+
+	if(user.power === '1' || user.power === '5'){
+		addnews.date_post = Date.now();
 	}
 	
 	addnews.isPostedFanpage = isPostedFanpage;
@@ -161,6 +168,7 @@ module.exports.updateNews = async (req, res) => {
 		power,
 		categories,
 		idPriceOfKind, 
+		kindOfImages,
 		isPostedFanpage = false
 	} = req.body;
 	console.log(idUser)
@@ -188,6 +196,10 @@ module.exports.updateNews = async (req, res) => {
 		}
 		news.images = listImagesOnContent;
 		news.status = status;
+		if(listImagesOnContent.length > 0){
+			news.idPriceOfImages = kindOfImages
+		}
+		
 		if (kindNews) {
 			news.kindNews = kindNews;
 		}
@@ -202,11 +214,14 @@ module.exports.updateNews = async (req, res) => {
 			news.isCheckedBTV = true;
 			news.date_BTV = Date.now();
 		}
-		console.log(power==="2")
 
 		if(power === "2"){
 			news.isCheckedTBBT  = true;
 			news.date_TBBT = Date.now();
+		}
+
+		if(power === "1" || power === "5"){
+			news.date_post = Date.now();
 		}
 		
 		news.isPostedFanpage = isPostedFanpage;
@@ -522,11 +537,10 @@ module.exports.statisticalByAuthor = async (req, res) => {
 		.filter((item) => item.status === "4")
 		.map((newsData) => {
 			const price = dataPriceImages.find(val => String(val._id) === newsData.idPriceOfImages);
-
 			return {
 				...newsData,
 				price: dataPrice.find(item => String(item._id) === newsData.idPriceOfKind)?.price,
-				priceImages: price ? Number(price.price) : null,
+				priceImages: price ? Number(price.price) : 0,
 				nameKind: getKind.find( val => String(val._id) === newsData.kindNews )?.name,
 				nameCategory: getCategory.find(val => String(val._id) === newsData.categories)?.name
 			};
@@ -632,13 +646,15 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		let sum = 0;
 		getKind.forEach( function(kind){
 			const getNews = allNews.filter(val => (val.status === '4' && val.IdUser === String(item._id) && val.kindNews === String(kind._id)))
-			const price = getPriceKind.find(val => String(val.idKind) === String(kind._id))?.price
-			
+			const price = getNews.length > 0 ? getPriceKind.find(val => String(val.idKind) === String(kind._id)).price : 0
+			console.log(price)
 			arr.push({count: getNews.length, price: price * getNews.length});
 			sum = sum + (getNews.length * price);
 		})
 		arr2.push({user: user, sum: sum, news: arr})
 	})
+
+	console.log(arr2)
 
 	let arrCount = [];
 	let arrPrice = [];
@@ -647,16 +663,15 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		let sum = 0;
 		const getNews = allNews.filter( val => val.kindNews === String(item._id) && val.status === '4')
 		const price = getPriceKind.find(val => String(val.idKind) === String(item._id))?.price
-		console.log(price)
-		sum = getNews.length;
-		sumPrice = sumPrice + (getNews.length * price)
+		sum = getNews.length > 0 ? getNews.length : 0;
+		sumPrice = getNews.length > 0 ? sumPrice + (getNews.length * price) : 0
+		
 		arrCount.push({count: sum, sumPrice: sumPrice})
 		arrPrice.push({sumPrice: sumPrice})
 	})
 	let sumAll = arrPrice.reduce( (a, b) => {
 		return a + b.sumPrice
 	}, 0) 
-	console.log(sumAll)
 
 	res.json({News: arr2, sumByKind: arrCount, sumAll: sumAll})
 };
@@ -692,7 +707,6 @@ module.exports.statisticalByDepartment = async (req, res) => {
 			let sum = 0;
 			let kq;
 			getKind.forEach( function(kind){
-				console.log(kind._id)
 				let getNews = allNews.filter(val => (val.status === '4' && val.idDepartment === String(item._id) && val.kindNews === String(kind._id)))
 				arr.push({count: getNews.length});
 				sum = sum + getNews.length;
@@ -720,8 +734,6 @@ module.exports.statisticalByDepartment = async (req, res) => {
 			sumAll = sumAll + getNews1.length;
 			arrCount.push({count: sum})
 		})
-		console.log(sumAll)
-
 		res.json({News: arr2, sumByKind: arrCount, sumAll: sumAll})
 	
 };
@@ -780,10 +792,17 @@ module.exports.listNewsWaitingForApproval = async (req, res) => {
 
 module.exports.listNewBTV = async (req, res) => {
 	const {id} = req.query;
+	const categories = await Categories.find();
 
-	const data = await News.find()
+	const getNews = await News.find()
 										.where('idBTV').equals(id)
-										.where('status').equals("1")
+										.where('status').equals("1");
+	const data = getNews.map( item => {
+		return {
+			...item,
+			nameCategories: categories.find( val => String(val._id) === item.categories)?.name
+		}
+	})
 	return res.json({listNews: data})
 }
 
@@ -872,11 +891,18 @@ module.exports.listTBBTRefuse = async (req, res) => {
 //danh sach yeu cau phe duyet tu truong ban bien tap
 module.exports.listNewsRequestEdit = async (req, res) => {
 	const {id} = req.query;
+	const categories = await Categories.find();
 
-	console.log(id);
-	const data = await News.find()
+	const getNews = await News.find()
 												.where('idBTV').equals(id)
 												.where('status').equals("6");
+
+	const data = getNews.map(item => {
+		return {
+			...item,
+			nameCategories: categories.find(val => String(val._id) === item.categories)?.name
+		}
+	})
 	return res.json({listNews: data})
 }
 

@@ -31,6 +31,7 @@ export default function ListKinds(props){
       }
 
     let Remove = (id) =>{
+      if(window.confirm("Bạn chắc chắn muốn xóa thể loaị này")){
         axios.delete(`/api-kind/delete/${id}`)
         .then(
             res => {
@@ -43,8 +44,7 @@ export default function ListKinds(props){
                 }
             }
         )
-
-       
+      }
     }
 
     const add = () => {

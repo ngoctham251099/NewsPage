@@ -106,6 +106,7 @@ export default function ListEditor(props) {
                 <th>Thumbnail</th>
                 <th>Bút danh</th>
                 <th>Ngày viết</th>
+                <th>Chuyên mục</th>
                 <th>Xem bài</th>
                 <th>Hành động</th>
               </tr>
@@ -118,13 +119,13 @@ export default function ListEditor(props) {
                 }
                 
                 if(currentFilter === "1"){
-                  if(val.title.toLowerCase().includes(search.toLowerCase())){
+                  if(val._doc.title.toLowerCase().includes(search.toLowerCase())){
                     return val;
                   }
                 }
   
                 if(currentFilter === "2"){
-                  if(val.author.toLowerCase().includes(search.toLowerCase())){
+                  if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
                     return val;
                   }
                 }
@@ -135,29 +136,32 @@ export default function ListEditor(props) {
                 // }
                 
               })
-              .map((item) => (
-                <tr key={item._id}>
-                  <td>{stt++}</td>
-                  <td>{item.title}</td>
+              .map((item, index) => (
+                <tr key={index}>
+                  <td>{index + 1}</td>
+                  <td>{item._doc.title}</td>
                   <td>
                     <img
                       width={150}
-                      src={`/api-news/viewFile/${item.avatar}`}
+                      src={`/api-news/viewFile/${item._doc.avatar}`}
                     ></img>
                   </td>
-                  <td>{item.author}</td>
+                  <td>{item._doc.author}</td>
                   <td>
-                    <Moment format="DD/MM/YYYY">{item.date_submitted}</Moment>
+                    <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                   </td>
                   <td>
-                    <Link to={`${props.path}/news/views/${item._id}`}>
+                    {item.nameCategories}
+                  </td>
+                  <td>
+                    <Link to={`${props.path}/news/views/${item._doc._id}`}>
                       Views
                     </Link>
                   </td>
 
                   <td style={{ width: 120 }}>
                     <span style={{ padding: "5px" }}>
-                      <Link to={`${props.path}/news/${item._id}`}>
+                      <Link to={`${props.path}/news/${item._doc._id}`}>
                           Chỉnh sửa và phê duyệt
                       </Link>
                     </span>

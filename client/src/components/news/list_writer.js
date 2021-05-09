@@ -70,13 +70,7 @@ export default function ListEditor(props) {
 		});
 		setNews(res.data.arrNews);
 		if (res.data.arrNews.length > 0) {
-			
 			setNews(res.data.arrNews);
-			const data = await res.data.arrNews.filter( item => item._doc.status === "5");
-			let count = data.length;
-			if(count > 0){
-				toast.warning(`Bạn đang có ${count} bài viết đang yêu cầu chỉnh sửa`);
-			}
 		} 
 	}, []);
 
@@ -186,6 +180,7 @@ export default function ListEditor(props) {
 							<tr>
 								<th>STT</th>
 								<th>Tiêu đề</th>
+								<th>Thumbnail</th>
 								<th>Bút danh</th>
 								<th>Ngày viết</th>
 								<th>Trạng thái</th>
@@ -237,6 +232,12 @@ export default function ListEditor(props) {
 												maxWidth: "180px",
 												overflowWrap: "break-word",
 											}}>{item._doc.title}</td>
+									<td>
+                      <img
+                        width={150}
+                        src={`/api-news/viewFile/${item._doc.avatar}`}
+                      ></img>
+                    </td>
 									<td>{item._doc.author}</td>
 									<td>
 										<Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>

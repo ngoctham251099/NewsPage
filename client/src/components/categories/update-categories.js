@@ -8,7 +8,7 @@ import Input from "../UI/Input";
 
 export default function UpdateDepartment(props){
 
-   const [categories, setCategories] = useState([]);
+    const [categories, setCategories] = useState([]);
     const history = useHistory();
 
     useEffect(() => {
@@ -22,7 +22,6 @@ export default function UpdateDepartment(props){
     },[])
 
     const onChange = (e)=>{
-        console.log(e.target.value)
         setCategories(e.target.value);
     }
 
@@ -37,6 +36,7 @@ export default function UpdateDepartment(props){
                 console.log(props.path)
                 
                 if(res.data.message === 'Exercise update'){
+                    toast.success("Cập nhật thành công")
                     history.push(`${props.path}/categories`);
                 }else{
                     toast.error(res.data.message);
@@ -54,8 +54,6 @@ export default function UpdateDepartment(props){
       <h3 style={{ marginBottom: 20 }}>Cập nhật</h3>
             <Input ref={React.createRef()} onChange={onChange} value={categories.name}></Input>
             <Button onClick={onSubmit} title="Cập nhật">Submit</Button>
-            
-            
         </div>  
     )
 }

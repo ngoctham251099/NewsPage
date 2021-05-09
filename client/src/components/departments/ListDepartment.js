@@ -31,6 +31,7 @@ function ListDepatment(props){
       }
 
     let Remove = async (id) =>{
+      if(window.confirm("Bạn chắc chắn muốn xóa phòng ban này")){
         const res = await axios.delete(`/api-department/delete/${id}`)
         if(res.data.message == "Đã xóa thành công"){
           toast.success(res.data.message);
@@ -38,6 +39,7 @@ function ListDepatment(props){
         }else{
           toast.error(res.data.message);
         }
+      }
         
     }
 
