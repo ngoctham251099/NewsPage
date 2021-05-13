@@ -139,7 +139,7 @@ function ListNews(props) {
 								height: "41px",
 								outline: "none"
 							}}
-							onChange={(e) => {console.log(e.target.value); setCurrentFilter(e.target.value)}}
+							onChange={(e) => {setCurrentFilter1(e.target.value)}}
 						>
 							{listSearch.map((status) => (
 								<option value={status.id}>{status.value}</option>
@@ -190,7 +190,7 @@ function ListNews(props) {
                   }
   
                   if(currentFilter1 === "2"){
-                    if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+                    if(val.nameAuthor.toLowerCase().includes(search.toLowerCase())){
                       return val;
                     }
                   }
@@ -223,7 +223,7 @@ function ListNews(props) {
                         src={`/api-news/viewFile/${item._doc.avatar}`}
                       ></img>
                     </td>
-                    <td>{item._doc.author}</td>
+                    <td>{item.nameAuthor}</td>
                     <td>
                       <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                     </td>

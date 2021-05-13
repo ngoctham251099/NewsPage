@@ -122,7 +122,7 @@ export default function ListEditor(props) {
                 }
 
                 if(currentFilter === "2"){
-                  if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+                  if(val.nameAuthor.toLowerCase().includes(search.toLowerCase())){
                     return val;
                   }
                 }
@@ -132,7 +132,7 @@ export default function ListEditor(props) {
                 <tr key={item._doc._id}>
                   <td>{stt++}</td>
                   <td>{item._doc.title}</td>
-                  <td>{item._doc.author}</td>
+                  <td>{item.nameAuthor}</td>
                   <td>{item.nameKind}</td>
                   <td>{item.nameCategories}</td>
                   <td>

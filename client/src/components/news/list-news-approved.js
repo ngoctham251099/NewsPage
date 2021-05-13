@@ -121,7 +121,7 @@ function ListNews(props) {
                   }
     
                   if(currentFilter === "2"){
-                    if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+                    if(val.nameAuthor.toLowerCase().includes(search.toLowerCase())){
                       return val;
                     }
                   }
@@ -137,7 +137,7 @@ function ListNews(props) {
                           src={`/api-news/viewFile/${item._doc.avatar}`}
                         ></img>
                       </td>
-                      <td>{item._doc.author}</td>
+                      <td>{item.nameAuthor}</td>
                       <td>{item.nameKind}</td>
                       <td>{item.nameCategories}</td>
                       <td>

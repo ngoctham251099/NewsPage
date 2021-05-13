@@ -57,6 +57,7 @@ class RenderReport extends React.Component {
 
 	render() {
 		const { month, news, kind, sumBykind, sumAll } = this.state;
+		const dateReport = Date.now();
 		return (
 			<div className="card-body">
 				<div className="table-responsive">
@@ -79,6 +80,14 @@ class RenderReport extends React.Component {
 							</MuiPickersUtilsProvider>
 						</span>
 					</h3>
+
+					<br></br>
+					<div className="title-center" style={{
+						textAlign: "center	"
+					}}>
+						<p><b>DANH SÁCH BỒI DƯỠNG BAN BIÊN TẬP VÀ CỘNG TÁC VIÊN CUNG CẤP TIN</b></p>
+						<p>(Tháng {this.state.month.format("MM")} năm {this.state.month.format("YYYY")})</p>
+					</div>	
 
 					<table
 						width="100%"
@@ -162,6 +171,25 @@ class RenderReport extends React.Component {
 							<td></td>
 						</tbody>
 					</table>
+					<br></br>
+					<div className="footer-report" style={{
+						display: "flex",
+						justifyContent: "space-between"
+					}}>
+						<p style={{
+								marginLeft:"5rem",
+								textAlign: "center"
+							}}><b>Kế toán</b></p>
+						<p><b>Người lập phiếu</b></p>
+						<div style={{
+								marginRight:"5rem",
+								textAlign: "center"
+							}}>
+							<p>An Giang, ngày {moment(dateReport).format("DD")} tháng {moment(dateReport).format("MM")} năm {moment(dateReport).format("YYYY")} </p>
+							<p><b>Duyệt</b></p>
+							<p><b>TRƯỞNG BAN BIÊN TẬP</b></p>
+						</div>
+					</div>
 				</div>
 			</div>
 		);

@@ -26,7 +26,6 @@ export default function ListEditor(props) {
   const [news, setNews] = useState([]);
   useEffect(async () => {
     const id = localStorage.getItem("idUser");
-    console.log(id)
     const res = await axios.get(`/api-news/list-news-request-edit?id=${id}`, {
       id: localStorage.getItem("idUSer"),
     });
@@ -117,7 +116,7 @@ export default function ListEditor(props) {
                 }
   
                 if(currentFilter === "2"){
-                  if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+                  if(val.nameAuthor.toLowerCase().includes(search.toLowerCase())){
                     return val;
                   }
                 }
@@ -141,7 +140,7 @@ export default function ListEditor(props) {
                       src={`/api-news/viewFile/${item._doc.avatar}`}
                     ></img>
                   </td>
-                  <td>{item._doc.author}</td>
+                  <td>{item.nameAuthor}</td>
                   <td>
                     <Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
                   </td>

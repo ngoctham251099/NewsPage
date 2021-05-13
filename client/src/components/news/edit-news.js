@@ -184,7 +184,7 @@ export default function EditNews(props) {
 			.post(`/api-news/update/${props.match.params.id}`, formData)
 			.then((res) => {
 				if(res.data.message === "Cập nhật thành công"){
-					toast.success("Đã phê duyệt")
+					toast.success("Thành công")
 					const redirect = props.match.url.split("/");
 					// history.push(`/${redirect[1] + "/" + redirect[2]}`);
 					history.goBack();

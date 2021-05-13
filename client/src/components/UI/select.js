@@ -58,6 +58,7 @@ export default function CustomizedSelects(props) {
           value={props.value}
           onChange={props.onChange}
           input={<BootstrapInput />}
+          disabled = {props.disabled ? props.disabled : null}
         >
           {/* <MenuItem value="0">None</MenuItem> */}
           {props.list ? 

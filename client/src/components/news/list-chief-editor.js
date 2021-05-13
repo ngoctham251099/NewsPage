@@ -99,7 +99,7 @@ export default function ListEditor(props) {
 								}
 	
 								if(currentFilter === "2"){
-									if(val._doc.author.toLowerCase().includes(search.toLowerCase())){
+									if(val.nameAuthor.toLowerCase().includes(search.toLowerCase())){
 										return val;
 									}
 								}
@@ -120,7 +120,7 @@ export default function ListEditor(props) {
                         src={`/api-news/viewFile/${item._doc.avatar}`}
                       ></img>
 									</td>
-									<td>{item._doc.author}</td>
+									<td>{item.nameAuthor}</td>
 									<td>
 										<Moment format="DD/MM/YYYY">{item._doc.date_submitted}</Moment>
 									</td>

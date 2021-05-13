@@ -150,7 +150,8 @@ export default function UpdateUser(props) {
         power: power,
         fullName: fullName,
         idBTV: user.idBTV,
-        phoneNumber: user.phoneNumber
+        phoneNumber: user.phoneNumber,
+        local: localStorage.getItem("idUser")
       })
       .then((res) => {
         if(res.data.message =="Cập nhật thành công"){
@@ -189,6 +190,7 @@ export default function UpdateUser(props) {
           placeholder="Bút danh"
           onChange={onChangeFullName}
           value={user.fullName}
+        
         ></Input>
 
         <label>Số điện thoại</label>
@@ -203,6 +205,7 @@ export default function UpdateUser(props) {
           value={user.department}
           onChange={onChangeDepartment}
           list={departments}
+          disabled = "disabled"
         ></Select2>
       
         <label>Quyền hạn</label>

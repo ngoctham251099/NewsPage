@@ -37,7 +37,7 @@ export default function ChiefEditor(props) {
 	useEffect(() => {
 		const id = localStorage.getItem("idUser");
 		axios.post(`/api-user/user-id/${id}`).then((res) => {
-			setUsername(res.data.News);
+			setUsername(res.data.user);
 		});
 	}, []);
 

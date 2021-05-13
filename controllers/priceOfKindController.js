@@ -37,11 +37,6 @@ module.exports.createPriceKind = async (req, res, next) => {
     return res.json({message: "Đơn giá không đúng. Vui lòng nhập lại"})
   }
 
-  const findKind = await PriceOfKind.findOne({ name: name });
-
-  if (findKind) {
-    return res.json({ message: "Loại tin đã tồn tại" });
-  }
   let addKind = new PriceOfKind();
   addKind.name = name;
   addKind.price = price;

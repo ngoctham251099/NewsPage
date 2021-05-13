@@ -8,7 +8,6 @@ const Categories = require("../data/models/Categories")
 const moment = require("moment");
 const Departments = require("../data/models/Department")
 const PriceImages = require("../data/models/kindOfImages");
-const { get } = require("../router/news-router");
 
 const calculatePrice = async (idPrice) => {
  
@@ -36,6 +35,7 @@ module.exports.showNews = async (req, res, next) => {
 	const getKind = await Kinds.find();
 	const getCategories = await Categories.find();
 	const getKindPrice = await PriceOfKind.find();
+	const getUser = await Users.find();
 	const news = await News.find().sort({date_submitted: -1});
 	const data = news.map(item => {
 		return {
@@ -43,8 +43,10 @@ module.exports.showNews = async (req, res, next) => {
 			price: calculatePrice(item.idPriceOfKind),
 			nameKind: getKind.find(val => String(val._id) === item.kindNews)?.name ,
 			nameCategories: getCategories.find( val => String(val._id) === item.categories)?.name ,
-			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.price
+			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.price,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}}) 
+	//	console.log(data)
 	return res.json({page: data})
 };
 
@@ -279,12 +281,14 @@ module.exports.viewsWriter = async (req, res, next) => {
 	const { id } = req.query;
 	const kind = await Kinds.find();
 	const category = await Categories.find();
+	const getUser = await Users.find();
 	const arrNews = await News.find({ IdUser: id }).sort({date_submitted: -1});
 	const data = arrNews.map(item => {
 		return {
 			...item,
 			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
-			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({ arrNews: data });
@@ -310,6 +314,7 @@ module.exports.viewsDepartmentPresident = async (req, res) => {
 	const { id } = req.query;
 	const getKinds = await Kinds.find();
 	const getCategory = await Categories.find();
+	const getUser = await Users.find();
 	const user = await Users.findOne({ _id: id });
 	if (user.power == "2") {
 		const listNews = await News.find({ status: "2" }).sort({date_submitted: -1});
@@ -318,7 +323,8 @@ module.exports.viewsDepartmentPresident = async (req, res) => {
 			return {
 				...item,
 				nameKind: getKinds.find(val => String(val._id) === item.kindNews)?.name,
-				nameCategories: getCategory.find(val => String(val._id) === item.categories)?.name
+				nameCategories: getCategory.find(val => String(val._id) === item.categories)?.name,
+				nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 			}
 		})
 
@@ -513,6 +519,7 @@ module.exports.statisticalByAuthor = async (req, res) => {
 	const getCategory = await Categories.find();
 	const dataPrice =  await PriceOfKind.find();
 	const dataPriceImages = await PriceImages.find();
+	const getUser = await Users.find();
 	console.log(month)
 	const startOfMonth = moment(month)
 		.clone()
@@ -542,7 +549,8 @@ module.exports.statisticalByAuthor = async (req, res) => {
 				price: dataPrice.find(item => String(item._id) === newsData.idPriceOfKind)?.price,
 				priceImages: price ? Number(price.price) : 0,
 				nameKind: getKind.find( val => String(val._id) === newsData.kindNews )?.name,
-				nameCategory: getCategory.find(val => String(val._id) === newsData.categories)?.name
+				nameCategory: getCategory.find(val => String(val._id) === newsData.categories)?.name,
+				nameAuthor: getUser.find(val => String(val._id) === newsData.IdUser)?.fullName
 			};
 		})
 
@@ -759,11 +767,13 @@ module.exports.listNewsApproved = async (req, res) => {
 	const listNews = await News.find({ status: "3" });
 	const kind = await Kinds.find();
 	const category = await Categories.find();
+	const getUser = await Users.find();
 	const data = listNews.map(item => {
 		return {
 			...item,
 			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
-			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 		return res.json({ listNewsApproved: data });
@@ -793,6 +803,7 @@ module.exports.listNewsWaitingForApproval = async (req, res) => {
 module.exports.listNewBTV = async (req, res) => {
 	const {id} = req.query;
 	const categories = await Categories.find();
+	const getUser = await Users.find();
 
 	const getNews = await News.find()
 										.where('idBTV').equals(id)
@@ -800,7 +811,8 @@ module.exports.listNewBTV = async (req, res) => {
 	const data = getNews.map( item => {
 		return {
 			...item,
-			nameCategories: categories.find( val => String(val._id) === item.categories)?.name
+			nameCategories: categories.find( val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({listNews: data})
@@ -812,6 +824,7 @@ module.exports.listNewsBTV2 = async (req, res) => {
 	const {id} = req.query;
 	const kind = await Kinds.find();
 	const category = await Categories.find();
+	const getUser = await Users.find();
 
 	const getNews = await News.find()
 										.where('isCheckedBTV').equals(true)
@@ -821,7 +834,8 @@ module.exports.listNewsBTV2 = async (req, res) => {
 		return {
 			...item,
 			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
-			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 
@@ -834,6 +848,7 @@ module.exports.listNewsTBBT = async (req, res) => {
 
 	const kind = await Kinds.find();
 	const category = await Categories.find();
+	const getUser = await Users.find();
 
 	const getNews = await News.find()
 													// .where('idBTV').equals(id)
@@ -843,7 +858,8 @@ module.exports.listNewsTBBT = async (req, res) => {
 		return{
 			...item,
 			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
-			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({listNews: data})
@@ -854,6 +870,7 @@ module.exports.listBTVRefuse = async (req, res) => {
 	const {id} = req.query;
 	const kind = await Kinds.find();
 	const category = await Categories.find();
+	const getUser = await Users.find();
 	const getNews = await News.find()
 												.where('idBTV').equals(id)
 												.where('isCheckedRefuseBTV').equals(true);
@@ -861,7 +878,8 @@ module.exports.listBTVRefuse = async (req, res) => {
 		return{
 			...item,
 			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
-			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({listNews: data})
@@ -873,6 +891,7 @@ module.exports.listTBBTRefuse = async (req, res) => {
 
 	const kind = await Kinds.find();
 	const category = await Categories.find(); 
+	const getUser = await Users.find();
 
 	const getNews = await News.find()
 												.where('isCheckedRefuseTBBT').equals(true);
@@ -881,7 +900,8 @@ module.exports.listTBBTRefuse = async (req, res) => {
 		return{
 			...item,
 			nameKind: kind.find(val => String(val._id) === item.kindNews)?.name,
-			nameCategories: category.find(val => String(val._id) === item.categories)?.name
+			nameCategories: category.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 												
@@ -892,6 +912,7 @@ module.exports.listTBBTRefuse = async (req, res) => {
 module.exports.listNewsRequestEdit = async (req, res) => {
 	const {id} = req.query;
 	const categories = await Categories.find();
+	const getUser = await Users.find();
 
 	const getNews = await News.find()
 												.where('idBTV').equals(id)
@@ -900,7 +921,8 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 	const data = getNews.map(item => {
 		return {
 			...item,
-			nameCategories: categories.find(val => String(val._id) === item.categories)?.name
+			nameCategories: categories.find(val => String(val._id) === item.categories)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({listNews: data})
@@ -910,13 +932,15 @@ module.exports.listNewsbyCategory = async(req, res) => {
 	const {id} = req.params;
 	const getKind = await Kinds.find();
 	const getCategories =await Categories.find();
+	const getUser = await Users.find();
 
 	const getNews = await News.find({categories: id});
 	const data = await getNews.map(item => {
 		return{
 			...item,
 			nameKind: getKind.find( val => String(val._id) === kindNews)?.name,
-			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name
+			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({news: data})
@@ -926,13 +950,15 @@ module.exports.NewsById = async (req, res) => {
 	const {id} = req.params;
 	const getKind = Kinds.find();
 	const getCategories = Categories.find();
+	const getUser = await Users.find();
 
 	const getNews = await News.find({_id: id})
 	const data = await getNews.map(item => {
 		return{
 			...item,	
 			nameKind: getKind.find( val => String(val._id) === kindNews)?.name,
-			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name
+			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
 	return res.json({news: data})

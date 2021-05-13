@@ -2,8 +2,6 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import Moment from 'react-moment';
 
-import Card from "../UI/List"
-
 function ListNews(){
 
     const [news , setNews] = useState([]);

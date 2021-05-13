@@ -116,6 +116,11 @@ module.exports.createUser = async (req, res) => {
     return res.json({message: "Vui lòng nhập lại email"})
   }
 
+  if( power === 4 ){
+    if(!idBTV)  
+      return res.json({message: "Quản lý không được để trống"})
+  }
+
   const searchUser = await Users.findOne({ email: email });
   if (searchUser) {
     return res.json({ message: "Tài khoản đã tồn tại" });
@@ -414,10 +419,20 @@ module.exports.editUser = (req, res, next) => {
 
 module.exports.updateUser = async (req, res, next) => {
   const {id} = req.params;
-  const {username, email, department, fullName, idBTV, power, phoneNumber} = req.body;
+  const {username, email, department, fullName, idBTV, power, phoneNumber, local} = req.body;
   const getBTV = await Users.findOne({idBTV: id});
+  const getNewsByLocal = await Users.findOne({_id: local});
+  const getUserUpdating = await Users.findOne({_id: id});
+  console.log(getNewsByLocal.email)
+  console.log(getUserUpdating.email)
   if(power ==="4" && !idBTV) {
     return res.json({message: "Chọn người sơ duyệt bài viết"})
+  }
+  
+  console.log(getNewsByLocal.email === getUserUpdating.email)
+
+  if(getNewsByLocal.email === getUserUpdating.email){
+    return res.json({message: "Người dùng đang được sử dụng"})
   }
 
   if(getBTV){
@@ -435,7 +450,7 @@ module.exports.updateUser = async (req, res, next) => {
   user.power = power;
   user.fullName = fullName;
   user.idBTV = idBTV;
-  user.phoneNumber = phoneNumber
+  user.phoneNumber = phoneNumber;
 
   await user.save()
   return res.json({ message: "Cập nhật thành công" })
