@@ -7,9 +7,8 @@ const MainContentContainer = ({ categories }) => {
   const [allPost, setAllPost] = useState([]);
 
   useEffect(() => {
-    axios.get("/api-news").then((res) => {
-      console.log(res.data.page);
-      setAllPost(res.data.page);
+    axios.get("/api-news/list-news-post").then((res) => {
+      setAllPost(res.data.news);
     });
   }, []);
 

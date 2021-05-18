@@ -154,7 +154,7 @@ export default function UpdateUser(props) {
         local: localStorage.getItem("idUser")
       })
       .then((res) => {
-        if(res.data.message =="Cập nhật thành công"){
+        if(res.data.message === "Cập nhật thành công"){
           toast.success(res.data.message)
           history.push("/admin/users");
         }else{
@@ -226,7 +226,7 @@ export default function UpdateUser(props) {
                 input={<BootstrapInput />}
               >
               {btv.filter(item => {
-              if(user.department == -1){
+              if(user.department === -1){
                 return '';
               }
               return item._doc.department === user.department && item._doc.power === "3";

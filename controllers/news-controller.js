@@ -43,7 +43,7 @@ module.exports.showNews = async (req, res, next) => {
 			price: calculatePrice(item.idPriceOfKind),
 			nameKind: getKind.find(val => String(val._id) === item.kindNews)?.name ,
 			nameCategories: getCategories.find( val => String(val._id) === item.categories)?.name ,
-			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.price,
+			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.name,
 			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}}) 
 	//	console.log(data)
@@ -964,4 +964,23 @@ module.exports.NewsById = async (req, res) => {
 	return res.json({news: data})
 
 }
+
+module.exports.ListNewsPost = async (req, res) => {
+	const getKind = Kinds.find();
+	const getCategories = Categories.find();
+	const getUser = await Users.find();
+
+	const getNews = await News.find({status: "4"}).sort({date_submitted: -1});
+	const data = getNews.map(item => {
+		return{
+			...item,	
+			nameKind: getKind.find( val => String(val._id) === kindNews)?.name,
+			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
+			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
+		}
+	})
+	return res.json({news: data})
+
+}
+
 

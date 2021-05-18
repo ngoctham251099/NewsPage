@@ -46,7 +46,7 @@ export default function Users(){
 const Remove = async (id) => {
   if(window.confirm("Bạn chắc chắn muốn xóa người dùng này?")){
     const res = await axios.delete(`/api-user/delete/${id}`)
-    if(res.data.message == "Xóa thành công"){
+    if(res.data.message === "Xóa thành công"){
         showItemAfterDelete(); 
         toast.success(`Xóa thành công`)
     }else{

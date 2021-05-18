@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 import Input from "../UI/Input";
 import Button from "../UI/button-add";
 function Create(props){
 	const [name, setName] = useState("");
-	const [message, setMessage] = useState();
+	
 	let history = useHistory();
 
 	const addDepartment = () => {
@@ -15,12 +16,11 @@ function Create(props){
 			})
 			.then(
 					res => {
-							if(res.data.findCategories){
-								console.log(res.data.message);
-								setMessage(res.data.message);
+							if(res.data.message === "Thêm thành công"){
+								toast.success(res.data.message)
+								history.goBack();
 							}else{
-								console.log(res.data.message);
-								history.replace(`${props.path}`)
+								toast.error(res.data.message)
 							}
 					}
 			)

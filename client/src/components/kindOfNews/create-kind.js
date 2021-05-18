@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import axios from 'axios';
+import { toast } from "react-toastify";
 
 import Input from "../UI/Input";
 import Button from "../UI/button-add";
@@ -16,8 +17,13 @@ function Create(props){
 			})
 			.then(
 					res => {
-							console.log(res.data.message);
-							history.replace(`${props.path}`)
+							if(res.data.message === "Thêm thành công"){
+								toast.success(res.data.message)
+								history.goBack()
+							}
+							else{
+								toast.error(res.data.message)
+							}
 					}
 			)
 	}

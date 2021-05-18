@@ -14,12 +14,15 @@ module.exports.showsDepartments = (req, res, next) => {
 //create department
 module.exports.createDepartment = (req, res, next) => {
   const name = req.body.name;
+  if(!name){
+    return res.json({message: "Không được phép để trống"})
+  }
   let newDepartment = new Departments({ name });
   newDepartment
     .save()
     .then((item) => {
       console.log(item);
-      res.status(200).json({ department: "Department in added successfully" });
+      res.status(200).json({ message: "Thêm thành công" });
     })
     .catch((err) => {
       console.log(req.body);

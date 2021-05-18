@@ -13,6 +13,9 @@ module.exports.showsCategories = (req, res, next) => {
 //create categories
 module.exports.createCategories = (req, res, next) => {
 	const name = req.body.name;
+	if(!name){
+    return res.json({message: "Không được phép để trống"})
+  }
 	let newCategories = new Categories({name})
 	Categories.findOne({name: name})
 	.then(
@@ -24,7 +27,7 @@ module.exports.createCategories = (req, res, next) => {
 							newCategories.save()
 							.then(item => {
 									console.log(item);
-									res.status(200).json({'categories': 'Categories in added successfully'})
+									res.status(200).json({message: 'Thêm thành công'})
 							})
 							.catch(err => {
 									console.log(req.body);

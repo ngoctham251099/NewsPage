@@ -229,6 +229,17 @@ main{
 	color: #fff;
 } */
 
+.pagination{
+	text-align: right;
+}
+
+.pagination button:hover{
+	border: 1px solid #3498db;
+	outline: none;
+	cursor: pointer;
+	background-color: #3498db i !important;
+}
+
 .recent-grid{
 	margin-top: 3.5rem;
 	display: grid;

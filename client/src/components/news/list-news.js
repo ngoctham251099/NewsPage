@@ -4,6 +4,8 @@ import Moment from "react-moment";
 import { BsTrashFill } from "react-icons/bs";
 import { BsPencil, BsCheck, BsX} from "react-icons/bs";
 import { toast } from "react-toastify";
+import {NEWS_PER_PAGE} from "../../config/contants";
+import Pagination from "../pagination/Pagination";
 
 import { useHistory, Link } from "react-router-dom";
 
@@ -61,16 +63,21 @@ function ListNews(props) {
   let history = useHistory();
   const [news, setNews] = useState([]);
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   let stt = 1;
   useEffect(() => {
     axios.get("/api-news/").then((res) => {
-      console.log(res.data.page )
       setNews(res.data.page);
+      setTotalPages(Math.ceil(res.data.page.length / NEWS_PER_PAGE))
     });
   }, []);
 
   const [currentFilter, setCurrentFilter] = useState("-1");
   const [currentFilter1, setCurrentFilter1] = useState("1");
+  const startIndex = (page - 1) * NEWS_PER_PAGE;
+  const selectedNews = news.slice(startIndex, startIndex + NEWS_PER_PAGE)
+
 
   const getStatus = (power) => {
 		switch (power) {
@@ -108,6 +115,10 @@ function ListNews(props) {
       });
     }
   };
+  
+  const handleClick = num => {
+    setPage(num)
+  }
 
   return (
     <div>
@@ -177,7 +188,7 @@ function ListNews(props) {
               </tr>
             </thead>
             <tbody>
-              {news
+              {selectedNews
                 .filter(val => {
                   if(search == ""){
                     return val;
@@ -264,6 +275,7 @@ function ListNews(props) {
                 ))}
             </tbody>
           </table>
+          <Pagination totalPages = {totalPages} handleClick={handleClick}/>
         </div>
       </div>
     </div>

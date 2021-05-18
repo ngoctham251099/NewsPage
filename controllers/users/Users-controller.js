@@ -423,21 +423,19 @@ module.exports.updateUser = async (req, res, next) => {
   const getBTV = await Users.findOne({idBTV: id});
   const getNewsByLocal = await Users.findOne({_id: local});
   const getUserUpdating = await Users.findOne({_id: id});
-  console.log(getNewsByLocal.email)
-  console.log(getUserUpdating.email)
   if(power ==="4" && !idBTV) {
     return res.json({message: "Chọn người sơ duyệt bài viết"})
   }
   
-  console.log(getNewsByLocal.email === getUserUpdating.email)
+  // console.log(getNewsByLocal.email === getUserUpdating.email)
 
   if(getNewsByLocal.email === getUserUpdating.email){
     return res.json({message: "Người dùng đang được sử dụng"})
   }
 
-  if(getBTV){
-    return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
-  }
+  // if(getBTV){
+  //   return res.json({message: "Đã có cộng tác viên thuộc quyền quản lý của người dùng này"})
+  // }
 
   if(!Number(phoneNumber) || phoneNumber.length < 10){
     return res.json({message: "Số điện thoại không đúng. Yêu cầu nhập lại"})

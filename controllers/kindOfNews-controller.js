@@ -27,7 +27,7 @@ module.exports.createKindOfNews = async (req, res, next) => {
     
     const newKind = await addKind.save();
     if(newKind){
-        res.status(200).json({message: `${newKind.name} đã được thêm`})
+        res.status(200).json({message: `Thêm thành công`})
     }else{
         err => {
             console.log(req.body);

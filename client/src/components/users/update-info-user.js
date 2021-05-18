@@ -62,8 +62,11 @@ export default function UpdateUser(props) {
         password: user.password
       })
       .then((res) => {
-        if(res.data.message == "Cập nhật thành công"){
-          toast.success("Mời bạn đăng nhập lại tài khoản")
+        if(res.data.message === "Cập nhật thành công"){
+          toast.success("Mời bạn đăng nhập lại tài khoản");
+          localStorage.removeItem('power')
+          localStorage.removeItem('idUser')
+          localStorage.removeItem('token')
           history.push("/");
         }else{
           toast.error(res.data.message)

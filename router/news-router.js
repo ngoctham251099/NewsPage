@@ -103,5 +103,7 @@ router.get('/list-news-request-edit', newsController.listNewsRequestEdit)
 
 router.post('/list-news-by-caterogy/:id', newsController.listNewsbyCategory)
 router.post('/list-news-by-id/:id', newsController.NewsById )
+//danh sach dang tin
+router.get('/list-news-post', newsController.ListNewsPost)
 
 module.exports = router;
