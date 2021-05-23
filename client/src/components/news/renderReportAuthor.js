@@ -86,7 +86,7 @@ class RenderReport extends React.Component {
 						textAlign: "center	"
 					}}>
 						<p><b>DANH SÁCH BỒI DƯỠNG BAN BIÊN TẬP VÀ CỘNG TÁC VIÊN CUNG CẤP TIN</b></p>
-						<p>(Tháng {this.state.month.format("MM")} năm {this.state.month.format("YYYY")})</p>
+						{/* <p>(Tháng {this.state.month.format("MM")} năm {this.state.month.format("YYYY")})</p> */}
 					</div>	
 
 					<table

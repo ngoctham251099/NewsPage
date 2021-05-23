@@ -6,6 +6,8 @@ import Moment from "react-moment";
 import { BsPencil } from "react-icons/bs";
 import { BsTrashFill} from "react-icons/bs";
 import { toast } from "react-toastify";
+import {NEWS_PER_PAGE} from "../../config/contants";
+import Pagination from "../pagination/Pagination";
 
 const listStatus = [
 	{
@@ -63,6 +65,8 @@ export default function ListEditor(props) {
 	const [news, setNews] = useState([]);
 	const [message, setMessage] = useState();
 	const [currentFilter1, setCurrentFilter1] = useState("1");
+	const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 	useEffect(async () => {
 		const id = localStorage.getItem("idUser");
 		const res = await axios.get(`/api-news/view-writer?id=${id}`, {
@@ -71,8 +75,12 @@ export default function ListEditor(props) {
 		setNews(res.data.arrNews);
 		if (res.data.arrNews.length > 0) {
 			setNews(res.data.arrNews);
+			setTotalPages(Math.ceil(res.data.arrNews.length / NEWS_PER_PAGE))
 		} 
 	}, []);
+
+	const startIndex = (page - 1) * NEWS_PER_PAGE;
+  const selectedNews = news.slice(startIndex, startIndex + NEWS_PER_PAGE)
 
 	const getStatus = (power) => {
 		switch (power) {
@@ -102,7 +110,6 @@ export default function ListEditor(props) {
 			})
 			.then(
 				res => {
-					console.log(res.data.arrNews);
 					if (res.data.arrNews) {
 						setNews(res.data.arrNews);
 					} else {
@@ -122,6 +129,10 @@ export default function ListEditor(props) {
 			});
 		}
 	};
+
+	const handleClick = num => {
+    setPage(num)
+  }
 
 	const [currentFilter, setCurrentFilter] = useState("-1");
 
@@ -193,7 +204,7 @@ export default function ListEditor(props) {
 							</tr>
 						</thead>
 						<tbody>
-							{news
+							{selectedNews
 							.filter(val => {
 								if(search == ""){
 									return val;
@@ -280,6 +291,7 @@ export default function ListEditor(props) {
 							))}
 						</tbody>
 					</table>
+					<Pagination totalPages = {totalPages} handleClick={handleClick}/>
 				</div>
 			</div>
 		</div>

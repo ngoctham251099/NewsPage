@@ -46,7 +46,6 @@ module.exports.showNews = async (req, res, next) => {
 			namePriceOfNews: getKindPrice.find( val => String(val._id) === item.idPriceOfKind)?.name,
 			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}}) 
-	//	console.log(data)
 	return res.json({page: data})
 };
 
@@ -173,11 +172,9 @@ module.exports.updateNews = async (req, res) => {
 		kindOfImages,
 		isPostedFanpage = false
 	} = req.body;
-	console.log(idUser)
 	const { avatar = "" } = req.files;
 	const listImagesOnContent = getAttrFromString(content, "img", "src");
 	const user = await Users.findOne({_id: idUser})
-	console.log(user)
 	if(user.power !== "4"){
 		if(kindNews === "undefined" || idPriceOfKind === "undefined"){
 			return res.json({message: "Loại tin và chất lượng không được để trống"})
@@ -318,7 +315,6 @@ module.exports.viewsDepartmentPresident = async (req, res) => {
 	const user = await Users.findOne({ _id: id });
 	if (user.power == "2") {
 		const listNews = await News.find({ status: "2" }).sort({date_submitted: -1});
-		console.log(listNews)
 		const data = listNews.map(item => {
 			return {
 				...item,
@@ -328,7 +324,6 @@ module.exports.viewsDepartmentPresident = async (req, res) => {
 			}
 		})
 
-		console.log(data)
 		return res.json({ listNews: data });
 	} else {
 		return res.json({ message: "Không được phép xem" });
@@ -520,7 +515,6 @@ module.exports.statisticalByAuthor = async (req, res) => {
 	const dataPrice =  await PriceOfKind.find();
 	const dataPriceImages = await PriceImages.find();
 	const getUser = await Users.find();
-	console.log(month)
 	const startOfMonth = moment(month)
 		.clone()
 		.startOf("month")
@@ -561,70 +555,6 @@ module.exports.statisticalByAuthor = async (req, res) => {
 		
 };
 
-// module.exports.statisticalByAuthor2 = async (req, res) => {
-// 	const { month } = req.body;
-
-// 	const startOfMonth = moment(month)
-// 		.clone()
-// 		.startOf("month")
-// 		.format("YYYY-MM-DD hh:mm");
-// 	const endOfMonth = moment(month)
-// 		.clone()
-// 		.endOf("month")
-// 		.format("YYYY-MM-DD hh:mm");
-// 		console.log("2021-04-22 11:59")
-// 		console.log(endOfMonth)
-
-// 		const allNews = await News.find({
-// 			date_submitted: {
-// 				$gte: new Date(startOfMonth),
-// 				$lt: new Date(endOfMonth),
-// 			},
-// 		});
-// 	const getKind = await Kinds.find({});
-// 	const getPriceKind = await PriceOfKind.find({})
-// 	const getUser = await Users.find(); 
-
-// 	Users.aggregate([
-// 		{ "$lookup": {
-// 			"let": { "userObjId": { "$toString": "$_id" }},
-// 			"from": "News",
-// 			"pipeline": [
-// 				{ 
-// 					"$match":
-// 					{"date_submitted": {
-// 						"$gte": new Date(startOfMonth),
-// 						"$lte": new Date(endOfMonth)
-// 					},
-// 					"status": "4",
-// 					 "$expr": { "$eq": [ "$IdUser", "$$userObjId" ],}}
-// 				},
-// 				{
-// 					"$group": {"_id": {"IdUser": "$IdUser", "kindNews": "$kindNews"}, "count" : {"$sum": 1}}
-// 				}
-// 			],
-// 			"as": "userDetails"
-// 		}}
-// 	]).exec((e, d)=> {
-
-// 		const kind = d.map(item => {
-// 			return {
-// 				...item,
-// 				newsArr: 
-// 				item.userDetails.map(val => {
-// 				return {
-// 					...val,
-// 					count: val.count ? val.count : 0,
-// 					nameKind : getKind.find(x => String(x._id) === val._id.kindNews)?.name,
-// 					price: val.count * getPriceKind.find(x => x.idKind === val._id.kindNews)?.price,
-// 				}
-// 			})}
-// 		})
-// 		res.json({News: kind})
-// 	})
-
-// };
-
 module.exports.statisticalByAuthor2 = async (req, res) => {
 	const { month } = req.body;
 
@@ -662,8 +592,6 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		arr2.push({user: user, sum: sum, news: arr})
 	})
 
-	console.log(arr2)
-
 	let arrCount = [];
 	let arrPrice = [];
 	let sumPrice = 0;
@@ -695,7 +623,6 @@ module.exports.statisticalByDepartment = async (req, res) => {
 		.clone()
 		.endOf("month")
 		.format("YYYY-MM-DD hh:mm");
-		console.log(startOfMonth)
 
 	const allNews = await News.find({
 		date_submitted: {
@@ -966,7 +893,6 @@ module.exports.NewsById = async (req, res) => {
 }
 
 module.exports.ListNewsPost = async (req, res) => {
-	const getKind = Kinds.find();
 	const getCategories = Categories.find();
 	const getUser = await Users.find();
 
@@ -974,7 +900,6 @@ module.exports.ListNewsPost = async (req, res) => {
 	const data = getNews.map(item => {
 		return{
 			...item,	
-			nameKind: getKind.find( val => String(val._id) === kindNews)?.name,
 			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
 			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Moment from "react-moment";
 import { Link } from "react-router-dom";
+import {NEWS_PER_PAGE} from "../../config/contants";
+import Pagination from "../pagination/Pagination";
 
 const listSearch = [
 	{
@@ -18,15 +20,15 @@ const listSearch = [
 function ListNews(props) {
   const [news, setNews] = useState([]);
   const [images, setImages] = useState();
-  const [count, setCount] = useState();
   const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("1");
-  let stt = 1;
-  let d = 0;
+  const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
   useEffect(() => {
     axios.get("/api-news/list-news-approved").then((res) => {
       setNews(res.data.listNewsApproved);
       setImages(res.data.images);
+      setTotalPages(Math.ceil(res.data.listNewsApproved.length / NEWS_PER_PAGE))
     });
   }, []);
 
@@ -48,21 +50,14 @@ function ListNews(props) {
     }
   };
 
-  // useEffect(() => {
-  //   const countNews = () => {
-  //     news.forEach((item) => {
-  //       d++;
-  //     });
-  //     setCount(d);
+  const startIndex = (page - 1) * NEWS_PER_PAGE;
+  const selectedNews = news.slice(startIndex, startIndex + NEWS_PER_PAGE)
+  
 
-  //     let list = news.filter((elem, index, seft) => {
-  //       seft.findIndex((t) => {
-  //         return (t.author == elem.author) === index;
-  //       });
-  //     });
-  //   };
-  //   countNews();
-  // }, []);
+  const handleClick = num => {
+    setPage(num)
+  }
+
   return (
     <div>
       <div className="card-header">
@@ -107,8 +102,8 @@ function ListNews(props) {
               </tr>
             </thead>
             <tbody>
-              {news
-                ? news
+              {selectedNews
+                ? selectedNews
                 .filter(val => {
                   if(search == ""){
                     return val;
@@ -161,6 +156,7 @@ function ListNews(props) {
                 : <tr><td colSpan="9" style={{paddingTop: 12}}>Không có tin nào chờ đăng</td></tr>}
             </tbody>
           </table>
+          <Pagination totalPages = {totalPages} handleClick={handleClick}/>
         </div>
       </div>
     </div>

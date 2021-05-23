@@ -112,14 +112,18 @@ export default function ChiefEditor(props) {
 						</li>
 						<li>
 							<div onClick={listTBBT} href="#" class="nav__link ">
-								<span class="las la-igloo"></span>
+							<span>
+								<AiOutlineOrderedList />
+								</span>
 								<span>Danh sách tin đã duyệt</span>
 							</div>
 						</li>
 
 						<li>
 							<div onClick={listTBBTRefuse} href="#" class="nav__link ">
-								<span class="las la-igloo"></span>
+							<span>
+								<AiOutlineOrderedList />
+								</span>
 								<span>Danh sách tin từ chối</span>
 							</div>
 						</li>

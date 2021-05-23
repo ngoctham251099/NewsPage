@@ -27,8 +27,6 @@ class RenderReport extends React.Component {
 			this.setState({ ...this.state, news: res.data.News });
 		};
 
-		console.log(this.state.news)
-
 		fetchData();
 	}
 
@@ -49,7 +47,6 @@ class RenderReport extends React.Component {
 			return a + Number(b.priceImages)
 		},0)
 
-		console.log(this.state.month.format("MM"))
 
 		return (
 			<div className="card-body">
@@ -101,7 +98,10 @@ class RenderReport extends React.Component {
 					<div className="title-center" style={{
 						textAlign: "center	"
 					}}>
-						<p><b>BẢNG NHUẬN BÚT THÁNG {this.state.month.format('MM')} NĂM {this.state.month.format("YYYY")}</b></p>
+						{/* <p><b>BẢNG NHUẬN BÚT THÁNG {this.state.month.format('MM')} NĂM {this.state.month.format("YYYY")}</b></p> */}
+						{/* <p><b>TIN CUNG CẤP CHO CỔNG THÔNG TIN ĐIỆN TỬ SỞ TT&TT</b></p> */}
+						{/* <p>(Từ {moment().clone().startOf(this.state.month).format("DD/MM/YYYY")} đến {moment().clone().endOf(this.state.month).format("DD/MM/YYYY")})</p> */}
+						<p><b>BẢNG NHUẬN BÚT</b></p>
 						<p><b>TIN CUNG CẤP CHO CỔNG THÔNG TIN ĐIỆN TỬ SỞ TT&TT</b></p>
 						{/* <p>(Từ {moment().clone().startOf(this.state.month).format("DD/MM/YYYY")} đến {moment().clone().endOf(this.state.month).format("DD/MM/YYYY")})</p> */}
 					</div>

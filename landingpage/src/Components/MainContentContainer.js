@@ -23,7 +23,8 @@ const MainContentContainer = ({ categories }) => {
             <div className="card">
               <div className="card-body">
                 {allPost &&
-                  allPost.slice(5, allPost.length).map((item, index) => (
+                  allPost
+                  .slice(5, allPost.length).map((item, index) => (
                     <div className="row">
                       <div className="col-sm-4 grid-margin">
                         <div className="position-relative">
@@ -34,11 +35,6 @@ const MainContentContainer = ({ categories }) => {
                               className="img-fluid"
                             />
                           </div>
-                          {/* <div className="badge-positioned">
-                      <span className="badge badge-danger font-weight-bold">
-                        Flash news
-                      </span>
-                    </div> */}
                         </div>
                       </div>
                       <div className="col-sm-8  grid-margin">

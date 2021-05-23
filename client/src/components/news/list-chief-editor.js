@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import Moment from "react-moment";
+import {NEWS_PER_PAGE} from "../../config/contants";
+import Pagination from "../pagination/Pagination";
 
 const listSearch = [
 	{
@@ -25,18 +27,27 @@ export default function ListEditor(props) {
 	const [message, setMessage] = useState();
 	const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("1");
+	const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 	useEffect(async () => {
 		const id = localStorage.getItem("idUser");
 		const res = await axios.get(`/api-news/views-president?id=${id}`, {
 			id: localStorage.getItem("idUSer"),
 		});
 		if (res.data.listNews) {
-			console.log(res.data.listNews)
 			setNews(res.data.listNews);
+			setTotalPages(Math.ceil(res.data.listNews.length / NEWS_PER_PAGE))
 		} else {
 			setMessage(res.data.message);
 		}
 	}, []);
+
+	const startIndex = (page - 1) * NEWS_PER_PAGE;
+  const selectedNews = news.slice(startIndex, startIndex + NEWS_PER_PAGE)
+
+	const handleClick = num => {
+    setPage(num)
+  }
 
 	return (
 		<div>
@@ -85,8 +96,8 @@ export default function ListEditor(props) {
 							</tr>
 						</thead>
 						<tbody>
-							{news ? 
-							news
+							{selectedNews ? 
+							selectedNews
 							.filter(val => {
 								if(search == ""){
 									return val;
@@ -140,6 +151,7 @@ export default function ListEditor(props) {
 							)): null}
 						</tbody>
 					</table>
+					<Pagination totalPages = {totalPages} handleClick={handleClick}/>
 				</div>
 			</div>
 		</div>

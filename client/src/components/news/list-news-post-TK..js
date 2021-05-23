@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Moment from "react-moment";
 import { toast } from "react-toastify";
+import {NEWS_PER_PAGE} from "../../config/contants";
+import Pagination from "../pagination/Pagination";
 
 const listSearch = [
 	{
@@ -21,33 +23,33 @@ const listSearch = [
 
 ]
 
-
-
 export default function ListEditor(props) {
 	let history = useHistory();
 	let stt = 1;
 
-	const [listKind, setListKind] = useState([]);
+	const [listNewsPost, setListNewsPost] = useState([]);
 	const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("1");
+	const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
 	const [news, setNews] = useState([]);
 	useEffect(async () => {
-		const id = localStorage.getItem("idUser");
-		console.log(id)
 		const res = await axios.get(`/api-news`);
 		if (res.data.page) {
-			setNews(res.data.page);
+			setNews(res.data.page)
+			setListNewsPost(res.data.page.filter(item => item._doc.status === "4"));
+			setTotalPages(Math.ceil(res.data.page.filter(item => item._doc.status === "4").length / NEWS_PER_PAGE))
 		} else {
 			toast.error(res.data.message);
 		}
 	}, []);
+	const startIndex = (page - 1) * NEWS_PER_PAGE;
+  const selectedNews = listNewsPost.slice(startIndex, startIndex + NEWS_PER_PAGE)
 
-	useEffect(() => {
-		axios.get("/api-kind").then((res) => {
-			setListKind(res.data.kind);
-		});
-	}, []);
+	const handleClick = num => {
+    setPage(num)
+  }
 
 	return (
 	<div>
@@ -92,7 +94,7 @@ export default function ListEditor(props) {
 						</tr>
 					</thead>
 					<tbody>
-						{news
+						{selectedNews
 						.filter(val => {
 							if(search == ""){
 								return val;
@@ -117,9 +119,6 @@ export default function ListEditor(props) {
 							}
 							
 						})
-            .filter((item) => {
-              return item._doc.status === "4";
-            })
 						.map((item) => (
 							<tr key={item._doc._id}>
 								<td>{stt++}</td>
@@ -142,6 +141,7 @@ export default function ListEditor(props) {
 						))}
 					</tbody>
 				</table>
+				<Pagination totalPages = {totalPages} handleClick={handleClick}/>
 			</div>
 		</div>
 	</div>

@@ -9,7 +9,6 @@ const HomePageComponent = () => {
 
   useEffect(() => {
     axios.get("/api-categories").then((res) => {
-      console.log(res.data.categories);
       setCategories(res.data.categories);
     });
   }, []);

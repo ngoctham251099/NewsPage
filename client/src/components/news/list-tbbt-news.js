@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 import { useHistory } from "react-router-dom";
 import Moment from "react-moment";
 import { toast } from "react-toastify";
+import {NEWS_PER_PAGE} from "../../config/contants";
+import Pagination from "../pagination/Pagination";
 
 const listSearch = [
 	{
@@ -24,6 +26,8 @@ export default function ListEditor(props) {
 	const [listKind, setListKind] = useState([]);
 	const [search, setSearch] = useState("");
   const [currentFilter, setCurrentFilter] = useState("1");
+	const [page, setPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(0);
 
 	const [news, setNews] = useState([]);
 	useEffect(async () => {
@@ -32,10 +36,14 @@ export default function ListEditor(props) {
 		const res = await axios.get(`/api-news/list-tbbt-approved?id=${id}`);
 		if (res.data.listNews) {
 			setNews(res.data.listNews);
+			setTotalPages(Math.ceil(res.data.listNews.length / NEWS_PER_PAGE))
 		} else {
 			toast.error(res.data.message);
 		}
 	}, []);
+
+	const startIndex = (page - 1) * NEWS_PER_PAGE;
+  const selectedNews = news.slice(startIndex, startIndex + NEWS_PER_PAGE)
 
 	useEffect(() => {
 		axios.get("/api-kind").then((res) => {
@@ -62,6 +70,9 @@ export default function ListEditor(props) {
 		}
 	};
 
+	const handleClick = num => {
+    setPage(num)
+  }
 
 	return (
 	<div>
@@ -106,7 +117,8 @@ export default function ListEditor(props) {
 						</tr>
 					</thead>
 					<tbody>
-						{news
+						{selectedNews ? 
+						selectedNews
 						.filter(val => {
 							if(search == ""){
 								return val;
@@ -144,9 +156,10 @@ export default function ListEditor(props) {
 									</Link>
 								</td>
 							</tr>
-						))}
+						)): null}
 					</tbody>
 				</table>
+				<Pagination totalPages = {totalPages} handleClick={handleClick}/>
 			</div>
 		</div>
 	</div>

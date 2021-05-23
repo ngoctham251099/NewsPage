@@ -35,8 +35,6 @@ export default function ListEditor(props) {
     console.log(id)
     const res = await axios.get(`/api-news/list-news-tbbv-refuse?id=${id}`);
     if (res.data.listNews) {
-      console.log(res.data.listNews)
-      console.log("jahdsjs")
       setNews(res.data.listNews);
     } else {
       toast.error(res.data.message);
@@ -48,26 +46,6 @@ export default function ListEditor(props) {
       setListKind(res.data.kind);
     });
   }, []);
-
-  const getStatus = (power) => {
-    switch (power) {
-      case "1":
-        return "Chờ phê duyệt";
-      // break;
-      case "2":
-        return "Đã xác nhận";
-      // break;
-      case "3":
-        return "Đã phê duyệt";
-      // break;
-      case "4":
-        return "Từ chối";
-      // break;
-      default:
-        break;
-    }
-  };
-
 
   return (
     <div>

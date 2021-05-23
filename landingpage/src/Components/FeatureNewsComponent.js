@@ -1,7 +1,6 @@
 import React from "react";
 
 const FeatureNewsComponent = ({ newsData }) => {
-  console.log(newsData[0]?._doc.thumbnail);
   return (
     <div className="row" data-aos="fade-up">
       <div className="col-xl-8 stretch-card grid-margin">

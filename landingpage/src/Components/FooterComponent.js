@@ -7,16 +7,9 @@ const FooterComponent = () => {
       <div className="container">
         <div className="row">
           <div className="col-sm-5">
-            <img
-              src="assets/images/logo.svg"
-              className="footer-logo"
-              alt=""
-            />
-            <h5 className="font-weight-normal mt-4 mb-5">
-              Newspaper is your news, entertainment, music fashion
-              website. We provide you with the latest breaking news and
-              videos straight from the entertainment industry.
-            </h5>
+            <h3>SỞ THÔNG TIN VÀ TRUYỀN THÔNG AN GIANG</h3>
+            <p>Giấy phép thiết lập website số 51/GP-TTDT do Cục Quản lý Phát Thanh, Truyền hình và thông tin điện tử cấp ngày 11/8/2008</p>
+            <p>Người chịu trách nhiệm chính: Ông Lê Việt Phương - Phó Giám đốc Sở Thông tin và Truyền thông An Giang</p>
             <ul className="social-media mb-3">
               <li>
                 <a href="#">
@@ -36,22 +29,14 @@ const FooterComponent = () => {
             </ul>
           </div>
           <div className="col-sm-4">
-            <h3 className="font-weight-bold mb-3">RECENT POSTS</h3>
+            <h3 className="font-weight-bold mb-3">LIÊN HỆ</h3>
             <div className="row">
               <div className="col-sm-12">
                 <div className="footer-border-bottom pb-2">
                   <div className="row">
-                    <div className="col-3">
-                      <img
-                        src="assets/images/dashboard/home_1.jpg"
-                        alt="thumb"
-                        className="img-fluid"
-                      />
-                    </div>
                     <div className="col-9">
                       <h5 className="font-weight-600">
-                        Cotton import from USA to soar was American
-                        traders predict
+                        Địa chỉ: 01 Lê Hồng Phong, P. Mỹ Bình, TP Long Xuyện, tỉnh An Giang
                       </h5>
                     </div>
                   </div>
@@ -62,17 +47,9 @@ const FooterComponent = () => {
               <div className="col-sm-12">
                 <div className="footer-border-bottom pb-2 pt-2">
                   <div className="row">
-                    <div className="col-3">
-                      <img
-                        src="assets/images/dashboard/home_2.jpg"
-                        alt="thumb"
-                        className="img-fluid"
-                      />
-                    </div>
                     <div className="col-9">
                       <h5 className="font-weight-600">
-                        Cotton import from USA to soar was American
-                        traders predict
+                        Số điện thoại: (02963) 956898
                       </h5>
                     </div>
                   </div>
@@ -83,17 +60,9 @@ const FooterComponent = () => {
               <div className="col-sm-12">
                 <div>
                   <div className="row">
-                    <div className="col-3">
-                      <img
-                        src="assets/images/dashboard/home_3.jpg"
-                        alt="thumb"
-                        className="img-fluid"
-                      />
-                    </div>
                     <div className="col-9">
                       <h5 className="font-weight-600 mb-3">
-                        Cotton import from USA to soar was American
-                        traders predict
+                        Email: sotttt@angiang.gov.vn
                       </h5>
                     </div>
                   </div>
@@ -102,35 +71,10 @@ const FooterComponent = () => {
             </div>
           </div>
           <div className="col-sm-3">
-            <h3 className="font-weight-bold mb-3">CATEGORIES</h3>
+            <h3 className="font-weight-bold mb-3">Tìm kiếm</h3>
             <div className="footer-border-bottom pb-2">
               <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0 font-weight-600">Magazine</h5>
-                <div className="count">1</div>
-              </div>
-            </div>
-            <div className="footer-border-bottom pb-2 pt-2">
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0 font-weight-600">Business</h5>
-                <div className="count">1</div>
-              </div>
-            </div>
-            <div className="footer-border-bottom pb-2 pt-2">
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0 font-weight-600">Sports</h5>
-                <div className="count">1</div>
-              </div>
-            </div>
-            <div className="footer-border-bottom pb-2 pt-2">
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0 font-weight-600">Arts</h5>
-                <div className="count">1</div>
-              </div>
-            </div>
-            <div className="pt-2">
-              <div className="d-flex justify-content-between align-items-center">
-                <h5 className="mb-0 font-weight-600">Politics</h5>
-                <div className="count">1</div>
+                <input placeholder="Tìm kiếm"></input>
               </div>
             </div>
           </div>
@@ -143,25 +87,7 @@ const FooterComponent = () => {
           <div className="col-sm-12">
             <div className="d-sm-flex justify-content-between align-items-center">
               <div className="fs-14 font-weight-600">
-                © 2020 @{" "}
-                <a
-                  href="https://www.bootstrapdash.com/"
-                  target="_blank"
-                  className="text-white"
-                >
-                  BootstrapDash
-                </a>
-                . All rights reserved.
-              </div>
-              <div className="fs-14 font-weight-600">
-                Handcrafted by{" "}
-                <a
-                  href="https://www.bootstrapdash.com/"
-                  target="_blank"
-                  className="text-white"
-                >
-                  BootstrapDash
-                </a>
+                Copyright © 2020 @{" "} sotttt.angiang.gov.vn. All Rights Reserved.
               </div>
             </div>
           </div>
