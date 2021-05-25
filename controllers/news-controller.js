@@ -585,7 +585,6 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 		getKind.forEach( function(kind){
 			const getNews = allNews.filter(val => (val.status === '4' && val.IdUser === String(item._id) && val.kindNews === String(kind._id)))
 			const price = getNews.length > 0 ? getPriceKind.find(val => String(val.idKind) === String(kind._id)).price : 0
-			console.log(price)
 			arr.push({count: getNews.length, price: price * getNews.length});
 			sum = sum + (getNews.length * price);
 		})
@@ -594,9 +593,10 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 
 	let arrCount = [];
 	let arrPrice = [];
-	let sumPrice = 0;
+	// let sumPrice = 0;
 	getKind.forEach(item => {
 		let sum = 0;
+		let sumPrice = 0;
 		const getNews = allNews.filter( val => val.kindNews === String(item._id) && val.status === '4')
 		const price = getPriceKind.find(val => String(val.idKind) === String(item._id))?.price
 		sum = getNews.length > 0 ? getNews.length : 0;
@@ -608,6 +608,8 @@ module.exports.statisticalByAuthor2 = async (req, res) => {
 	let sumAll = arrPrice.reduce( (a, b) => {
 		return a + b.sumPrice
 	}, 0) 
+
+	console.log(sumAll)
 
 	res.json({News: arr2, sumByKind: arrCount, sumAll: sumAll})
 };
@@ -857,34 +859,34 @@ module.exports.listNewsRequestEdit = async (req, res) => {
 
 module.exports.listNewsbyCategory = async(req, res) => {
 	const {id} = req.params;
-	const getKind = await Kinds.find();
-	const getCategories =await Categories.find();
 	const getUser = await Users.find();
-
-	const getNews = await News.find({categories: id});
-	const data = await getNews.map(item => {
+	const getNews = await News.find()
+												.where('categories').equals(id)
+												.where('status').equals("4")
+												.sort({date_submitted: -1});
+	const data = getNews.map(item => {
 		return{
 			...item,
-			nameKind: getKind.find( val => String(val._id) === kindNews)?.name,
-			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
 			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
-	return res.json({news: data})
+	const getCategoryByid = await Categories.findOne({_id: id});
+	return res.json({news: data, category: getCategoryByid.name})
+	
 }
 
 module.exports.NewsById = async (req, res) => {
 	const {id} = req.params;
-	const getKind = Kinds.find();
+	const getKind = await Kinds.find();
 	const getCategories = Categories.find();
 	const getUser = await Users.find();
 
 	const getNews = await News.find({_id: id})
-	const data = await getNews.map(item => {
+	const data = getNews.map(item => {
 		return{
 			...item,	
 			nameKind: getKind.find( val => String(val._id) === kindNews)?.name,
-			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
+			nameCategories: getCategories.find(val => String(val._id) === item.categories)?.name,
 			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})
@@ -893,14 +895,14 @@ module.exports.NewsById = async (req, res) => {
 }
 
 module.exports.ListNewsPost = async (req, res) => {
-	const getCategories = Categories.find();
+	const getCategories = await Categories.find();
 	const getUser = await Users.find();
 
 	const getNews = await News.find({status: "4"}).sort({date_submitted: -1});
 	const data = getNews.map(item => {
 		return{
 			...item,	
-			nameCategories: getCategories.find(val => String(val._id) === item.category)?.name,
+			nameCategories: getCategories.find(val => String(val._id) === item.categories)?.name,
 			nameAuthor: getUser.find(val => String(val._id) === item.IdUser)?.fullName
 		}
 	})

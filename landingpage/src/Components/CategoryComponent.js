@@ -12,7 +12,7 @@ const CategoryComponent = ({ categories }) => {
               categories.map((item, index) => (
                 <li>
                   <Link to={`/post-by-category/${item._id}`}>
-                    <a href="#">{item.name}</a>
+                    {item.name}
                   </Link>
                 </li>
               ))}

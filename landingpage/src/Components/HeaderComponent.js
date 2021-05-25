@@ -11,7 +11,7 @@ const HeaderComponent = ({ categories }) => {
             <div className="d-flex justify-content-between align-items-center">
               <div>
                 <a className="navbar-brand" href="#">
-                  <img src="assets/images/logo.png" alt="" />
+                  <img src="../assets/images/logo.png" alt="" />
                 </a>
               </div>
               <div>
@@ -36,18 +36,18 @@ const HeaderComponent = ({ categories }) => {
                       </button>
                     </li>
                     <li className="nav-item active">
-                      <a className="nav-link" href="index.html">
+                      <Link className="nav-link" to="/">
                         Trang chủ
-                      </a>
+                      </Link>
                     </li>
 
                     {categories &&
                       categories.map((item, index) => (
                         <li className="nav-item" key={index}>
                           <Link to={`/post-by-category/${item._id}`}>
-                            <a className="nav-link" href="javascript:void(0);">
-                        {item.name}
-                            </a>
+                            <span className="nav-link">
+                              {item.name}
+                            </span>
                           </Link>
                         </li>
                       ))}

@@ -1,4 +1,7 @@
 import React from "react";
+import {
+  Link,
+} from "react-router-dom";
 
 const FeatureNewsComponent = ({ newsData }) => {
   return (
@@ -11,7 +14,9 @@ const FeatureNewsComponent = ({ newsData }) => {
             className="img-fluid-first-news"
           />
           <div className="banner-content">
-            <h1 className="mb-0 text-uppercase">{newsData[0]?._doc.title}</h1>
+            <h1 className="mb-0 text-uppercase">
+              <Link to={`/post/${newsData[0]?._doc._id}`} style={{color: "#000"}}>{newsData[0]?._doc.title}</Link>
+            </h1>
 
             <div className="fs-12">
               <span className="mr-2">{newsData[0]?.nameKind} </span>10 Minutes
@@ -28,7 +33,9 @@ const FeatureNewsComponent = ({ newsData }) => {
             {newsData.slice(1, 4).map((item, index) => (
               <div className="d-flex border-bottom-blue pb-4 pt-4 align-items-center justify-content-between" key={index}>
                 <div className="pr-3">
-                  <h5>{item._doc.title}</h5>
+                  <h5><Link to={`/post/${item._doc._id}`} style={{
+                    color: "#fff",
+                  }}>{item._doc.title}</Link></h5>
                   <div className="fs-12">
                     <span className="mr-2">{item.nameKind} </span>10 Minutes ago
                   </div>

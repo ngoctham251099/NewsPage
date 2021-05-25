@@ -2,15 +2,18 @@ import React, { useEffect, useState } from "react";
 import CategoryComponent from "./CategoryComponent";
 import FeatureNewsComponent from "./FeatureNewsComponent";
 import axios from "axios";
+import {
+  Link,
+} from "react-router-dom";
 
-const MainContentContainer = ({ categories }) => {
-  const [allPost, setAllPost] = useState([]);
+const MainContentContainer = ({ categories, allPost }) => {
+  // const [allPost, setAllPost] = useState([]);
 
-  useEffect(() => {
-    axios.get("/api-news/list-news-post").then((res) => {
-      setAllPost(res.data.news);
-    });
-  }, []);
+  // useEffect(() => {
+  //   axios.get("/api-news/list-news-post").then((res) => {
+  //     setAllPost(res.data.news);
+  //   });
+  // }, []);
 
   return (
     <div className="content-wrapper">
@@ -39,7 +42,9 @@ const MainContentContainer = ({ categories }) => {
                       </div>
                       <div className="col-sm-8  grid-margin">
                         <h2 className="mb-2 font-weight-600">
-                          {item._doc.title}
+                          <Link to={`/post/${item._doc._id}`} style={{
+                                    color: "#000"
+                          }}>{item._doc.title}</Link>
                         </h2>
                         <div className="fs-13 mb-2">
                           <span className="mr-2">{item.nameKind} </span>10
