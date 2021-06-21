@@ -86,10 +86,6 @@ module.exports.postRegister = async (req, res, next) => {
 //create user
 module.exports.createUser = async (req, res) => {
   const { username, email, department, password, confirmPassword, phoneNumber, fullName, power, idBTV} = req.body;
-  // const BTV = await Users.findOne()
-  //                         .where('power').equals("3")
-  //                         .where('department').equals(department);
-  console.log(idBTV)
   if (!username || !password || !confirmPassword || !fullName) {
     return res.json({ message: "Không được để trống" });
   }
@@ -145,7 +141,6 @@ module.exports.createUser = async (req, res) => {
 module.exports.postLogIn = async (req, res, next) => {
   const { email, password } = req.body;
 
-  console.log(password, email);
   const user = await Users.findOne({ email: email });
   if (!user) {
     return res.json({
@@ -203,7 +198,6 @@ module.exports.updateInfoUser = async(req, res) => {
   const {username, email, password, confirmPassword, phoneNumber} = req.body;
 
   const emailRegexp = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-  console.log(!emailRegexp.test(email))
   if(!emailRegexp.test(email)){
     return res.json({message: "Vui lòng nhập lại email"})
   }
@@ -305,7 +299,6 @@ module.exports.forgot = (req, res, next) => {
 
 module.exports.resetPassword = async (req, res, next) => {
   const token = req.params.token;
-  console.log(token);
   const user = await Users.findOne({
     resetPasswordToken: token,
   });
@@ -324,11 +317,9 @@ module.exports.resetPassword = async (req, res, next) => {
 };
 
 module.exports.updatePasswordViaEmail = (req, res, next) => {
-  console.log(req.params.token);
   const { token } = req.params;
   const newPassword = req.body.newPassword;
   const confirmPassword = req.body.confirmPassword;
-  console.log(newPassword);
   Async.waterfall(
     [
       function (done) {
@@ -392,8 +383,15 @@ module.exports.updatePasswordViaEmail = (req, res, next) => {
 };
 
 module.exports.delete = async (req, res, next) => {
-  const userBTV = await Users.findOne({idBTV: req.params.id});
-  const getNews = await News.findOne({IdUser: req.params.id});
+  const {id, idUser} = req.params;
+  const userBTV = await Users.findOne({idBTV: id});
+  const getNews = await News.findOne({IdUser: id});
+
+  const getUser = await Users.findOne({_id: idUser})
+
+  if(getUser && idUser === id){
+    return res.json({message: "Người dùng đang được sử dụng"})
+  }
 
   if(getNews) {
     return res.json({message: "Đã có bài viết thuộc người dùng này"});

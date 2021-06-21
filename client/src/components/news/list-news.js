@@ -205,10 +205,11 @@ function ListNews(props) {
                       return val;
                     }
                   }
-
-                  if(currentFilter1 === "3"){
-                    if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
-                      return val;
+                  if(val.nameKind){
+                    if(currentFilter1 === "3"){
+                      if(val.nameKind.toLowerCase().includes(search.toLowerCase())){
+                        return val;
+                      }
                     }
                   }
                   

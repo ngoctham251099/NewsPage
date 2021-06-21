@@ -26,7 +26,6 @@ module.exports.createKindOfImages = async (req, res, next) => {
 				res.status(200).json({message: `${newKind.name} đã được thêm`})
 		}else{
 				err => {
-						console.log(req.body);
 						res.status(400).send({message: `${item.name} thêm không thành công`});
 				}
 		}
@@ -39,7 +38,6 @@ module.exports.deleteKindOfImages = async (req, res, next) => {
 		const find = await Kinds.findOne({_id: id})
 		if(find){
 				const news = await News.findOne({idPriceOfImages: find._id})   
-				console.log(news) 
 				if(news) {
 						return res.json({message: `Đã có hình ảnh thuộc loại này.`})
 				}else{
@@ -51,7 +49,6 @@ module.exports.deleteKindOfImages = async (req, res, next) => {
 
 module.exports.editKindOfImages = (req, res, next) => {
 		const {id} = req.params;
-		console.log(req.params)
 
 		Kinds.findById(id)
 		.then(

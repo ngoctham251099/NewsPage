@@ -21,11 +21,9 @@ module.exports.createDepartment = (req, res, next) => {
   newDepartment
     .save()
     .then((item) => {
-      console.log(item);
       res.status(200).json({ message: "Thêm thành công" });
     })
     .catch((err) => {
-      console.log(req.body);
       res.status(400).send("unable to save to database");
     });
 };
@@ -36,13 +34,11 @@ module.exports.deleteDepartment = async (req, res, next) => {
 
   const find = await Departments.findOne({ _id: id });
   const news = await Users.findOne({ department: find._id });
-  console.log("news", news);
   if (news) {
     return res.json({
       message: `Đã có người dùng thuộc phòng ban này.`,
     });
   } else {
-    console.log(id);
     await Departments.deleteOne({ _id: id });
     return res.json({ message: `Đã xóa thành công` });
   }
@@ -71,7 +67,6 @@ module.exports.updateDepartment = (req, res, next) => {
 
 module.exports.findById = async (req, res) => {
   const { id } = req.params;
-  console.log(id);
   const department = await Departments.findOne({ _id: id });
   if (department) {
     return res.json({ department: department.name });

@@ -29,6 +29,15 @@ module.exports.getPriceOfKind = async (req, res, next) => {
 module.exports.createPriceKind = async (req, res, next) => {
   const { name, price, idKind } = req.body;
 
+  const getKind = await PriceOfKind.findOne()
+                              .where('name').equals(name)
+                              .where('idKind').equals(idKind);
+  console.log(getKind)
+
+  if(getKind){
+    return res.json({message: "Đã có chất lượng tin và đơn giá này. Vui lòng nhập lại"})
+  }
+
   if (!name || !idKind) {
     return res.json({ message: "Tên loại không được để trống" });
   }
